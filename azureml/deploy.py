@@ -10,22 +10,19 @@ from azureml.core import Workspace, Run
 from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 from azureml.train.dnn import TensorFlow
-from azureml.core import Datastore
-from azureml.core import ScriptRunConfig
+from azureml.core import Datastore, ScriptRunConfig
 from azureml.core.runconfig import RunConfiguration
 from azureml.core.model import InferenceConfig
 from azureml.core.environment import Environment
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.model import Model
 from azureml.core.webservice import LocalWebservice
-from azureml.core.model import Model
 
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
     resource_group="extern2020",
     workspace_name="exten-amls"
 )
-
 
 model = Model.register(model_path = "sklearn_regression_model.pkl",
                        model_name = "sklearn_regression",
