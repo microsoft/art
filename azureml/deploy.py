@@ -18,12 +18,14 @@ from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.model import Model
 from azureml.core.webservice import LocalWebservice
 
+#connect to the workspace
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
     resource_group="extern2020",
     workspace_name="exten-amls"
 )
 
+#load the model
 model = Model.register(model_path = "sklearn_regression_model.pkl",
                        model_name = "sklearn_regression",
                        workspace = ws)

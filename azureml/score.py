@@ -24,6 +24,7 @@ output_sample = np.array([3726.995])
 
 @input_schema('data', NumpyParameterType(input_sample))
 @output_schema(NumpyParameterType(output_sample))
+
 def run(data):
     try:
         result = model.predict(data)
