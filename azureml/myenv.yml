@@ -6,3 +6,4 @@ dependencies:
     - scikit-learn
     - numpy
     - inference-schema[numpy-support]
+    - keras

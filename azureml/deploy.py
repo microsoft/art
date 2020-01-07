@@ -54,4 +54,4 @@ response = requests.post(scoring_uri, data=test_data, headers=headers)
 
 print(response.status_code)
 print(response.elapsed)
-print(response.json())
+#print(response.json())
