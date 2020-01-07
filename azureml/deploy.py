@@ -42,7 +42,6 @@ deployment_config = LocalWebservice.deploy_configuration(port=5000)
 
 service = Model.deploy(ws, 'myservice', [model], inference_config, deployment_config)
 
-print("HEREEE1")
 service.wait_for_deployment(True)
 print("HEREEE2")
 print(service.state)
