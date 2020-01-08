@@ -18,36 +18,53 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-Give a short description for your sample here. What does it do and why is it important?
+Work done on day one of the hackathon, deploys model onto AzureML to be run from a webservice
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
+File/Folder: Description
+'azureml': All code is here
+	'.vs'
+	'.vscode'
+	'call.py': Regression model, run to simulate a call to the model
+	'call2.py': Resnet50 model, run to simulate a call to the model (CURRENTLY NOT WORKING)
+	'deploy.py': Resgression model, deploys the model to AzureML
+	'deploy2.py': Resnet50 model, deploys the model to AzureML (CURRENTLY NOT WORKING)
+	'deploymentConfig.yml': configuration details for deploying the model to AzureML
+	'my_model.h5': Model of Resnet50, may need modification
+	'myenv.yml': details about the python environment
+	'panda.jpg': image of a panda used for testing
+	'score.py': Regression model, handles the actual calculations when called from call.py
+	'score2.py': Resnet model, handles the actual classification when called from call2.py
+	'sklearn_regression_model.pkl': Regression model
+'gitignore': What to ignore at commit time
+'CODE_OF_CONDUCT': Code of conduct 
+'LICENSE': The license for the files
+'README': This README file
+'SECURITY': Security information
 
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+Visual Studio/Visual Studio Code (if you use Visual Studio Code to set up your python environment use ctrl+shift+p, "Python: Select Interpreter")
+Anaconda 3.7
+Azure Machine Learning workspace
+Azure Machine Learning SDK (https://docs.microsoft.com/en-us/python/api/overview/azure/ml/install?view=azure-ml-py)
+Docker
+Tensorflow
+Keras
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+One time run of either deploy.py or deploy2.py depending on which model is being used to deploy the model to the target
 
 ## Running the sample
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+Run call.py or call2.py depending on which model is being used to simulate a call to the AzureML model
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+The general idea is that we are deploying a machine learning model to the cloud as a webservice. The regression model was mostly proof of concept and the Resnet50 model is going to be closer to what we will end up using since we will be handling images. 
 
 ## Contributing
 
