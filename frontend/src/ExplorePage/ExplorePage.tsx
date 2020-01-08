@@ -98,16 +98,25 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <Buttons 
                         setCurrent={() => this.setCurrent(this.state.selected)} 
                         reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/>
+<<<<<<< HEAD
                     <Separator/>
                     <Options/>
                 </Stack>
                 <Separator vertical />
                 <Stack grow={1}>
+=======
+                </Stack>
+                <Separator vertical />
+                <Stack grow={1}>
+                    <Options/>
+                </Stack>
+                <Separator vertical />
+                <Stack grow={1}>
+>>>>>>> 3ec4b898b61efe0427bf09a15b3cc6b38859d7fe
                     <Artwork item={this.state.selected} />
                     <ListGrid items={this.state.galleryItems} setSelected={this.setSelected}/>
                 </Stack>
             </Stack>
-    
         );
     }
 }
