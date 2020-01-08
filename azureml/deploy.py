@@ -26,16 +26,16 @@ ws = Workspace(
 )
 
 #load the model
-model = Model.register(model_path = "sklearn_regression_model.pkl",
+model = Model.register(model_path = "azureml/sklearn_regression_model.pkl",
                        model_name = "sklearn_regression",
                        workspace = ws)
 
 print(model.name, model.id, model.version, sep='\t')
 
 inference_config = InferenceConfig(
-    entry_script="score.py",
+    entry_script="azureml/score.py",
     runtime="python",
-    conda_file="myenv.yml")
+    conda_file="azureml/myenv.yml")
 
 deployment_config = LocalWebservice.deploy_configuration(port=5000)
 

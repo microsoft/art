@@ -5,8 +5,8 @@ from sklearn.externals import joblib
 from sklearn.linear_model import Ridge
 from azureml.core.model import Model
 
-from inference_schema.schema_decorators import input_schema, output_schema
-from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
+# from inference_schema.schema_decorators import input_schema, output_schema
+# from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
 
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from keras.models import load_model
@@ -23,8 +23,8 @@ input_sample = "panda.jpg"
 output_sample = "panda"
 
 
-@input_schema('data', NumpyParameterType(input_sample))
-@output_schema(NumpyParameterType(output_sample))
+# @input_schema('data', NumpyParameterType(input_sample))
+# @output_schema(NumpyParameterType(output_sample))
 
 def run(data):
     try:
@@ -38,3 +38,6 @@ def run(data):
     except Exception as e:
         error = str(e)
         return error
+
+init()
+print(run(input_sample))
