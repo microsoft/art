@@ -9,6 +9,7 @@ import CollectionAdder from './CollectionAdder';
 import {Buttons} from './Buttons';
 import ExplorePage from './ExplorePage/ExplorePage';
 import HomePage from "./HomePage/HomePage";
+import SearchPage from "./SearchPage/SearchPage";
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
@@ -24,12 +25,13 @@ export class App extends React.Component {
     render() {
         return (
             <Router>
-                <Stack>
+                <Stack className="main">
                     <Stack className={btmMargin}>
                         <Header />
                     </Stack>
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/explore" component={ExplorePage} />
+                    <Route exact path="/search" component={SearchPage} />
                 </Stack>
             </Router>
         );
