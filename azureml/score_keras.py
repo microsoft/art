@@ -24,17 +24,14 @@ def init():
     model = load_model(model_path)
 
 input_sample = "https://wamu.org/wp-content/uploads/2019/12/Bei-Bei-trip-to-china-1500x1266.jpg"
-output_sample = "panda"
+output_sample = "giant_panda"
 
 @input_schema('url', StandardPythonParameterType(input_sample))
 @output_schema( StandardPythonParameterType(output_sample))
 def run(url):
     try:
-        #TODO LOAD THE URLS and SUCH
         response = requests.get(url)
-        img = Image.open(BytesIO(response.content)).resize((224, 224))
-    
-        #original = image.load_img(data, target_size=(224, 224)) #load image in PIL format
+        img = Image.open(BytesIO(response.content)).resize((224, 224)) #URL -> PIL 
         np_img = image.img_to_array(img) #PIL -> numpy
         img_batch = np.expand_dims(np_img, axis=0) #numpy -> batch
         processed_image = preprocess_input(img_batch, mode='caffe') #pre-process img
