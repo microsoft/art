@@ -12,7 +12,7 @@
     "office-ui-fabric-react": "^6.174.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0",
+    "react-scripts": "^3.3.0",
     "typescript": "3.4.5"
   },
   "scripts": {
