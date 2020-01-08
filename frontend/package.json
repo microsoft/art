@@ -4,14 +4,19 @@
   "private": true,
   "dependencies": {
     "@types/react-router": "^5.1.4",
+    "@types/react-slick": "^0.23.4",
     "@uifabric/fluent-theme": "^0.16.7",
     "@uifabric/react-hooks": "^7.0.1",
     "office-ui-fabric-react": "^6.174.0",
+    "pure-react-carousel": "^1.24.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-responsive-carousel": "^3.1.51",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
-    "typescript": "3.4.5",
-    "react-router-dom": "^5.1.2"
+    "react-slick": "^0.25.2",
+    "slick-carousel": "^1.8.1",
+    "typescript": "3.4.5"
   },
   "scripts": {
     "start": "react-scripts start",

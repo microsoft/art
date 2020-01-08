@@ -91,30 +91,24 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <Stack>
-                <Stack className={btmMargin}>
-                    <Header />
+            <Stack horizontal>
+                <Stack grow={1}>
+                    <Artwork item={this.state.current} />
+                    <CollectionAdder items={this.state.collections} addtoCollection={this.addtoCollection} addCollection={this.addCollection}/>
+                    <Buttons 
+                        setCurrent={() => this.setCurrent(this.state.selected)} 
+                        reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/>
                 </Stack>
-                <Stack horizontal>
-                    <Stack grow={1}>
-                        <Artwork item={this.state.current} />
-                        <CollectionAdder items={this.state.collections} addtoCollection={this.addtoCollection} addCollection={this.addCollection}/>
-                        <Buttons 
-                            setCurrent={() => this.setCurrent(this.state.selected)} 
-                            reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/>
-                    </Stack>
-                    <Separator vertical />
-                    <Stack grow={1}>
-                        <Options/>
-                    </Stack>
-                    <Separator vertical />
-                    <Stack grow={1}>
-                        <Artwork item={this.state.selected} />
-                        <ListGrid items={this.state.galleryItems} setSelected={this.setSelected}/>
-                    </Stack>
+                <Separator vertical />
+                <Stack grow={1}>
+                    <Options/>
+                </Stack>
+                <Separator vertical />
+                <Stack grow={1}>
+                    <Artwork item={this.state.selected} />
+                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected}/>
                 </Stack>
             </Stack>
-    
         );
     }
 }
