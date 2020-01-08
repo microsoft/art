@@ -6,6 +6,8 @@ const dropdown = mergeStyles({
     marginBottom : 10
 });
 
+interface IState {};
+
 // Expected props
 interface IProps {
   // Potentially pass in a object of the selector options from parent (culture, medium, etc)?
