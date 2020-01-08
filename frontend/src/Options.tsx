@@ -15,6 +15,8 @@ interface IProps {
   handleMediumChange? : (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => void
 }
 
+interface IState {};
+
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width:300 }
 }
