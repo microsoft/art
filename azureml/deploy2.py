@@ -18,7 +18,8 @@ from azureml.core.environment import Environment
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.model import Model
 from azureml.core.webservice import LocalWebservice
-from azureml.core.model import Model
+
+sys = "azureml/"
 
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
@@ -34,16 +35,16 @@ from keras.applications.resnet50 import ResNet50
 #model.save('my_model.h5')
 
 
-model = Model.register(model_path = "my_model.h5",
+model = Model.register(model_path = sys+"my_model.h5",
                       model_name = "resNet50",
                       workspace = ws)
 
 #print(model.name, model.id, model.version, sep='\t')
 
 inference_config = InferenceConfig(
-    entry_script="score2.py",
+    entry_script=sys+"score.py",
     runtime="python",
-    conda_file="myenv.yml")
+    conda_file=sys+"myenv.yml")
 
 deployment_config = LocalWebservice.deploy_configuration(port=5000)
 
@@ -57,7 +58,7 @@ print("scoring URI: " + service.scoring_uri)
 scoring_uri = 'http://localhost:5000'
 headers = {'Content-Type':'application/json'}
 test_data = json.dumps([[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]])
-test_data = "panda.jpg"
+# test_data = sys+"panda.jpg"
 response = requests.post(scoring_uri, data=test_data, headers=headers)
 
 print(response.status_code)
