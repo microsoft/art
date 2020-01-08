@@ -23,35 +23,35 @@ Work done on day one of the hackathon, deploys model onto AzureML to be run from
 ## Contents
 
 File/Folder: Description
-'azureml': All code is here
-	'.vs'
-	'.vscode'
-	'call.py': Regression model, run to simulate a call to the model
-	'call2.py': Resnet50 model, run to simulate a call to the model (CURRENTLY NOT WORKING)
-	'deploy.py': Resgression model, deploys the model to AzureML
-	'deploy2.py': Resnet50 model, deploys the model to AzureML (CURRENTLY NOT WORKING)
-	'deploymentConfig.yml': configuration details for deploying the model to AzureML
-	'my_model.h5': Model of Resnet50, may need modification
-	'myenv.yml': details about the python environment
-	'panda.jpg': image of a panda used for testing
-	'score.py': Regression model, handles the actual calculations when called from call.py
-	'score2.py': Resnet model, handles the actual classification when called from call2.py
-	'sklearn_regression_model.pkl': Regression model
-'gitignore': What to ignore at commit time
-'CODE_OF_CONDUCT': Code of conduct 
-'LICENSE': The license for the files
-'README': This README file
-'SECURITY': Security information
++ 'azureml': All code is here
+	+ '.vs'
+	+ '.vscode'
+	+ 'call.py': Regression model, run to simulate a call to the model
+	+ 'call2.py': Resnet50 model, run to simulate a call to the model **(CURRENTLY NOT WORKING)**
+	+ 'deploy.py': Resgression model, deploys the model to AzureML
+	+ 'deploy2.py': Resnet50 model, deploys the model to AzureML **(CURRENTLY NOT WORKING)**
+	+ 'deploymentConfig.yml': configuration details for deploying the model to AzureML
+	+ 'my_model.h5': Model of Resnet50, may need modification
+	+ 'myenv.yml': details about the python environment
+	+ 'panda.jpg': image of a panda used for testing
+	+ 'score.py': Regression model, handles the actual calculations when called from call.py
+	+ 'score2.py': Resnet model, handles the actual classification when called from call2.py
+	+ 'sklearn_regression_model.pkl': Regression model
++ 'gitignore': What to ignore at commit time
++ 'CODE_OF_CONDUCT': Code of conduct 
++ 'LICENSE': The license for the files
++ 'README': This README file
++ 'SECURITY': Security information
 
 
 ## Prerequisites
 
-Visual Studio/Visual Studio Code (if you use Visual Studio Code to set up your python environment use ctrl+shift+p, "Python: Select Interpreter")
-Anaconda 3.7
-Azure Machine Learning workspace
-Azure Machine Learning SDK (https://docs.microsoft.com/en-us/python/api/overview/azure/ml/install?view=azure-ml-py)
-Docker
-Tensorflow
+Visual Studio/Visual Studio Code (if you use Visual Studio Code to set up your python environment use ctrl+shift+p, "Python: Select Interpreter") \
+Anaconda 3.7 \
+Azure Machine Learning workspace \
+Azure Machine Learning SDK (https://docs.microsoft.com/en-us/python/api/overview/azure/ml/install?view=azure-ml-py) \
+Docker \
+Tensorflow \
 Keras
 
 ## Setup
