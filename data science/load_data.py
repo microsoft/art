@@ -8,7 +8,7 @@ from torch.autograd import Variable
 from PIL import Image
 
 def load_dataset(batch_size):
-    data_path = './test/'
+    data_path = './dataset'
     train_dataset = datasets.ImageFolder(
         root=data_path,
         transform=transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
@@ -26,7 +26,7 @@ def load_dataset(batch_size):
 # Load the pretrained model
 model = models.resnet18(pretrained=True)
 # Use CUDA to utilize the GPU
-# print(torch.cuda.is_available())
+print(torch.cuda.is_available())
 model.cuda()
 # Use the model object to select the desired layer
 layer = model._modules.get('avgpool')

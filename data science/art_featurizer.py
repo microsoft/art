@@ -7,6 +7,8 @@ from PIL import Image
 import numpy as np
 import pickle
 import time
+import json
+import tqdm
 
 import os
 
@@ -18,7 +20,7 @@ import torchvision.datasets as datasets
 def load_dataset(batch_size):
     """ Loads the dataset from the dataset/fonts folder with the specified batch size. """
 
-    data_path = 'datasets/fonts'
+    data_path = './dataset'
     train_dataset = datasets.ImageFolder(
         root=data_path,
         transform=transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
@@ -85,7 +87,7 @@ def get_filenames():
     """ Extracts filenames from the dataset/fonts folder. """
     # TODO replace with better data reading?
     total_filenames = []
-    root_dir = "datasets/fonts"
+    root_dir = "./dataset_small/metadata"
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             total_filenames.append(os.path.join(root, file).replace('\\', '/'))
@@ -96,13 +98,12 @@ def get_metadata(filenames):
     """ Extracts metadata from filenames and writes them to a .pkl file. """
     total_metadata = []
     for filename in filenames:
-        split_name = filename.split('/')
-        content = split_name[-2]
-        style = split_name[-1].split('.')[0]
-        metadata = (content, style)
-        total_metadata.append(metadata)
-
-    pickle.dump(total_metadata, open("datasets/metadata.pkl", "wb"))
+        with open(filename) as f:
+            metadata = json.load(f)
+            total_metadata.append(metadata)
+    
+    with open("metadata.json", 'w') as outfile:
+        json.dump(total_metadata, outfile)
 
 
 def process_images(model, dataset):
@@ -118,15 +119,18 @@ def process_images(model, dataset):
     print(model.name)
     count = 0
     for imgs, label in dataset:
-        feature_vector = get_feature_vector(imgs.cuda(), model, layer)
-        total_features.extend(feature_vector)
-        if count%120 == 0:
-            print(count)
-        count += 1
+        try:
+            feature_vector = get_feature_vector(imgs.cuda(), model, layer)
+            total_features.extend(feature_vector)
+            if count%120 == 0:
+                print(count)
+            count += 1
+        except:
+            print("error loading: {}".format(label))
 
     total_numpy_features = np.array(total_features)
 
-    pickle.dump(total_numpy_features, open("datasets/features-" + model.name + ".pkl", "wb"))
+    pickle.dump(total_numpy_features, open("dataset/features-" + model.name + ".pkl", "wb"))
     # end = time.time()
     # print(end - start)
     # print(model.name)
@@ -176,9 +180,9 @@ def run_models():
     # mobilenet.name = "mobilenet"
     # mnasnet.name = "mnasnet"
 
-    print("Models created")
+    # print("Models created")
 
-    # only needs to be run once, commented out for now
+    # # only needs to be run once, commented out for now
     # filenames = get_filenames()
     # get_metadata(filenames)
     # print("Metadata done")
@@ -205,15 +209,14 @@ def benchmark_different():
         
         print(model)
         print(sum / 61504)
-         
 
 
 if __name__ == '__main__':
     torch.multiprocessing.freeze_support()
 
-    # run_models()
+    run_models()
 
-    benchmark_different()
+    # benchmark_different()
     
     # print(pickle.load(open("datasets/metadata.pkl", "rb")))
     # vectors = pickle.load(open("datasets/features-resnet18.pkl", "rb"))
