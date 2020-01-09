@@ -30,8 +30,8 @@ output_sample = "giant_panda"
 @output_schema( StandardPythonParameterType(output_sample))
 def run(url):
     try:
-        response = requests.get(url)
-        img = Image.open(BytesIO(response.content)).resize((224, 224)) #URL -> PIL 
+        response = requests.get(url) #URL -> response
+        img = Image.open(BytesIO(response.content)).resize((224, 224)) #response -> PIL 
         np_img = image.img_to_array(img) #PIL -> numpy
         img_batch = np.expand_dims(np_img, axis=0) #numpy -> batch
         processed_image = preprocess_input(img_batch, mode='caffe') #pre-process img

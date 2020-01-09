@@ -46,7 +46,7 @@ service.wait_for_deployment(True)
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
 
-
+# Check prediction response with test data
 scoring_uri = 'http://localhost:5050/score'
 headers = {'Content-Type':'application/json'}
 test_data = json.dumps({"url":"https://wamu.org/wp-content/uploads/2019/12/Bei-Bei-trip-to-china-1500x1266.jpg"})
