@@ -18,15 +18,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: CondaEnvironment@0
+- task: UsePythonVersion@0
   inputs:
-    environmentName: 'azureml-deploy'
-    packageSpecs: 'python=3'
+    versionSpec: '3.6'
+- script: pip install -r azureml/requirements.txt
+    displayName: 'Install dependencies'
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      pip install -r azureml/requirements.txt
       python3 azureml/deploy.py
