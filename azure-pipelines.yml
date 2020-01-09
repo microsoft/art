@@ -23,7 +23,7 @@ steps:
     azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'pip install --upgrade pip && pip install -r azureml/requirements.txt && python3 azureml/deploy.py'
+    inlineScript: 'pip install -r azureml/requirements.txt && python3 azureml/deploy.py'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
