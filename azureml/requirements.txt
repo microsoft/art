@@ -1,3 +1,3 @@
-azureml
-azureml-core
-azureml-train
+azureml-sdk
+tensorflow
+keras
