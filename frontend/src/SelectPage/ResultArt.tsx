@@ -79,7 +79,7 @@ export default class ResultArt extends Component<IProps, IState> {
           src={image.img}
           alt={image.id}
           onClick={() => {this.props.selectImage(image.key, image.id);}}
-          style={this.props.selectedImage.key === image.key ? { borderColor: '#002050', borderWidth: '2px' } : { borderColor: '#ffffff', borderWidth: '2px' }}
+          style={this.props.selectedImage.key === image.key ? { borderColor: '#002050', borderWidth: '4px' } : { borderColor: '#ffffff', borderWidth: '4px' }}
         />
       </React.Fragment>
     ));

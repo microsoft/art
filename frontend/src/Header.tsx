@@ -12,6 +12,10 @@ const iconClass = mergeStyles({
   color: "#005a9e"
 });
 
+const headerClass = mergeStyles({
+  backgroundColor: "#005500"
+});
+
 export const Header : React.FunctionComponent = () => {
   
   const title = () => {
@@ -45,6 +49,7 @@ export const Header : React.FunctionComponent = () => {
     <CommandBar
       items={_items}
       farItems={_farItems}
+      className={headerClass}
     />
   );
 };

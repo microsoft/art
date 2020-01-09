@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
 import SelectControl from './SelectControl';
 import ResultArt from './ResultArt';
 import { Translation } from 'react-i18next';
@@ -7,6 +8,14 @@ import { Translation } from 'react-i18next';
 
 const NUM_FROM_EACH_CAT = 2; //Number to choose from each category
 const NUM_MAX_RESULTS = 6;
+
+const buttonStyle = mergeStyles({
+    width: 175,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+    marginBottom: 10
+})
 
 interface IState {
     curatedImages: any,
@@ -282,27 +291,44 @@ class SelectPage extends Component<IProps, IState> {
     }
   }
 
+  exploreArtUrlSuffix() {
+    let urlBase = '/explore/';
+    return urlBase;
+  }
+
+  searchArtUrlSuffix() {
+    let urlBase = '/search/';
+    return urlBase;
+  }
+
+  
+
   render() {
     return (
-        <React.Fragment>
-            <div className="selectpage__head">
+        <Stack>
+            <Stack.Item className="selectpage__head">
                 <h1 className="claim">{"Select something please"}</h1>
                 <SelectControl
                     sendObjectIds={this.getImageIDs}
                     clearOldImages={this.clearOldImages}
                     curatedImages={this.state.curatedImages}
                 />
-            </div>
-            <ResultArt
-                images={this.state.imgObjects}
-                selectedImage={this.state.selectedImage}
-                selectImage={this.changeSelectedImage}
-                categorySelected={this.state.categorySelected}
-            />
-            <div className="u-container-centered">
-                <a className="button" href={this.generateArtUrlSuffix()}>Generate</a>
-            </div>
-        </React.Fragment>
+            </Stack.Item>
+            <Stack.Item>
+                <ResultArt
+                    images={this.state.imgObjects}
+                    selectedImage={this.state.selectedImage}
+                    selectImage={this.changeSelectedImage}
+                    categorySelected={this.state.categorySelected}
+                />
+            </Stack.Item>
+
+            <Stack horizontal horizontalAlign="space-around" className="u-container-centered">
+                <DefaultButton className="button" text="Explore" href={this.exploreArtUrlSuffix()}/>
+                <DefaultButton className="button" text="Search" href={this.searchArtUrlSuffix()}/>
+            </Stack>
+        </Stack>
+
     );
   }
 }

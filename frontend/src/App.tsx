@@ -11,11 +11,13 @@ import ExplorePage from './ExplorePage/ExplorePage';
 import HomePage from "./HomePage/HomePage";
 import SearchPage from "./SearchPage/SearchPage";
 import SelectPage from "./SelectPage/SelectPage";
+import NavBar from "./NavBar/NavBar";
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 const btmMargin = mergeStyles({
-    marginBottom: 50
+    marginBottom: 50,
+    backgroundColor: "#d0c8b0"
 });
 
 interface IProps {};

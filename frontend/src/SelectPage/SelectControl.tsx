@@ -17,7 +17,7 @@ const NUM_FOR_SELECT = 7;
 
 const dropdownOptions: IDropdownOption[] = [
     { key: 'optionAll', text: 'All' },
-    { key: 'optionAmor', text: 'Armor' },
+    { key: 'optionArmor', text: 'Armor' },
     { key: 'optionEwers', text: 'Ewers' },
     { key: 'optionGoblets', text: 'Goblets' },
     { key: 'optionPurses', text: 'Purses' },
@@ -79,7 +79,11 @@ export default class SearchControl extends Component<IProps, IState> {
     // }
 
     let curatedImages = this.props.curatedImages;
+    console.log(curatedImages);
+    console.log(category);
     let IDs = this.pickNUniqueFromList(curatedImages[category], NUM_FOR_SELECT);
+    console.log("IDS:");
+    console.log(IDs);
     this.props.clearOldImages();
     this.props.sendObjectIds(IDs);
   }
@@ -90,7 +94,7 @@ export default class SearchControl extends Component<IProps, IState> {
       <Dropdown
         placeholder="Select a Category"
         options={options}
-        onChange={( option:any ) => this.onSelection(option)}
+        onChange={( event:any, option:any ) => this.onSelection(option["text"])}
       />
     );
   }
