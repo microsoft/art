@@ -4,6 +4,7 @@ import { App } from './App';
 import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Customizer, mergeStyles } from 'office-ui-fabric-react';
 import * as serviceWorker from './serviceWorker';
+import './main.scss';
 
 // Inject some global styles
 mergeStyles({

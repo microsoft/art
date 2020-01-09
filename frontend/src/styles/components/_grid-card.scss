@@ -1,64 +1,64 @@
 .grid-card {
-    margin-bottom: $space-l;
-    width: 20%;
-  
-    @media (max-width: $mq-m) {
-      width: 60%;
-    }
-  
-    @media (max-width: $mq-l) {
-      width: 40%;
-    }
-  
-    @media (min-width: $mq-l) {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-  
-    &__img {
-      background-color: $color-shade-light;
-      height: 15rem;
-      max-height: 31.25rem;
-      max-width: 31.25rem;
-      margin-bottom: $space-s;
-      object-fit: contain;
-      width: 100%;
-  
-      @media (max-width: $mq-m){
-        height: 8rem;
-      }
-    }
-  
-    &__link {
-  
-    }
-  
-    &__title,
-    &__text {
-      margin-top: 0;
-    }
-  
-    &__title {
-      color: $color-primary;
-      font-size: $font-l;
-      font-weight: $font-weight-semibold;
-      margin-bottom: $space-xs;
-      @media (max-width: $mq-m) {
-        font-size: $font-s;
-      }
-      @media (max-width: $mq-l) {
-        font-size: $font-m;
-      }
-    }
-  
-    &__text {
-      color: $color-primary;
-      margin-bottom: 0;
-      @media (max-width: $mq-m) {
-        font-size: $font-s;
-      }
-      @media (max-width: $mq-l) {
-        font-size: $font-m;
-      }
+  margin-bottom: $space-l;
+  width: 20%;
+
+  @media (max-width: $mq-m) {
+    width: 60%;
+  }
+
+  @media (max-width: $mq-l) {
+    width: 40%;
+  }
+
+  @media (min-width: $mq-l) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  &__img {
+    background-color: $color-shade-light;
+    height: 15rem;
+    max-height: 31.25rem;
+    max-width: 31.25rem;
+    margin-bottom: $space-s;
+    object-fit: contain;
+    width: 100%;
+
+    @media (max-width: $mq-m){
+      height: 8rem;
     }
   }
+
+  &__link {
+
+  }
+
+  &__title,
+  &__text {
+    margin-top: 0;
+  }
+
+  &__title {
+    color: $color-primary;
+    font-size: $font-l;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $space-xs;
+    @media (max-width: $mq-m) {
+      font-size: $font-s;
+    }
+    @media (max-width: $mq-l) {
+      font-size: $font-m;
+    }
+  }
+
+  &__text {
+    color: $color-primary;
+    margin-bottom: 0;
+    @media (max-width: $mq-m) {
+      font-size: $font-s;
+    }
+    @media (max-width: $mq-l) {
+      font-size: $font-m;
+    }
+  }
+}
