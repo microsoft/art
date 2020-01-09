@@ -12,33 +12,33 @@
   // '/styles/abstracts/mixins/crop-text',
   // '/styles/abstracts/mixins/underline',
   // '/styles/abstracts/mixins/spacing',
-  // '/styles/abstracts/mixins/container-centered',
-  // '/styles/abstracts/mixins/transition';
+  '/styles/abstracts/mixins/container-centered',
+  '/styles/abstracts/mixins/transition';
 
 // 2. Vendors
-// @import
-  // '/styles/vendor/normalize',
-  // '/styles/vendor/slick';
+@import
+  '/styles/vendor/normalize',
+  '/styles/vendor/slick';
 
 // 3. Base stuff
-// @import
+@import
   // '/styles/base/base',
   // '/styles/base/fonts',
   // '/styles/base/typography',
-  // '/styles/base/utilities';
+  '/styles/base/utilities';
 
 // 4. Layout-related sections
-// @import
+@import
   // '/styles/layout/header',
-  // '/styles/layout/selectpage-head',
+  '/styles/layout/selectpage-head';
   // '/styles/layout/footer';
 
 // 5. Components
-
+@import
   // '/styles/components/btn',
   // '/styles/components/explore',
   // '/styles/components/search',
-  '/styles/components/grid-card'
+  '/styles/components/grid-card';
   // '/styles/components/original',
   // '/styles/components/nav',
   // '/styles/components/gen-art',

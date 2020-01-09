@@ -26,7 +26,7 @@ export class App extends React.Component {
     render() {
         return (
             <Router>
-                <Stack className="main">
+                <Stack className="main" role="main">
                     <Stack className={btmMargin}>
                         <Header />
                     </Stack>
