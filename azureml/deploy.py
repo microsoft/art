@@ -1,22 +1,13 @@
-import os
-import urllib
-import shutil
-import azureml
-import requests
-import json
+import azureml, json, os, requests, shutil, urllib
 
-from azureml.core import Experiment
-from azureml.core import Workspace, Run
-from azureml.core.compute import ComputeTarget, AmlCompute
+from azureml.core import Datastore, Experiment, Run, ScriptRunConfig, Workspace
+from azureml.core.compute import AmlCompute, ComputeTarget
 from azureml.core.compute_target import ComputeTargetException
 from azureml.train.dnn import TensorFlow
-from azureml.core import Datastore
-from azureml.core import ScriptRunConfig
 from azureml.core.runconfig import RunConfiguration
-from azureml.core.model import InferenceConfig
+from azureml.core.model import InferenceConfig, Model
 from azureml.core.environment import Environment
 from azureml.core.conda_dependencies import CondaDependencies
-from azureml.core.model import Model
 from azureml.core.webservice import LocalWebservice
 
 ws = Workspace(
@@ -35,7 +26,7 @@ model = Model.register(model_path = "my_model.h5",
                       workspace = ws)
 
 inference_config = InferenceConfig(
-    entry_script="score_keras.py",
+    entry_script="score.py",
     runtime="python",
     conda_file="myenv.yml")
 
