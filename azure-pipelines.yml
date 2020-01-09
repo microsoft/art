@@ -15,7 +15,7 @@ steps:
     azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'python deploy.py'
+    inlineScript: 'python azureml/deploy.py'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
