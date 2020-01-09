@@ -50,6 +50,7 @@ export const Header : React.FunctionComponent = () => {
       items={_items}
       farItems={_farItems}
       className={headerClass}
+      
     />
   );
 };
