@@ -52,7 +52,7 @@ export default class ResultBox extends Component<IProps> {
           <Card.Item className="grid-card__link">
             <a className="grid-card__load" href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
                 <LazyLoad
-                throttle={100250}
+                throttle={250}
                 height={200}
                 offset={1000}
                 placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
@@ -62,10 +62,10 @@ export default class ResultBox extends Component<IProps> {
             </a>
           </Card.Item>
           <Card.Item className="grid-card__title">
-            <div>{this.props.data.Title}</div>
+            <div>{!this.props.data.Title ? "Untitled Piece" : this.props.data.Title}</div>
           </Card.Item>
           <Card.Item className="grid-card__text">
-            <div>{this.props.data.Department}</div>
+            <div>{!this.props.data.Department ? "No description" : this.props.data.Department}</div>
           </Card.Item>
       </Card>
     );
