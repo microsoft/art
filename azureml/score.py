@@ -11,6 +11,7 @@ from io import BytesIO
 
 from inference_schema.schema_decorators import input_schema, output_schema
 from inference_schema.parameter_types.standard_py_parameter_type import StandardPythonParameterType
+
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from keras.models import load_model
 from keras.preprocessing import image
@@ -38,6 +39,5 @@ def run(url):
         preds = model.predict(processed_image) #make prediction on img
         pred_class = decode_predictions(preds, top=1) #decode predition
         return pred_class[0][0][1] #return the prediction
-    except Exception as e:
-        error = str(e)
-        return error
+    except Exception as err:
+        return str(err)

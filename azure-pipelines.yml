@@ -1,0 +1,39 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - '*.md'
+
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - '*.md'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+  displayName: Set Python Version
+- script: pip install -r azureml/requirements.txt
+  displayName: 'Install dependencies'
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
+  displayName: Install Docker
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      pip install
+      python3 azureml/deploy.py
+  displayName: Run Deploy Script
