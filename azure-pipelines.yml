@@ -22,7 +22,7 @@ steps:
   inputs:
     versionSpec: '3.6'
 - script: pip install -r azureml/requirements.txt
-    displayName: 'Install dependencies'
+  displayName: 'Install dependencies'
 - task: DockerInstaller@0
   inputs:
     dockerVersion: '17.09.0-ce'
