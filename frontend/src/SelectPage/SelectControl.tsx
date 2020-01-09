@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-
-import { Select } from 'grommet';
-
 import {Dropdown, IDropdownOption, IDropdownStyles} from 'office-ui-fabric-react';
 
 interface IProps {
@@ -18,6 +15,17 @@ interface IState {
 //const NUM_IMAGES_SEARCH_PAGE = 12;
 const NUM_FOR_SELECT = 7;
 
+const dropdownOptions: IDropdownOption[] = [
+    { key: 'optionAll', text: 'All' },
+    { key: 'optionAmor', text: 'Armor' },
+    { key: 'optionEwers', text: 'Ewers' },
+    { key: 'optionGoblets', text: 'Goblets' },
+    { key: 'optionPurses', text: 'Purses' },
+    { key: 'optionTeapots', text: 'Teapots' },
+    { key: 'optionVases', text: 'Vases' },
+
+]
+
 /**
  * The search bar for art tags
  * 'curatedImages' prop: object of objIDs
@@ -26,7 +34,7 @@ const NUM_FOR_SELECT = 7;
  */
 export default class SearchControl extends Component<IProps, IState> {
   state = {
-    options: ['All', 'Armor', 'Ewers', 'Goblets', 'Purses', 'Teapots', 'Vases'],
+    options: dropdownOptions,
     selectedValue: '',
   };
 
@@ -79,10 +87,8 @@ export default class SearchControl extends Component<IProps, IState> {
   render() {
     const { options, selectedValue } = this.state;
     return (
-      <Select
-        size="medium"
+      <Dropdown
         placeholder="Select a Category"
-        value={selectedValue}
         options={options}
         onChange={( option:any ) => this.onSelection(option)}
       />

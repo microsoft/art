@@ -70,6 +70,7 @@ export default class ResultArt extends Component<IProps, IState> {
     if (this.props.categorySelected) {
       imagesToDisplay = imagesToDisplay.slice(0, 6);
     }
+    console.log(imagesToDisplay.length);
 
     const listItems = imagesToDisplay.map((image:any, i:any) => (
       <React.Fragment key={image.id}>
@@ -78,7 +79,7 @@ export default class ResultArt extends Component<IProps, IState> {
           src={image.img}
           alt={image.id}
           onClick={() => {this.props.selectImage(image.key, image.id);}}
-          style={this.props.selectedImage.key === image.key ? { borderColor: '#002050', borderSize: '2px' } : { borderColor: '#ffffff', borderSize: '2px' }}
+          style={this.props.selectedImage.key === image.key ? { borderColor: '#002050', borderWidth: '2px' } : { borderColor: '#ffffff', borderWidth: '2px' }}
         />
       </React.Fragment>
     ));

@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import SelectControl from './SelectControl';
 import ResultArt from './ResultArt';
-import { NamespacesConsumer } from 'react-i18next';
-import {AppInsights} from "applicationinsights-js"
+import { Translation } from 'react-i18next';
+//import {AppInsights} from "applicationinsights-js"
 
 
 const NUM_FROM_EACH_CAT = 2; //Number to choose from each category
 const NUM_MAX_RESULTS = 6;
 
+interface IState {
+    curatedImages: any,
+    choiceLists: any, 
+    selectedIndex: any,
+    selectedImage: any,
+    imgObjects: any,
+    categorySelected: any
+};
+
+interface IProps {
+
+};
+
 /**
  * Page for selecting an image to start generating on
  */
-class SelectPage extends Component {
-  constructor(props) {
+class SelectPage extends Component<IProps, IState> {
+  constructor(props:any) {
     super(props);
     this.state = {
       curatedImages: {
@@ -98,8 +111,8 @@ class SelectPage extends Component {
     this.getImageIDs = this.getImageIDs.bind(this);
     this.clearOldImages = this.clearOldImages.bind(this);
 
-    AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
-    AppInsights.trackPageView("Select Page");
+    //AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
+    //AppInsights.trackPageView("Select Page");
   }
 
   /**
@@ -107,12 +120,12 @@ class SelectPage extends Component {
    * @param {any[]} list - list of elements of any type
    * @param {*} n - the number of unqiue elements to choose. N <= list.length
    */
-  pickNUniqueFromList(list, n) {
+  pickNUniqueFromList(list:any, n:any) {
     if (n > list.length) {
       return 'N IS TOO LARGE';
     }
 
-    let output = [];
+    let output: any[] = [];
     while (output.length < n) {
       let randIndex = Math.floor(Math.random() * list.length);
       let choice = list[randIndex];
@@ -130,9 +143,9 @@ class SelectPage extends Component {
    */
   getLandingPage() {
     let categories = Object.keys(this.state.curatedImages);
-    let landingPageList = [];
+    let landingPageList: any[] = [];
 
-    let choiceLists = {};
+    let choiceLists:any = {};
     for (let j = 0; j < NUM_FROM_EACH_CAT; j++) {
       choiceLists[j] = [];
     }
@@ -166,7 +179,7 @@ class SelectPage extends Component {
    * @param {int} key
    * @param {int} ID - objID of the art being selected
    */
-  changeSelectedImage(key, ID) {
+  changeSelectedImage(key: any, ID: any) {
     //Unclear if this is a better system or not
     if (ID === this.state.selectedImage.id) {
       this.setState({
@@ -189,7 +202,7 @@ class SelectPage extends Component {
    * callback wrapper for the objIDsToImages function
    * @param {int[]} imageIDs - list of object IDs to get the images for
    */
-  getImageIDs(imageIDs) {
+  getImageIDs(imageIDs:any) {
     this.objIDsToImages(imageIDs);
   }
 
@@ -208,10 +221,10 @@ class SelectPage extends Component {
    * into this.state.imgObjects
    * @param {Int[]} objIDs - An array of object IDs from the met API to convert to an array of image urls
    */
-  objIDsToImages(objIDs) {
+  objIDsToImages(objIDs:any) {
     const baseURL = 'https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/';
 
-    let imgObjs = objIDs.map(ID => ({ img: baseURL + ID.toString() + '.jpg', id: ID, key: ID }));
+    let imgObjs = objIDs.map((ID:any) => ({ img: baseURL + ID.toString() + '.jpg', id: ID, key: ID }));
 
     this.setState({
       imgObjects: imgObjs,
@@ -228,7 +241,7 @@ class SelectPage extends Component {
 
     //If a category is selected, then just use the current set of images
     if (this.state.categorySelected) {
-      idList = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map(ob => ob.id);
+      idList = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
 
       //Else, you are in the default landing page and should take the selected image and a choiceList that does not contain the selected image
     } else {
@@ -242,7 +255,7 @@ class SelectPage extends Component {
     
     // Randomly selects an image if no image is selected from the array of imgObjects and category not selected
     if(this.state.selectedImage.id === 0 && !this.state.categorySelected){
-      let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map(ob => ob.id);
+      let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
       let randomId;
 
       for(var i = 0 ; i < imgSet.length ; i++){
@@ -271,29 +284,25 @@ class SelectPage extends Component {
 
   render() {
     return (
-      <NamespacesConsumer>
-        {t => (
-          <React.Fragment>
+        <React.Fragment>
             <div className="selectpage__head">
-              <h1 className="claim">{t('global.claim')}</h1>
-              <SelectControl
-                sendObjectIds={this.getImageIDs}
-                clearOldImages={this.clearOldImages}
-                curatedImages={this.state.curatedImages}
-              />
+                <h1 className="claim">{"Select something please"}</h1>
+                <SelectControl
+                    sendObjectIds={this.getImageIDs}
+                    clearOldImages={this.clearOldImages}
+                    curatedImages={this.state.curatedImages}
+                />
             </div>
             <ResultArt
-              images={this.state.imgObjects}
-              selectedImage={this.state.selectedImage}
-              selectImage={this.changeSelectedImage}
-              categorySelected={this.state.categorySelected}
+                images={this.state.imgObjects}
+                selectedImage={this.state.selectedImage}
+                selectImage={this.changeSelectedImage}
+                categorySelected={this.state.categorySelected}
             />
             <div className="u-container-centered">
-              <a className="button" href={this.generateArtUrlSuffix()}>Generate</a>
+                <a className="button" href={this.generateArtUrlSuffix()}>Generate</a>
             </div>
-          </React.Fragment>
-        )}
-      </NamespacesConsumer>
+        </React.Fragment>
     );
   }
 }

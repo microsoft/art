@@ -10,6 +10,7 @@ import {Buttons} from './Buttons';
 import ExplorePage from './ExplorePage/ExplorePage';
 import HomePage from "./HomePage/HomePage";
 import SearchPage from "./SearchPage/SearchPage";
+import SelectPage from "./SelectPage/SelectPage";
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
@@ -32,6 +33,7 @@ export class App extends React.Component {
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/explore" component={ExplorePage} />
                     <Route exact path="/search" component={SearchPage} />
+                    <Route exact path="/select" component={SelectPage} />
                 </Stack>
             </Router>
         );
