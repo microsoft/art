@@ -12,10 +12,10 @@ pool:
 steps:
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'Azure Search DEV Service Layer (susudars,kmort,miwelsh,mikaels)(ce1dee05-8cf6-4ad6-990a-9c80868800ba)'
+    azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'echo FOOOOO'
+    inlineScript: 'echo Autheddd'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
