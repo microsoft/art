@@ -44,6 +44,7 @@
     color: $color-primary;
     font-size: $font-l;
     font-weight: $font-weight-semibold;
+    font-family: $font-family-heading;
     margin-bottom: $space-xs;
     @media (max-width: $mq-m) {
       font-size: $font-s;
@@ -56,6 +57,7 @@
   &__text {
     color: $color-primary;
     margin-bottom: 0;
+    font-family: $font-family-base;
     @media (max-width: $mq-m) {
       font-size: $font-s;
     }

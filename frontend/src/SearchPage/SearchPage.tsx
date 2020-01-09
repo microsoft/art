@@ -156,7 +156,6 @@ export class SearchPage extends React.Component<IProps, IState> {
                         clearActiveFilters={this.clearActiveFilters}
                         />
                     </Stack>
-
                     <Separator vertical />
                     <Stack horizontal wrap grow={2}>
                         <SearchGrid results={this.state.results} />
