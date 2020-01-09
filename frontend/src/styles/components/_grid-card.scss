@@ -1,8 +1,9 @@
 .grid-card {
   margin-bottom: $space-l;
   width: 20%;
-  height: 500px;
+  height: auto;
   margin: 10px;
+  padding-bottom: 20px;
 
   @media (max-width: $mq-m) {
     width: 60%;
@@ -13,8 +14,6 @@
   }
 
   @media (min-width: $mq-l) {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   &__img {
@@ -32,12 +31,13 @@
   }
 
   &__link {
-
+    text-align: center;
   }
 
   &__title,
   &__text {
     margin-top: 0;
+    padding: 0px 20px;
   }
 
   &__title {
@@ -62,5 +62,9 @@
     @media (max-width: $mq-l) {
       font-size: $font-m;
     }
+  }
+
+  &__load {
+    text-align: center;
   }
 }

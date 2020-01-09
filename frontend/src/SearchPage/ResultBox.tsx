@@ -1,10 +1,9 @@
-  
 import React, { Component } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LazyLoad from 'react-lazyload';
 
 import { Card, ICardSectionStyles } from '@uifabric/react-cards';
-import { Image, mergeStyles } from 'office-ui-fabric-react';
+import { Image, mergeStyles, ImageFit } from 'office-ui-fabric-react';
 
 interface IProps {
     key: any,
@@ -47,41 +46,18 @@ export default class ResultBox extends Component<IProps> {
   //   );
   // }
 
-  // render() {    
-  //   return (
-  //     <Card className={cardStyles}>
-  //         <Card.Item>
-  //           <a className="grid-card__link" href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
-  //               <LazyLoad
-  //               throttle={250}
-  //               height={200}
-  //               offset={100}
-  //               placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
-  //               >
-  //                   <Image src={this.props.data.Thumbnail_Url} />
-  //               </LazyLoad>
-  //           </a>
-  //         </Card.Item>
-  //         <Card.Item styles={cardItemStyles}>
-  //           <p className="grid-card__title">{this.props.data.Title}</p>
-  //           <p className="grid-card__text">{this.props.data.Department}</p>
-  //         </Card.Item>
-  //     </Card>
-  //   );
-  // }
-
   render() {    
     return (
       <Card className="grid-card">
           <Card.Item className="grid-card__link">
-            <a href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
+            <a className="grid-card__load" href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
                 <LazyLoad
-                throttle={250}
+                throttle={100250}
                 height={200}
-                offset={100}
+                offset={1000}
                 placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
                 >
-                    <Image className="grid-card__img" src={this.props.data.Thumbnail_Url} />
+                    <img className="grid-card__img" src={this.props.data.Thumbnail_Url} />
                 </LazyLoad>
             </a>
           </Card.Item>
