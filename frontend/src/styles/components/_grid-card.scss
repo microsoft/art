@@ -1,6 +1,8 @@
 .grid-card {
   margin-bottom: $space-l;
   width: 20%;
+  height: 500px;
+  margin: 10px;
 
   @media (max-width: $mq-m) {
     width: 60%;
