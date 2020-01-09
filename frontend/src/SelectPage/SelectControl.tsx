@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Select } from 'grommet';
+// import { Select } from 'grommet';
 
 import {Dropdown, IDropdownOption, IDropdownStyles} from 'office-ui-fabric-react';
 
