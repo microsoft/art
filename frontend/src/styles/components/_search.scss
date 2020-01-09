@@ -22,7 +22,7 @@
 
   &__input {
     background-color: $color-shade-light;
-    background-image: url('./images/icon-search.svg');
+    background-image: url('../../images/icon-search.svg');
     background-position: 1.5625rem;
     background-repeat: no-repeat;
     background-size: 2.5rem;
@@ -30,6 +30,7 @@
     height: 5rem;
     padding-left: 5rem;
     width: 100%;
+    font-family: $font-family-base;
 
     @media (max-width: $mq-s) {
       height: 4rem;
@@ -62,12 +63,14 @@
     display: flex;
     margin-left: $space-s;
     margin-bottom: $space-s;
+    font-family: $font-family-base;
   }
 
   &__row_category {
     display: flex;
     margin-bottom: $space-s;
     margin-top: $space-m;
+    font-family: $font-family-base;
     
     @media (max-width: $mq-m){
       margin-bottom: $space-s;

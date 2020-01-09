@@ -43,7 +43,7 @@ export default class TagList extends Component<IProps> {
     return (
       <React.Fragment>
         <DefaultButton className={buttonStyle} text="Clear Active Filters" onClick={this.props.clearActiveFilters} />
-        <h4>Active Filters</h4>
+        <h4 className="search__row_category">Active Filters</h4>
         {Object.entries(this.props.activeFilters).map((nameFiltervalue:any,) => 
           <React.Fragment>
             <div className="search__row_category" ><b>{nameFiltervalue[0]}</b></div> 

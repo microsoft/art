@@ -1,6 +1,9 @@
 .grid-card {
   margin-bottom: $space-l;
   width: 20%;
+  height: auto;
+  margin: 10px;
+  padding-bottom: 20px;
 
   @media (max-width: $mq-m) {
     width: 60%;
@@ -11,8 +14,6 @@
   }
 
   @media (min-width: $mq-l) {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   &__img {
@@ -30,18 +31,20 @@
   }
 
   &__link {
-
+    text-align: center;
   }
 
   &__title,
   &__text {
     margin-top: 0;
+    padding: 0px 20px;
   }
 
   &__title {
     color: $color-primary;
     font-size: $font-l;
     font-weight: $font-weight-semibold;
+    font-family: $font-family-heading;
     margin-bottom: $space-xs;
     @media (max-width: $mq-m) {
       font-size: $font-s;
@@ -54,11 +57,16 @@
   &__text {
     color: $color-primary;
     margin-bottom: 0;
+    font-family: $font-family-base;
     @media (max-width: $mq-m) {
       font-size: $font-s;
     }
     @media (max-width: $mq-l) {
       font-size: $font-m;
     }
+  }
+
+  &__load {
+    text-align: center;
   }
 }
