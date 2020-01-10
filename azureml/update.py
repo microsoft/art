@@ -37,28 +37,14 @@ model = Model.register(
 
 myenv = Environment.from_conda_specification(name="myenv", file_path="myenv.yml")
 myenv.docker.base_image = DEFAULT_GPU_IMAGE
+
 inference_config = InferenceConfig(
     entry_script="score.py",
     environment=myenv)
+    
+service = AksWebservice(name="myservicekeras", workspace=ws)
 
-gpu_aks_config = AksWebservice.deploy_configuration(
-    autoscale_enabled=False,
-    num_replicas=3,
-    cpu_cores=2,
-    memory_gb=4,
-    auth_enabled=False)
-
-resource_group = 'extern2020'
-cluster_name = 'new-aks'
-
-attach_config = AksCompute.attach_configuration(
-    resource_group = resource_group,
-    cluster_name = cluster_name,
-    cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
-aks_target = AksCompute(ws, cluster_name)
-
-
-service = Model.deploy(ws, 'myservicekeras', [model], inference_config, gpu_aks_config, aks_target, aks_service_name)
+service.update(models=[model], inference_config=inference_config)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
