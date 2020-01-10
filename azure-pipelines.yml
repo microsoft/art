@@ -21,13 +21,13 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.6'
-  displayName: Set Python Version
+  displayName: Setting Python Version...
 - script: pip install -r azureml/requirements.txt
-  displayName: 'Install dependencies'
+  displayName: 'Installing dependencies...'
 - task: DockerInstaller@0
   inputs:
     dockerVersion: '17.09.0-ce'
-  displayName: Install Docker
+  displayName: Installing Docker...
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'MMLSpark Connection'
@@ -36,4 +36,4 @@ steps:
     inlineScript: |
       pip install
       python3 azureml/deploy.py
-  displayName: Run Deploy Script
+  displayName: Running deploy...
