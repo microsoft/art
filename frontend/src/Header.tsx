@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, FontIcon, mergeStyles} from 'office-ui-fabric-react';
+import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import {CommandBar, ICommandBarItemProps} from 'office-ui-fabric-react/lib/CommandBar';
 import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
 
@@ -7,14 +8,15 @@ import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
 initializeIcons();
 
 const iconClass = mergeStyles({
-  paddingTop: 10,
+  // paddingTop: 10,
   paddingRight: 10,
   color: "#005a9e"
 });
 
 const headerClass = mergeStyles({
-  // borderBottom: "solid lightgray",
-  // paddingBottom: 10
+  paddingBottom: 10,
+  paddingTop: 10,
+  boxShadow: Depths.depth8
 });
 
 export const Header : React.FunctionComponent = () => {
@@ -32,25 +34,15 @@ export const Header : React.FunctionComponent = () => {
       key: 'title',
       text: 'Deep Culture Explorer',
       iconProps: { iconName: 'BranchSearch' },
-      commandBarButtonAs: title
-    }
-  ];
-
-  const _farItems: ICommandBarItemProps[] = [
-    {
-      key: 'cart',
-      text: 'Cart',
-      ariaLabel: 'Cart',
-      iconOnly: true,
-      iconProps: { iconName: 'ShoppingCart' }
+      commandBarButtonAs: title,
     }
   ];
 
   return (
     <CommandBar
       items={_items}
-      farItems={_farItems}
       className={headerClass}
+      style={{ color: 'purple' }}
     />
   );
 };

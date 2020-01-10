@@ -23,8 +23,13 @@ const dropdownOptions: IDropdownOption[] = [
     { key: 'optionPurses', text: 'Purses' },
     { key: 'optionTeapots', text: 'Teapots' },
     { key: 'optionVases', text: 'Vases' },
-
 ]
+
+const dropdownStyles: Partial<IDropdownStyles> = {
+    dropdown: { 
+        width: 300
+    }
+};
 
 /**
  * The search bar for art tags
@@ -95,6 +100,7 @@ export default class SearchControl extends Component<IProps, IState> {
         placeholder="Select a Category"
         options={options}
         onChange={( event:any, option:any ) => this.onSelection(option["text"])}
+        styles={dropdownStyles}
       />
     );
   }
