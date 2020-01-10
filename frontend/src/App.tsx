@@ -30,7 +30,6 @@ export class App extends React.Component {
                 <Stack className="main" role="main">
                     <Stack className={btmMargin}>
                         <Header />
-                        <Separator />
                     </Stack>
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/explore" component={ExplorePage} />

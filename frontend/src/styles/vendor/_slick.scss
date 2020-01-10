@@ -232,6 +232,7 @@
   text-transform: uppercase;
   position: relative;
   width: $arrow-size;
+  margin: 0 10px;
   @media (max-width: $mq-s) {
     height: $arrow-size - 1rem;
     width: $arrow-size - 1rem;
@@ -363,12 +364,16 @@
 
 .slick-slide > div {
   height: 337px; // Needed to show the full slide height, do not change
+  //height: 340px;
 
   @media (max-width: $mq-ss){
     height: 275px;
   }
 
-  button,
+  button {
+    height: inherit;
+    margin-left: 50px;
+  }
   img {
     height: inherit;
   }
