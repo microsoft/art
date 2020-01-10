@@ -70,7 +70,6 @@ export default class ResultArt extends Component<IProps, IState> {
     if (this.props.categorySelected) {
       imagesToDisplay = imagesToDisplay.slice(0, 6);
     }
-    console.log(imagesToDisplay.length);
 
     const listItems = imagesToDisplay.map((image:any, i:any) => (
       <React.Fragment key={image.id}>

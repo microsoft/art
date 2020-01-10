@@ -1,17 +1,10 @@
 import React from 'react';
-import {Stack, Separator, mergeStyles} from 'office-ui-fabric-react';
+import {Stack, mergeStyles} from 'office-ui-fabric-react';
 import {Header} from './Header';
-import Artwork from './Artwork';
-import Options from './Options';
-import GalleryItem from './GalleryItem';
-import ListGrid from './Gallery';
-import CollectionAdder from './CollectionAdder';
-import {Buttons} from './Buttons';
+
 import ExplorePage from './ExplorePage/ExplorePage';
-import HomePage from "./HomePage/HomePage";
 import SearchPage from "./SearchPage/SearchPage";
 import SelectPage from "./SelectPage/SelectPage";
-import NavBar from "./NavBar/NavBar";
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
@@ -31,8 +24,8 @@ export class App extends React.Component {
                     <Stack className={btmMargin}>
                         <Header />
                     </Stack>
-                    <Route exact path="/" component={HomePage} />
-                    <Route exact path="/explore" component={ExplorePage} />
+                    <Route exact path="/" component={SelectPage} />
+                    <Route exact path="/explore/:id" component={ExplorePage} />
                     <Route exact path="/search" component={SearchPage} />
                     <Route exact path="/select" component={SelectPage} />
                 </Stack>

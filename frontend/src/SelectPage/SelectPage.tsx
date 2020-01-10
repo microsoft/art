@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { Stack, DefaultButton} from 'office-ui-fabric-react';
 import SelectControl from './SelectControl';
 import ResultArt from './ResultArt';
-import { Translation } from 'react-i18next';
+//import { Translation } from 'react-i18next';
 //import {AppInsights} from "applicationinsights-js"
 
 
 const NUM_FROM_EACH_CAT = 2; //Number to choose from each category
 const NUM_MAX_RESULTS = 6;
 
-const buttonStyle = mergeStyles({
-    width: 175,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 10,
-    marginBottom: 10
-})
+// const buttonStyle = mergeStyles({
+//     width: 175,
+//     marginLeft: 'auto',
+//     marginRight: 'auto',
+//     marginTop: 10,
+//     marginBottom: 10
+// })
 
 interface IState {
     curatedImages: any,
@@ -293,6 +293,24 @@ class SelectPage extends Component<IProps, IState> {
 
   exploreArtUrlSuffix() {
     let urlBase = '/explore/';
+    
+    // Randomly selects an image if no image is selected from the array of imgObjects and category not selected
+    if(this.state.selectedImage.id === 0){
+      let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
+      let randomId = imgSet[Math.floor(Math.random()*imgSet.length)];
+
+      if (randomId) {
+        let url = '?id=' + randomId.toString();
+        url = encodeURIComponent(url);
+        return urlBase + url;
+      }
+
+    } else {
+      let url = '?id=' + this.state.selectedImage.id.toString();
+      url = encodeURIComponent(url);
+      return urlBase + url;
+    }
+
     return urlBase;
   }
 

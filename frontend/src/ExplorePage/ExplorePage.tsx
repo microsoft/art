@@ -1,6 +1,5 @@
 import React from 'react';
-import {Stack, Separator, mergeStyles} from 'office-ui-fabric-react';
-import {Header} from '../Header';
+import {Stack, Separator} from 'office-ui-fabric-react';
 import Artwork from '../Artwork';
 import Options from '../Options';
 import GalleryItem from '../GalleryItem';
@@ -8,17 +7,16 @@ import ListGrid from '../Gallery';
 import CollectionAdder from '../CollectionAdder';
 import {Buttons} from '../Buttons';
 
-const btmMargin = mergeStyles({
-    marginBottom: 50
-});
-
-interface IProps {};
+interface IProps {
+    match: any
+};
 
 interface IState {
     current: GalleryItem,
     selected: GalleryItem,
-    galleryItems: GalleryItem[]
-    collections: any
+    galleryItems: GalleryItem[],
+    collections: any,
+    url: any
 }
 
 const defaultGalleryItem = new GalleryItem(
@@ -41,7 +39,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             current: defaultGalleryItem,
             selected: defaultSelectedGalleryItem,
             galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
-            collections: {'Collection 1': [defaultGalleryItem], 'Collection 2':[defaultGalleryItem, defaultGalleryItem]}
+            collections: {'Collection 1': [defaultGalleryItem], 'Collection 2':[defaultGalleryItem, defaultGalleryItem]},
+            url: ''
         }
         this.setSelected = this.setSelected.bind(this);
         this.addtoCollection = this.addtoCollection.bind(this);
@@ -88,6 +87,23 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 this.setGalleryItems(newItems);
             });
     }
+
+    componentDidMount() {
+        //Decode the url data
+        let url = this.props.match.params.id.toString();
+        url = decodeURIComponent(url);
+        let selectedArt = url.split("&")[0].slice(4); //gives id of artwork
+        const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
+        const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
+        let newGalleryItem = new GalleryItem(
+            paintingUrl,
+            "WHOOOOO AM I",
+            "WHO who, WHO who"
+        );
+
+
+        this.setState({"current": newGalleryItem});
+      }    
 
     render() {
         return (

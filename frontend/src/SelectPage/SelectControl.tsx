@@ -9,7 +9,6 @@ interface IProps {
 
 interface IState {
     options: any,
-    selectedValue: any
 }
 
 //const NUM_IMAGES_SEARCH_PAGE = 12;
@@ -40,7 +39,6 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 export default class SearchControl extends Component<IProps, IState> {
   state = {
     options: dropdownOptions,
-    selectedValue: '',
   };
 
   /**
@@ -69,9 +67,9 @@ export default class SearchControl extends Component<IProps, IState> {
    * @param {String} category
    */
   onSelection(category: any) {
-    this.setState({
-      selectedValue: category,
-    });
+    // this.setState({
+    //   selectedValue: category,
+    // });
     // TODO: Review
     // if (this.selectedValue === 'All') {
     //   this.setState({
@@ -94,7 +92,7 @@ export default class SearchControl extends Component<IProps, IState> {
   }
 
   render() {
-    const { options, selectedValue } = this.state;
+    const { options } = this.state;
     return (
       <Dropdown
         placeholder="Select a Category"

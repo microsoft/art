@@ -2,19 +2,13 @@ import React, { Component } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LazyLoad from 'react-lazyload';
 
-import { Card, ICardSectionStyles } from '@uifabric/react-cards';
-import { Image, mergeStyles, ImageFit } from 'office-ui-fabric-react';
+import { Card } from '@uifabric/react-cards';
 
 interface IProps {
     key: any,
     data: any
 }
 
-const cardItemStyles: ICardSectionStyles = {
-  root: {
-    height: 10,
-  }
-};
 
 /**
  * One box in the Result Grid
@@ -37,7 +31,7 @@ export default class ResultBox extends Component<IProps> {
                 offset={1000}
                 placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
                 >
-                    <img className="grid-card__img" src={this.props.data.Thumbnail_Url} />
+                    <img className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} />
                 </LazyLoad>
             </a>
           </Card.Item>
