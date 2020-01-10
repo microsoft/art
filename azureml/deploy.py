@@ -36,7 +36,7 @@ model = Model.register(model_path = "my_model.h5",
 
 myenv = Environment.from_conda_specification(name="myenv", file_path="myenv.yml")
 myenv.docker.base_image = DEFAULT_GPU_IMAGE
-inference_config = InferenceConfig(entry_script="score_keras.py",
+inference_config = InferenceConfig(entry_script="score.py",
                                    environment=myenv)
 
 gpu_aks_config = AksWebservice.deploy_configuration(autoscale_enabled=False,
