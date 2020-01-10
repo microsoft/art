@@ -2,11 +2,8 @@ import React, { Component, ChangeEvent } from 'react';
 import { DefaultButton, mergeStyles } from 'office-ui-fabric-react';
 
 interface IProps {
-    selectedFilters:any,
     activeFilters:any,
     facets:any,
-    toggleFilter:any,
-    applySelectedFilters:any,
     clearActiveFilters:any,
     selectAndApplyFilters:any
 }
@@ -28,10 +25,6 @@ export default class TagList extends Component<IProps> {
     this.state = {};
   }
 
-  onChange = (event:any, category:any, value:any) => {
-    this.props.toggleFilter(category, value);
-  };
-
   /**
    * Handles filter updates related to a checkbox change
    * @param event the triggered checkbox event
@@ -42,39 +35,20 @@ export default class TagList extends Component<IProps> {
     this.props.selectAndApplyFilters(category, value);
   }
 
-  // isChecked(selectedFilters:any, name:any, value:any) {
-  //   if (selectedFilters[name] != null) {
-  //     return selectedFilters[name].has(value)
-  //    } else {
-  //     return false
-  //   }    
-  // }
-
-  isChecked(activeFilters:any, name:any, value:any) {
-    // if (activeFilters[name] != null) {
-    //   return activeFilters[name].has(value);
-    // }
-    // return false;
-    
+  /**
+   * Returns if a filter is active based on state in the parent
+   * @param activeFilters object containing the current active filters
+   * @param name the category of the filter to check (e.g. Culture, Department)
+   * @param value the specific filter to toggle (e.g. French, Sculptures)
+   */
+  isChecked(activeFilters:any, name:string, value:string) {
     return activeFilters[name] != null && activeFilters[name].has(value);
   }
 
   render() {
     return (
       <React.Fragment>
-        <DefaultButton className={buttonStyle} text="Clear Active Filters" onClick={this.props.clearActiveFilters} />
-        <h4 className="search__row_category">Active Filters</h4>
-        {Object.entries(this.props.activeFilters).map((nameFiltervalue:any,) => 
-          <React.Fragment>
-            <div className="search__row_category" ><b>{nameFiltervalue[0]}</b></div> 
-            {[...nameFiltervalue[1]].map(filterValue =>
-                <div className="search__row" key={nameFiltervalue[0] + filterValue} >
-                  <label className="search__label" htmlFor={nameFiltervalue[0] + filterValue}>{filterValue}</label>
-                </div>
-            )}
-          </React.Fragment>
-        )}
-        <DefaultButton className={buttonStyle} text="Apply Selected Filters" onClick={this.props.applySelectedFilters} />
+        <DefaultButton className={buttonStyle} text="Clear Filters" onClick={this.props.clearActiveFilters} />
         {Object.entries(this.props.facets).map((nameFacetEntries:any,) => 
           <React.Fragment>
             <div className="search__row_category" ><b>{nameFacetEntries[0]}</b></div> 
