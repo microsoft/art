@@ -13,7 +13,8 @@ const iconClass = mergeStyles({
 });
 
 const headerClass = mergeStyles({
-  backgroundColor: "#005500"
+  // borderBottom: "solid lightgray",
+  // paddingBottom: 10
 });
 
 export const Header : React.FunctionComponent = () => {
@@ -50,7 +51,6 @@ export const Header : React.FunctionComponent = () => {
       items={_items}
       farItems={_farItems}
       className={headerClass}
-      
     />
   );
 };
