@@ -1,6 +1,6 @@
 import React from 'react';
 import {Stack, mergeStyles} from 'office-ui-fabric-react';
-import {Header} from './Header';
+import {NavBar} from './NavBar/NavBar';
 
 import ExplorePage from './ExplorePage/ExplorePage';
 import SearchPage from "./SearchPage/SearchPage";
@@ -22,7 +22,7 @@ export class App extends React.Component {
             <Router>
                 <Stack className="main" role="main">
                     <Stack className={btmMargin}>
-                        <Header />
+                        <NavBar />
                     </Stack>
                     <Route exact path="/" component={SelectPage} />
                     <Route exact path="/explore/:id" component={ExplorePage} />

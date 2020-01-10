@@ -1,11 +1,11 @@
 import React from 'react';
 import {Stack, Separator} from 'office-ui-fabric-react';
-import Artwork from '../Artwork';
-import Options from '../Options';
-import GalleryItem from '../GalleryItem';
-import ListGrid from '../Gallery';
-import CollectionAdder from '../CollectionAdder';
-import {Buttons} from '../Buttons';
+import SelectedArtwork from './SelectedArtwork';
+import ResultArtwork from './ResultArtwork';
+import Options from './Options';
+import GalleryItem from './GalleryItem';
+import ListGrid from './Gallery';
+import {Buttons} from './Buttons';
 
 interface IProps {
     match: any
@@ -109,8 +109,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         return (
             <Stack horizontal>
                 <Stack grow={1}>
-                    <Artwork item={this.state.current} />
-                    <CollectionAdder items={this.state.collections} addtoCollection={this.addtoCollection} addCollection={this.addCollection}/>
+                    <SelectedArtwork item={this.state.current} />
                     <Buttons 
                         setCurrent={() => this.setCurrent(this.state.selected)} 
                         reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/>
@@ -119,7 +118,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 </Stack>
                 <Separator vertical />
                 <Stack grow={1}>
-                    <Artwork item={this.state.selected} />
+                    <ResultArtwork item={this.state.selected} />
                     <ListGrid items={this.state.galleryItems} setSelected={this.setSelected}/>
                 </Stack>
             </Stack>

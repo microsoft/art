@@ -17,7 +17,7 @@ type ArtworkProps = {
     item: GalleryItem
 }
 
-class Artwork extends React.Component < ArtworkProps, IState > {
+class SelectedArtwork extends React.Component < ArtworkProps, IState > {
 
     constructor(props:any) {
         super(props);
@@ -82,4 +82,4 @@ class Artwork extends React.Component < ArtworkProps, IState > {
     }
 };
 
-export default Artwork;
+export default SelectedArtwork;
