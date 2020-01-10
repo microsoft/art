@@ -24,7 +24,7 @@ export default class ResultBox extends Component<IProps> {
     return (
       <Card className="grid-card">
           <Card.Item className="grid-card__link">
-            <a className="grid-card__load" href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
+            <a href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
                 <LazyLoad
                 throttle={250}
                 height={200}
