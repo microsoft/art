@@ -42,6 +42,7 @@ export class SearchPage extends React.Component<IProps, IState> {
         this.clearActiveFilters = this.clearActiveFilters.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
         this.applySelectedFilters = this.applySelectedFilters.bind(this);
+        this.selectAndApplyFilters = this.selectAndApplyFilters.bind(this);
     
         //AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
         //AppInsights.trackPageView("Search Page");
@@ -55,7 +56,7 @@ export class SearchPage extends React.Component<IProps, IState> {
      * This function creates a brand new search query request and refreshes all tags and results in the current state
      * @param query the new search query
      */
-    executeSearch():any {
+    executeSearch():void {
         let query= "&search="+this.state.terms.join('|')
     
         if (this.state.searchFields!=null){
@@ -83,6 +84,40 @@ export class SearchPage extends React.Component<IProps, IState> {
           .then(function(responseJson) {
             self.setState({facets:responseJson["@search.facets"], results:responseJson.value})
           });
+    }
+
+    /**
+     * Executes a search without retrieving new filter tags (e.g. French, Sculptures).
+     * This search is used after a tag checkbox change.
+     */
+    executeSearchWithoutTagChange():void {
+      let query= "&search="+this.state.terms.join('|')
+    
+      if (this.state.searchFields!=null){
+        query = query+ "&searchFields=" + this.state.searchFields.join(",")
+      }
+      query = query+facetNames.map(f => "&facet="+f+",count:5").join("")
+      
+      let filtersToSearch = Object.entries(this.state.activeFilters)
+        .filter( (val:any) => 
+          val[1].size > 0
+        )
+  
+      if (filtersToSearch.length !== 0){
+        query = query + "&$filter=" +  filtersToSearch.map( ([col, values],) =>
+            this.filterTerm(col, values)
+          ).join(" or ")
+      }
+  
+      console.log(query)
+      let self = this
+      fetch(azureSearchUrl + query, { headers: { 'api-key': apiKey } })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(responseJson) {
+          self.setState({results:responseJson.value})
+        });
     }
     
     componentDidMount() {
@@ -131,13 +166,39 @@ export class SearchPage extends React.Component<IProps, IState> {
     applySelectedFilters(){
         let af = this.state.activeFilters
         let sf = this.state.selectedFilters
+        
         Object.entries(sf).forEach(([filter, values],) => {
           if (!Object.keys(af).includes(filter)) {
             af[filter] = []
           }
           af[filter] = this.setUnion(af[filter], values)
         })
-        this.setState({activeFilters: af, selectedFilters: {}}, this.executeSearch())
+        this.setState({activeFilters: af, selectedFilters: {}}, this.executeSearch);
+    }
+
+    /**
+     * Handler for selecting and applying filters immediately
+     * @param category the category of filter to update (e.g. Culture, Department)
+     * @param value the specific filter to toggle (e.g. French, Sculputres)
+     */
+    selectAndApplyFilters(category: any, value: any) {
+      let af = this.state.activeFilters;
+      
+      // Adds the new category to active filters if it does not exist
+      if (!Object.keys(af).includes(category)) {
+        af[category] = new Set();
+      }
+
+      // Toggles the active status of the filter
+      if (af[category].has(value)) {
+        af[category].delete(value);
+      }
+      else {
+        af[category].add(value);
+      }
+
+      // Update the state and search with the new active filters
+      this.setState({activeFilters: af}, this.executeSearchWithoutTagChange);
     }
     
     render() {
@@ -153,6 +214,7 @@ export class SearchPage extends React.Component<IProps, IState> {
                         facets={this.state.facets}
                         toggleFilter={this.toggleFilter}
                         applySelectedFilters={this.applySelectedFilters}
+                        selectAndApplyFilters={this.selectAndApplyFilters}
                         clearActiveFilters={this.clearActiveFilters}
                         />
                     </Stack>

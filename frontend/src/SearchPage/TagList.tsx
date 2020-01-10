@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ChangeEvent } from 'react';
 import { DefaultButton, mergeStyles } from 'office-ui-fabric-react';
 
 interface IProps {
@@ -7,7 +7,8 @@ interface IProps {
     facets:any,
     toggleFilter:any,
     applySelectedFilters:any,
-    clearActiveFilters:any
+    clearActiveFilters:any,
+    selectAndApplyFilters:any
 }
 
 const buttonStyle = mergeStyles({
@@ -31,12 +32,31 @@ export default class TagList extends Component<IProps> {
     this.props.toggleFilter(category, value);
   };
 
-  isChecked(selectedFilters:any, name:any, value:any) {
-    if (selectedFilters[name] != null) {
-      return selectedFilters[name].has(value)
-     } else {
-      return false
-    }    
+  /**
+   * Handles filter updates related to a checkbox change
+   * @param event the triggered checkbox event
+   * @param category the category of the filter to update (e.g. Culture, Department)
+   * @param value the specific filter to toggle (e.g. French, Sculptures)
+   */
+  onCheckboxChange(event:ChangeEvent, category: any, value: any) {
+    this.props.selectAndApplyFilters(category, value);
+  }
+
+  // isChecked(selectedFilters:any, name:any, value:any) {
+  //   if (selectedFilters[name] != null) {
+  //     return selectedFilters[name].has(value)
+  //    } else {
+  //     return false
+  //   }    
+  // }
+
+  isChecked(activeFilters:any, name:any, value:any) {
+    // if (activeFilters[name] != null) {
+    //   return activeFilters[name].has(value);
+    // }
+    // return false;
+    
+    return activeFilters[name] != null && activeFilters[name].has(value);
   }
 
   render() {
@@ -63,8 +83,9 @@ export default class TagList extends Component<IProps> {
                 <input 
                   className="search__checkbox"
                   type="checkbox" id={facetInfo.value}
-                  checked={this.isChecked(this.props.selectedFilters, nameFacetEntries[0], facetInfo.value)} 
-                  onChange={e => this.onChange(e, nameFacetEntries[0], facetInfo.value)} />
+                  checked={this.isChecked(this.props.activeFilters, nameFacetEntries[0], facetInfo.value)}
+                  // onChange={e => this.onChange(e, nameFacetEntries[0], facetInfo.value)} />
+                  onChange={e => this.onCheckboxChange(e, nameFacetEntries[0], facetInfo.value)} />
                 <label className="search__label" htmlFor={facetInfo.value}>{facetInfo.value + ` (${facetInfo.count})`}</label>
               </div>
             )}
