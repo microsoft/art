@@ -1,9 +1,11 @@
 .grid-card {
+  position: relative;
   margin-bottom: $space-l;
   width: 20%;
   height: auto;
   margin: 10px;
   padding-bottom: 20px;
+  overflow: hidden;
 
   @media (max-width: $mq-m) {
     width: 60%;
@@ -64,5 +66,32 @@
     @media (max-width: $mq-l) {
       font-size: $font-m;
     }
+  }
+
+  &__buttons {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    margin-top: auto !important;
+    background-color: lightsalmon
+  }
+
+  &__slide-enter {
+    top: 100%;
+  }
+
+  &__slide-enter-done {
+    top: 90%;
+    transition: top 0.25s linear;
+  }
+
+  &__slide-exit {
+    top: 90%;
+    transition-duration: top 1s;
+  }
+
+  &__slide-exit-active {
+    top: 100%;
+    transition-duration: top 1s;
   }
 }

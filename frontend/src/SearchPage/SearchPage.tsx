@@ -65,7 +65,7 @@ export class SearchPage extends React.Component<IProps, IState> {
         if (this.state.searchFields!=null){
           query = query+ "&searchFields=" + this.state.searchFields.join(",")
         }
-        query = query+facetNames.map(f => "&facet="+f+",count:5").join("")
+        query = query+facetNames.map(f => "&facet="+f+",count:8").join("")
         
         let filtersToSearch = Object.entries(this.state.activeFilters)
           .filter( (val:any) => 
@@ -94,7 +94,7 @@ export class SearchPage extends React.Component<IProps, IState> {
             
           });
     }
-    
+
     uriToJSON(urijson:any) { return JSON.parse(decodeURIComponent(urijson)); }
     
     updateTerms(newTerms:any) {
@@ -157,7 +157,6 @@ export class SearchPage extends React.Component<IProps, IState> {
             </Stack>
         )
     }
-
 }
 
 export default SearchPage
