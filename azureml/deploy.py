@@ -63,5 +63,6 @@ else:
     service = AksWebservice(name=service_name, workspace=ws)
     service.update(models=[model], inference_config=inference_config, auth_enabled=False)
 
+service.wait_for_deployment(True)
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
