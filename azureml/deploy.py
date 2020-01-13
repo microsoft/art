@@ -66,7 +66,7 @@ if cluster_name not in [x.name for x in aks_target.list(ws)]:
 else:
     print("Updating existing service...")
     service = AksWebservice(name=service_name, workspace=ws)
-    service.update(models=[model], inference_config=inference_config, auth_enabled=False)
+    service.update(models=[model], inference_config=inference_config, auth_enabled=True)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
