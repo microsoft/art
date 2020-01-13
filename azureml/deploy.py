@@ -31,12 +31,13 @@ from keras.preprocessing import image
 from keras.applications.resnet50 import ResNet50
 
 model = Model.register(
-     model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
+    model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
     model_name = "resNet50",
     workspace = ws)
 
-myenv = Environment.from_conda_specification(name="myenv", 
- file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
+myenv = Environment.from_conda_specification(
+    name="myenv", 
+    file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
 myenv.docker.base_image = DEFAULT_GPU_IMAGE
 inference_config = InferenceConfig(
     entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
@@ -50,15 +51,22 @@ gpu_aks_config = AksWebservice.deploy_configuration(
     auth_enabled=False)
 
 resource_group = 'extern2020'
-cluster_name = 'new-aks'
+cluster_name = 'art-aks'
+service_name = 'myserviceart'
 
-attach_config = AksCompute.attach_configuration(
-    resource_group = resource_group,
-    cluster_name = cluster_name,
-    cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
 aks_target = AksCompute(ws, cluster_name)
 
-service = Model.deploy(ws, 'myservicekeras', [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
+if cluster_name not in [x.name for x in aks_target.list(ws)]:
+    print("Creating new service...")
+    attach_config = AksCompute.attach_configuration(
+        resource_group = resource_group,
+        cluster_name = cluster_name,
+        cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
+    service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
+else:
+    print("Updating existing service...")
+    service = AksWebservice(name=service_name, workspace=ws)
+    service.update(models=[model], inference_config=inference_config, auth_enabled=False)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
