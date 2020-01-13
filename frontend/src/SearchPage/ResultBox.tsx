@@ -43,7 +43,9 @@ export default class ResultBox extends Component<IProps, IState> {
           </a>
         </Card.Item>
         <Card.Item className="grid-card__title">
-          <div>{!this.props.data.Title ? "Untitled Piece" : this.props.data.Title}</div>
+          <div>{!this.props.data.Title ?
+                "Untitled Piece" :
+                this.props.data.Title.length < 60 ? this.props.data.Title : this.props.data.Title.substring(0,60) + "..."}</div>
         </Card.Item>
         <Card.Item className="grid-card__text">
           <div>{!this.props.data.Department ? "No description" : this.props.data.Department}</div>
