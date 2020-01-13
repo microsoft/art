@@ -70,14 +70,15 @@
 
   &__buttons {
     position: absolute;
-    top: 100%;
+    bottom: -50px;
     width: 100%;
     height: 35px;
     margin-top: auto !important;
+    // box-shadow: 0px 5px 10px 5px gray;
   }
 
   &__slide-enter {
-    bottom: -35px;
+    bottom: -50px;
   }
 
   &__slide-enter-done {
@@ -90,30 +91,30 @@
   }
   
   &__slide-exit-done {
-    bottom: -35px;
+    bottom: -50px;
     transition: bottom 0.25s linear;
   }
 
-  &__button {
+  &__button_link {
     display: inline-block;
     text-align: center;
-    font-family: $font-family-base;
-    line-height: 35px;
-    background-color: gainsboro;
-  }
-
-  &__button:hover {
-    background-color: lightgray
-  }
-
-  &__button_link {
     text-decoration: none;
+    width: 50%;
     color: black;
+    // background-color: gainsboro;
+    background-color: rgb(240,240,240);
+    font-family: $font-family-base;
+    font-weight: 500;
+    line-height: 35px;
+  }
+
+  &__button_link:hover {
+    background-color: gainsboro;
   }
 
   &__button_sep {
     width: 1px;
     height: 100%;
-    background-color: silver;
+    background-color: gainsboro;
   }
 }
