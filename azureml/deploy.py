@@ -31,12 +31,13 @@ from keras.preprocessing import image
 from keras.applications.resnet50 import ResNet50
 
 model = Model.register(
-     model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
+    model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
     model_name = "resNet50",
     workspace = ws)
 
-myenv = Environment.from_conda_specification(name="myenv", 
- file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
+myenv = Environment.from_conda_specification(
+    name="myenv", 
+    file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
 myenv.docker.base_image = DEFAULT_GPU_IMAGE
 inference_config = InferenceConfig(
     entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
