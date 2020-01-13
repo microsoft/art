@@ -51,15 +51,22 @@ gpu_aks_config = AksWebservice.deploy_configuration(
     auth_enabled=False)
 
 resource_group = 'extern2020'
-cluster_name = 'new-aks'
+cluster_name = 'art-aks'
+service_name = 'myserviceart'
 
-attach_config = AksCompute.attach_configuration(
-    resource_group = resource_group,
-    cluster_name = cluster_name,
-    cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
 aks_target = AksCompute(ws, cluster_name)
 
-service = Model.deploy(ws, 'myservicekeras', [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
+if cluster_name not in [x.name for x in aks_target.list(ws)]:
+    print("Creating new service...")
+    attach_config = AksCompute.attach_configuration(
+        resource_group = resource_group,
+        cluster_name = cluster_name,
+        cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
+    service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
+else:
+    print("Updating existing service...")
+    service = AksWebservice(name=service_name, workspace=ws)
+    service.update(models=[model], inference_config=inference_config, auth_enabled=False)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
