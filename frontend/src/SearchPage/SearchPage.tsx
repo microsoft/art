@@ -15,8 +15,8 @@ interface IState {
 };
 
 const topStackClass = mergeStyles({
-    marginLeft: 40,
-    marginRight: 40
+    marginLeft: 50,
+    marginRight: 50
 })
 
 const facetNames = ["Culture","Department"];
@@ -134,29 +134,53 @@ export class SearchPage extends React.Component<IProps, IState> {
       this.setState({activeFilters: af}, ()=>this.executeSearch(false));
     }
     
-    render() {
-        return (
-            <Stack className={topStackClass}>
-                <SearchControl updateTerms={this.updateTerms} />
-                <Separator />
-                <Stack horizontal>
-                    <Stack grow={1}>
-                        <TagList
-                        activeFilters={this.state.activeFilters}
-                        facets={this.state.facets}
-                        selectAndApplyFilters={this.selectAndApplyFilters}
-                        clearActiveFilters={this.clearActiveFilters}
-                        />
-                    </Stack>
-                    <Separator vertical />
-                    <Stack horizontal wrap grow={2}>
-                        <SearchGrid results={this.state.results} />
-                    </Stack>
-                </Stack>
+    // render() {
+    //     return (
+    //         <Stack className={topStackClass}>
+    //             <SearchControl updateTerms={this.updateTerms} />
+    //             <Separator />
+    //             <Stack horizontal>
+    //                 <Stack grow={1}>
+    //                     <TagList
+    //                     activeFilters={this.state.activeFilters}
+    //                     facets={this.state.facets}
+    //                     selectAndApplyFilters={this.selectAndApplyFilters}
+    //                     clearActiveFilters={this.clearActiveFilters}
+    //                     />
+    //                 </Stack>
+    //                 <Separator vertical />
+    //                 <Stack horizontal wrap grow={2}>
+    //                     <SearchGrid results={this.state.results} />
+    //                 </Stack>
+    //             </Stack>
 
-            </Stack>
-        )
-    }
+    //         </Stack>
+    //     )
+    // }
+
+    render() {
+      return (
+          <Stack className={topStackClass}>
+              <SearchControl updateTerms={this.updateTerms} />
+              <Separator />
+              <Stack horizontal>
+                <div>
+                  <TagList
+                  activeFilters={this.state.activeFilters}
+                  facets={this.state.facets}
+                  selectAndApplyFilters={this.selectAndApplyFilters}
+                  clearActiveFilters={this.clearActiveFilters}
+                  />
+                </div>
+                <Separator vertical />
+                <Stack horizontal wrap grow={1}>
+                    <SearchGrid results={this.state.results} />
+                </Stack>
+              </Stack>
+
+          </Stack>
+      )
+  }
 }
 
 export default SearchPage

@@ -7,15 +7,15 @@
   padding-bottom: 20px;
   overflow: hidden;
 
-  @media (max-width: $mq-m) {
-    width: 60%;
+  @media (min-width: $mq-l) {
   }
 
   @media (max-width: $mq-l) {
-    width: 40%;
+    width: 15%;
   }
 
-  @media (min-width: $mq-l) {
+  @media (max-width: $mq-m) {
+    width: 15%;
   }
 
   &__img {

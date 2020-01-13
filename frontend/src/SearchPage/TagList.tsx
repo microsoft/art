@@ -9,11 +9,7 @@ interface IProps {
 }
 
 const buttonStyle = mergeStyles({
-  width: 175,
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  marginTop: 10,
-  marginBottom: 10
+
 })
 
 /**
@@ -47,8 +43,8 @@ export default class TagList extends Component<IProps> {
 
   render() {
     return (
-      <React.Fragment>
-        <DefaultButton className={buttonStyle} text="Clear Filters" onClick={this.props.clearActiveFilters} />
+      <div className="search__section">
+        <DefaultButton className="search__button" text="Clear Filters" onClick={this.props.clearActiveFilters} />
         {Object.entries(this.props.facets).map((nameFacetEntries:any,) => 
           <React.Fragment>
             <div className="search__row_category" ><b>{nameFacetEntries[0]}</b></div> 
@@ -65,7 +61,7 @@ export default class TagList extends Component<IProps> {
             )}
           </React.Fragment>
         )}
-      </React.Fragment>
+      </div>
     );
   }
 }
