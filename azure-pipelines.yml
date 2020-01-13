@@ -35,5 +35,5 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd azureml
-      python3 update.py
-  displayName: Updating service...
+      python3 deploy.py
+  displayName: Deploying/Updating service...
