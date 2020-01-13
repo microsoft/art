@@ -31,14 +31,15 @@ from keras.preprocessing import image
 from keras.applications.resnet50 import ResNet50
 
 model = Model.register(
-    model_path = "my_model.h5",
+     model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
     model_name = "resNet50",
     workspace = ws)
 
-myenv = Environment.from_conda_specification(name="myenv", file_path="myenv.yml")
+myenv = Environment.from_conda_specification(name="myenv", 
+ file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
 myenv.docker.base_image = DEFAULT_GPU_IMAGE
 inference_config = InferenceConfig(
-    entry_script="score.py",
+    entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
     environment=myenv)
 
 gpu_aks_config = AksWebservice.deploy_configuration(
@@ -57,8 +58,7 @@ attach_config = AksCompute.attach_configuration(
     cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
 aks_target = AksCompute(ws, cluster_name)
 
-
-service = Model.deploy(ws, 'myservicekeras', [model], inference_config, gpu_aks_config, aks_target, aks_service_name)
+service = Model.deploy(ws, 'myservicekeras', [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
