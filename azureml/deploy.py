@@ -1,9 +1,4 @@
-import os
-import urllib
-import shutil
-import azureml
-import requests
-import json
+import azureml, json, os, requests, shutil, urllib
 
 from azureml.core import Experiment
 from azureml.core import Workspace, Run
