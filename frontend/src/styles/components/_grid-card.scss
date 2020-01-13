@@ -1,9 +1,9 @@
 .grid-card {
   position: relative;
   margin-bottom: $space-l;
-  width: 20%;
+  width: 15%;
   height: auto;
-  margin: 10px;
+  margin: 12px;
   padding-bottom: 20px;
   overflow: hidden;
 
@@ -72,26 +72,48 @@
     position: absolute;
     top: 100%;
     width: 100%;
+    height: 35px;
     margin-top: auto !important;
-    background-color: lightsalmon
   }
 
   &__slide-enter {
-    top: 100%;
+    bottom: -35px;
   }
 
   &__slide-enter-done {
-    top: 90%;
-    transition: top 0.25s linear;
+    bottom: 0px;
+    transition: bottom 0.15s linear;
   }
 
   &__slide-exit {
-    top: 90%;
-    transition-duration: top 1s;
+    bottom: 0px;
+  }
+  
+  &__slide-exit-done {
+    bottom: -35px;
+    transition: bottom 0.25s linear;
   }
 
-  &__slide-exit-active {
-    top: 100%;
-    transition-duration: top 1s;
+  &__button {
+    display: inline-block;
+    text-align: center;
+    font-family: $font-family-base;
+    line-height: 35px;
+    background-color: gainsboro;
+  }
+
+  &__button:hover {
+    background-color: lightgray
+  }
+
+  &__button_link {
+    text-decoration: none;
+    color: black;
+  }
+
+  &__button_sep {
+    width: 1px;
+    height: 100%;
+    background-color: silver;
   }
 }

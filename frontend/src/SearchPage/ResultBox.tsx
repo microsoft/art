@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Stack, Separator } from 'office-ui-fabric-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LazyLoad from 'react-lazyload';
 import { CSSTransition } from 'react-transition-group';
@@ -48,7 +49,11 @@ export default class ResultBox extends Component<IProps, IState> {
           <div>{!this.props.data.Department ? "No description" : this.props.data.Department}</div>
         </Card.Item>
         <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
-          <div className="grid-card__buttons">ON SALE!</div>
+          <Stack horizontal className="grid-card__buttons" >
+            <Stack grow={1} className="grid-card__button"><a href="" className="grid-card__button_link">Explore</a></Stack>
+            <div className="grid-card__button_sep"></div>
+            <Stack grow={1} className="grid-card__button"><a href={this.props.data.Link_Resource} className="grid-card__button_link">Details</a></Stack>
+          </Stack>
         </CSSTransition>
       </Card>
     );
