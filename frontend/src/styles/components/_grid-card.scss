@@ -70,7 +70,7 @@
 
   &__buttons {
     position: absolute;
-    bottom: -50px;
+    bottom: -35px;
     width: 100%;
     height: 35px;
     margin-top: auto !important;
@@ -78,7 +78,7 @@
   }
 
   &__slide-enter {
-    bottom: -50px;
+    bottom: -35px;
   }
 
   &__slide-enter-done {
@@ -91,7 +91,7 @@
   }
   
   &__slide-exit-done {
-    bottom: -50px;
+    bottom: -35px;
     transition: bottom 0.25s linear;
   }
 
@@ -105,6 +105,7 @@
     background-color: rgb(240,240,240);
     font-family: $font-family-base;
     font-weight: 500;
+    font-size: $font-m;
     line-height: 35px;
   }
 
