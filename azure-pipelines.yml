@@ -35,7 +35,7 @@ steps:
 #     scriptLocation: 'inlineScript'
 #     inlineScript: |
 #       python3 azureml/deploy.py
-  displayName: Deploying/Updating service...
+# displayName: Deploying/Updating service...
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'MMLSpark Connection'
