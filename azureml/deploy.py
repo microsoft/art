@@ -1,9 +1,4 @@
-import os
-import urllib
-import shutil
-import azureml
-import requests
-import json
+import azureml, json, os, requests, shutil, urllib
 
 from azureml.core import Experiment
 from azureml.core import Workspace, Run
@@ -77,5 +72,6 @@ except ComputeTargetException:
     service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
+service.wait_for_deployment(True)
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
