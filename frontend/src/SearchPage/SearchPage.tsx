@@ -14,11 +14,6 @@ interface IState {
     results: object[]                             // Search results
 };
 
-const topStackClass = mergeStyles({
-    marginLeft: 50,
-    marginRight: 50
-})
-
 const facetNames = ["Culture","Department"];
 const azureSearchUrl =
   'https://met-search.search.windows.net/indexes/met-index/docs?api-version=2019-05-06&';
@@ -160,22 +155,20 @@ export class SearchPage extends React.Component<IProps, IState> {
 
     render() {
       return (
-          <Stack className={topStackClass}>
+          <Stack className="search__topstack">
               <SearchControl updateTerms={this.updateTerms} />
               <Separator />
               <Stack horizontal>
-                <div>
+                <Stack>
                   <TagList
                   activeFilters={this.state.activeFilters}
                   facets={this.state.facets}
                   selectAndApplyFilters={this.selectAndApplyFilters}
                   clearActiveFilters={this.clearActiveFilters}
                   />
-                </div>
-                <Separator vertical />
-                <Stack horizontal wrap grow={1}>
-                    <SearchGrid results={this.state.results} />
                 </Stack>
+                <Separator vertical />
+                <SearchGrid results={this.state.results} />
               </Stack>
 
           </Stack>

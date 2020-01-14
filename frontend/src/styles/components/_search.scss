@@ -13,6 +13,20 @@
   &__section {
     padding: 10px;
     width: 200px;
+
+    @media (max-width: $mq-m) {
+      width: 100px;
+    }
+  }
+
+  &__topstack {
+    margin-left: 50px;
+    margin-right: 50px;
+
+    @media (max-width: $mq-m) {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
   }
 
   &__content {
@@ -111,13 +125,6 @@
   }
 
   &__grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: calc(100% - #{$space-l} - 15rem);
-
-    @media (max-width: $mq-s){
-      width: calc(100% - #{$space-l} - 5rem);
-    }
+    height: 0;
   }
 }
