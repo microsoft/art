@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Stack, DefaultButton} from 'office-ui-fabric-react';
 import SelectControl from './SelectControl';
 import ResultArt from './ResultArt';
+import { Redirect } from 'react-router-dom';
 //import { Translation } from 'react-i18next';
 //import {AppInsights} from "applicationinsights-js"
 
@@ -23,7 +24,9 @@ interface IState {
     selectedIndex: any,
     selectedImage: any,
     imgObjects: any,
-    categorySelected: any
+    categorySelected: any,
+    redirect: any,
+    objIDs: any
 };
 
 interface IProps {
@@ -114,11 +117,14 @@ class SelectPage extends Component<IProps, IState> {
       },
       imgObjects: [],
       categorySelected: false,
+      redirect: false,
+      objIDs: []
     };
 
     this.changeSelectedImage = this.changeSelectedImage.bind(this);
     this.getImageIDs = this.getImageIDs.bind(this);
     this.clearOldImages = this.clearOldImages.bind(this);
+    this.searchArtUrlSuffix = this.searchArtUrlSuffix.bind(this);
 
     //AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
     //AppInsights.trackPageView("Select Page");
@@ -314,40 +320,84 @@ class SelectPage extends Component<IProps, IState> {
     return urlBase;
   }
 
+  jsonToURI(json:any){ return encodeURIComponent(JSON.stringify(json)); }
+
   searchArtUrlSuffix() {
     let urlBase = '/search/';
+
+    const apiURL = 'https://gen-studio-apim.azure-api.net/met-reverse-search-2/FindSimilarImages/url';
+    const key = '?subscription-key=7c02fa70abb8407fa552104e0b460c50&neighbors=20';
+    const Http = new XMLHttpRequest();
+    const data = new FormData();
+
+
+    let selID = this.state.selectedImage.id;
+    if (this.state.selectedImage.id === 0) {
+        let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
+        selID = imgSet[Math.floor(Math.random()*imgSet.length)];
+    }
+
+    const imageURL = 'https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/' + selID.toString() + '.jpg';
+
+    data.append('urlInput', imageURL);
+
+    Http.open('POST', apiURL + key);
+    //Http.send(data);
+    Http.send(JSON.stringify({"urlInput": imageURL}));
+    Http.onreadystatechange = e => {
+      if (Http.readyState === 4) {
+        try {
+          let response = JSON.parse(Http.responseText);
+          let ids = response.results.map((result:any) => result.ObjectID);
+          this.setState({
+            "objIDs": ids,
+            "redirect": true,
+          });
+
+        } catch (e) {
+          console.log('malformed request:' + Http.responseText);
+        }
+      }
+    };    
     return urlBase;
   }
 
   
 
   render() {
-    return (
-        <Stack>
-            <Stack.Item className="selectpage__head">
-                <h1 className="claim">{"Select something please"}</h1>
-                <SelectControl
-                    sendObjectIds={this.getImageIDs}
-                    clearOldImages={this.clearOldImages}
-                    curatedImages={this.state.curatedImages}
-                />
-            </Stack.Item>
-            <Stack.Item>
-                <ResultArt
-                    images={this.state.imgObjects}
-                    selectedImage={this.state.selectedImage}
-                    selectImage={this.changeSelectedImage}
-                    categorySelected={this.state.categorySelected}
-                />
-            </Stack.Item>
 
-            <Stack horizontal horizontalAlign="space-around" className="u-container-centered">
-                <DefaultButton className="button" text="Explore" href={this.exploreArtUrlSuffix()}/>
-                <DefaultButton className="button" text="Search" href={this.searchArtUrlSuffix()}/>
+    if (this.state.redirect) {
+        let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
+        return <Redirect push to={link} />;
+    } else {
+        return (
+            <Stack>
+                <Stack.Item className="selectpage__head">
+                    <h1 className="claim">{"Select something please"}</h1>
+                    <SelectControl
+                        sendObjectIds={this.getImageIDs}
+                        clearOldImages={this.clearOldImages}
+                        curatedImages={this.state.curatedImages}
+                    />
+                </Stack.Item>
+                <Stack.Item>
+                    <ResultArt
+                        images={this.state.imgObjects}
+                        selectedImage={this.state.selectedImage}
+                        selectImage={this.changeSelectedImage}
+                        categorySelected={this.state.categorySelected}
+                    />
+                </Stack.Item>
+    
+                <Stack horizontal horizontalAlign="space-around" className="u-container-centered">
+                    <DefaultButton className="button" text="Explore" href={this.exploreArtUrlSuffix()}/>
+                    <DefaultButton className="button" text="Search" onClick={this.searchArtUrlSuffix}/>
+                </Stack>
             </Stack>
-        </Stack>
+    
+        );
+    }
 
-    );
   }
 }
 

@@ -43,7 +43,8 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
         data.append('urlInput', imageURL);
     
         Http.open('POST', apiURL + key);
-        Http.send(data);
+        //Http.send(data);
+        Http.send(JSON.stringify({"urlInput": imageURL}));
         Http.onreadystatechange = e => {
           if (Http.readyState === 4) {
             try {
@@ -71,7 +72,7 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                     <Stack verticalAlign="end">
                       <Text style={{"textAlign":"right"}} variant="large">{this.props.item.title}</Text>
                       <Text style={{"textAlign":"right"}} variant="small">{this.props.item.principal}</Text>
-                      {/* <DefaultButton className="button" text="Explore Similar" onClick={this.getSimilarArtID}/> */}
+                      <DefaultButton className="button" text="Explore Similar" onClick={this.getSimilarArtID}/>
                     </Stack>                    
                     <Image src={this.props.item.url} height={200} className={spacerB}/>   
                 </Stack>

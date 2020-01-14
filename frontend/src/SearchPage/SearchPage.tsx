@@ -4,7 +4,9 @@ import SearchControl from './SearchControl';
 import TagList from './TagList';
 import SearchGrid from './SearchGrid';
 
-interface IProps {};
+interface IProps {
+  match: any
+};
 
 interface IState {
     terms: string[],                              // Current search query terms to be displayed
@@ -43,7 +45,12 @@ export class SearchPage extends React.Component<IProps, IState> {
      * Execute a search with no terms on startup
      */
     componentDidMount() {
-      this.setState({terms:["*"]}, () => this.executeSearch(true));
+      const ids = this.props.match.params.id; // The IDs of the images found by NN
+      if (ids != null) {
+        this.setState({terms:this.uriToJSON(ids), searchFields:["Object_ID"]}, () => this.executeSearch(true))
+      } else {
+        this.setState({terms:["*"]}, () => this.executeSearch(true))
+      }
     }
 
     filterTerm(col:any, values:any) {
