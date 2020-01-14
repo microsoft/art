@@ -73,15 +73,10 @@ def app_predict():
 @app.route('/select', methods=['GET'])
 def id_to_url():
     if 'id' in request.args and 'museum' in request.args:
-        try:
-            imgid = int(request.args['id'])
-            museum = str(request.args['museum'])
-        except:
-            return abort(404, description="Unable to cast params")
+        return jsonify(default_artwork)
     else:
         return abort(404, description="Missing params")
 
-    return jsonify(default_artwork)
 
 @app.route('/search', methods=['GET'])
 def search():
