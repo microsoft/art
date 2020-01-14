@@ -69,12 +69,15 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
         } else {
             return (
                 <Stack horizontalAlign="end" verticalAlign="center" horizontal className={spacerB}>
-                    <Stack verticalAlign="end">
-                      <Text style={{"textAlign":"right"}} variant="large">{this.props.item.title}</Text>
-                      <Text style={{"textAlign":"right"}} variant="small">{this.props.item.principal}</Text>
-                      <DefaultButton className="button" text="Explore Similar" onClick={this.getSimilarArtID}/>
+                    <Stack verticalAlign="end" style={{"marginRight":10}}>
+                      <Text style={{"textAlign":"right", "fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
+                      <Text style={{"textAlign":"right"}} variant="large">{this.props.item.principal}</Text>
+                      <Stack>
+                        <DefaultButton className="button" style={{"marginTop":10}} text="Search Similar" onClick={this.getSimilarArtID}/>
+                        <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/>
+                      </Stack>
                     </Stack>                    
-                    <Image src={this.props.item.url} height={200} className={spacerB}/>   
+                    <Image src={this.props.item.url} height={400} className={spacerB}/>   
                 </Stack>
             )
         }
