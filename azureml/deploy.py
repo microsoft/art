@@ -52,15 +52,22 @@ except ComputeTargetException:
     # cluster doesn't exist
     print("Creating new cluster...")
     # Provision AKS cluster with GPU machine
-    prov_config = AksCompute.provisioning_configuration(
-        vm_size="Standard_NC6",
-        cluster_purpose=AksCompute.ClusterPurpose.DEV_TEST)
+    # prov_config = AksCompute.provisioning_configuration(
+    #     vm_size="Standard_NC6",
+    #     cluster_purpose=AksCompute.ClusterPurpose.DEV_TEST)
 
-    # Create the cluster
-    aks_target = ComputeTarget.create(
-        workspace=ws, name=cluster_name, provisioning_configuration=prov_config
-    )
-    aks_target.wait_for_completion(show_output=True)
+    # # Create the cluster
+    # aks_target = ComputeTarget.create(
+    #     workspace=ws, name=cluster_name, provisioning_configuration=prov_config
+    # )
+    # aks_target.wait_for_completion(show_output=True)
+   #just attach to cluster
+
+    attach_config = AksCompute.attach_configuration(
+        resource_group = resource_group,
+        cluster_name = cluster_name,
+        cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
+    aks_target = AksCompute(ws, cluster_name)
 
     print("Deploying new service...")
     gpu_aks_config = AksWebservice.deploy_configuration(
