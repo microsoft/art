@@ -36,3 +36,12 @@ steps:
     inlineScript: |
       python3 azureml/deploy.py
   displayName: Deploying/Updating service...
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd backend
+      az webapp up -n art-backend -l eastus
+    displayName: Deploying backend...
