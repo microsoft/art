@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Stack } from 'office-ui-fabric-react';
 import ResultBox from './ResultBox';
 
 interface IProps{
@@ -12,11 +13,11 @@ interface IProps{
 export default class SearchGrid extends Component<IProps> {
   render() {
     return (
-      <React.Fragment>
+      <Stack horizontal wrap className="search__grid">
         {this.props.results.map( (result:any) => (
           <ResultBox key={result.Object_ID} data={result} />
         ))}
-      </React.Fragment>
+      </Stack>
     );
   }
 }
