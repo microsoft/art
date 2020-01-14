@@ -9,3 +9,4 @@ dependencies:
   - pip:
     - azureml-defaults
     - inference-schema[numpy-support]
+    - flask
