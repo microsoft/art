@@ -72,6 +72,5 @@ except ComputeTargetException:
     service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
-service.wait_for_deployment(True)
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
