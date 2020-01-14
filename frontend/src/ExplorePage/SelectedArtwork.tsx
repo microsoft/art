@@ -59,7 +59,7 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
             }
           }
         };
-      }
+    }
 
     render() {
 

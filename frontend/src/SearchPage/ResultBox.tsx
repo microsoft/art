@@ -27,6 +27,13 @@ export default class ResultBox extends Component<IProps, IState> {
     };
   }
 
+  exploreArtUrlSuffix() {
+    let urlBase = '/explore/';
+    let url = '?id=' + this.props.data.Thumbnail_Url;
+    url = encodeURIComponent(url);
+    return urlBase + url;
+  }
+
   render() {    
     return (
       <Card className="grid-card" onMouseEnter={()=>this.setState({hover:true})} onMouseLeave={()=>this.setState({hover:false})}>
@@ -53,7 +60,7 @@ export default class ResultBox extends Component<IProps, IState> {
         <Card.Item>
         <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
             <Stack horizontal className="grid-card__buttons">
-              <a href="" className="grid-card__button_link">Explore</a>
+              <a href={this.exploreArtUrlSuffix()} className="grid-card__button_link">Explore</a>
               <div className="grid-card__button_sep"></div>
               <a href={this.props.data.Link_Resource} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
             </Stack>

@@ -104,7 +104,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
         url = decodeURIComponent(url);
         let selectedArt = url.split("&")[0].slice(4); //gives id of artwork
         const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
-        const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
+        //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
+        const paintingUrl = selectedArt;
         let newGalleryItem = new GalleryItem(
             paintingUrl,
             "WHOOOOO AM I",

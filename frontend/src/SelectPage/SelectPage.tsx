@@ -299,20 +299,22 @@ class SelectPage extends Component<IProps, IState> {
 
   exploreArtUrlSuffix() {
     let urlBase = '/explore/';
+    const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
     
     // Randomly selects an image if no image is selected from the array of imgObjects and category not selected
     if(this.state.selectedImage.id === 0){
       let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
       let randomId = imgSet[Math.floor(Math.random()*imgSet.length)];
+      
 
       if (randomId) {
-        let url = '?id=' + randomId.toString();
+        let url = '?id=' + thumbnailRoot + randomId.toString() + ".jpg";
         url = encodeURIComponent(url);
         return urlBase + url;
       }
 
     } else {
-      let url = '?id=' + this.state.selectedImage.id.toString();
+      let url = '?id=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
       url = encodeURIComponent(url);
       return urlBase + url;
     }
