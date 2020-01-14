@@ -5,7 +5,7 @@ import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 
 const spacerB = mergeStyles({
-    paddingBottom: 10,
+    padding: 10,
   });
 
 interface IState {
@@ -67,13 +67,13 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
             return <Redirect push to={link} />;
         } else {
             return (
-                <Stack horizontalAlign="center" verticalAlign="start" className={spacerB}>
-                    <Image src={this.props.item.url} imageFit={ImageFit.centerContain} width={400} height={200} className={spacerB}/>
-                    <Stack>
-                      <Text variant="large">{this.props.item.title}</Text>
-                      <Text variant="small">{this.props.item.principal}</Text>
-                    </Stack>
-                    <DefaultButton className="button" text="Explore Similar" onClick={this.getSimilarArtID}/>
+                <Stack horizontalAlign="end" verticalAlign="center" horizontal className={spacerB}>
+                    <Stack verticalAlign="end">
+                      <Text style={{"textAlign":"right"}} variant="large">{this.props.item.title}</Text>
+                      <Text style={{"textAlign":"right"}} variant="small">{this.props.item.principal}</Text>
+                      {/* <DefaultButton className="button" text="Explore Similar" onClick={this.getSimilarArtID}/> */}
+                    </Stack>                    
+                    <Image src={this.props.item.url} height={200} className={spacerB}/>   
                 </Stack>
             )
         }

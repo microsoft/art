@@ -13,8 +13,7 @@ interface IProps {
   // Potentially pass in a object of the selector options from parent (culture, medium, etc)?
   options? : Object,
   // Functions for updating state in parent when changing filters
-  handleCultureChange? : (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => void,
-  handleMediumChange? : (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => void
+  callback : any
 }
 
 interface IState {};
@@ -71,7 +70,7 @@ class Options extends React.Component<IProps, IState> {
               options={cultureOptions}
               styles={dropdownStyles}
               className={dropdown}
-              onChange={this.props.handleCultureChange}
+              onChange={this.props.callback}
             />
         )
       }
@@ -90,7 +89,7 @@ class Options extends React.Component<IProps, IState> {
             options={cultureOptions}
             styles={dropdownStyles}
             className={dropdown}
-            onChange={this.props.handleCultureChange}
+            onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
           />
           <Dropdown
             placeholder={"Select Medium"}
@@ -98,7 +97,7 @@ class Options extends React.Component<IProps, IState> {
             options={mediumOptions}
             styles={dropdownStyles}
             className={dropdown}
-            onChange={this.props.handleMediumChange}
+            onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
           />
         </Stack.Item>
       </Stack>
