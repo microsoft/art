@@ -45,18 +45,20 @@ export default class ResultBox extends Component<IProps, IState> {
         <Card.Item className="grid-card__title">
           <div>{!this.props.data.Title ?
                 "Untitled Piece" :
-                this.props.data.Title.length < 60 ? this.props.data.Title : this.props.data.Title.substring(0,60) + "..."}</div>
+                this.props.data.Title.length < 55 ? this.props.data.Title : this.props.data.Title.substring(0,55) + "..."}</div>
         </Card.Item>
         <Card.Item className="grid-card__text">
           <div>{!this.props.data.Department ? "No description" : this.props.data.Department}</div>
         </Card.Item>
+        <Card.Item>
         <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
-          <Stack horizontal className="grid-card__buttons" >
-            <a href="" className="grid-card__button_link">Explore</a>
-            <div className="grid-card__button_sep"></div>
-            <a href={this.props.data.Link_Resource} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
-          </Stack>
+            <Stack horizontal className="grid-card__buttons">
+              <a href="" className="grid-card__button_link">Explore</a>
+              <div className="grid-card__button_sep"></div>
+              <a href={this.props.data.Link_Resource} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
+            </Stack>
         </CSSTransition>
+        </Card.Item>
       </Card>
     );
   }
