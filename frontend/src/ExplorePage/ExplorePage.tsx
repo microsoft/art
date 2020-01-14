@@ -16,6 +16,7 @@ interface IState {
     selected: GalleryItem,
     galleryItems: GalleryItem[],
     collections: any,
+    conditionals: any,
     url: any
 }
 
@@ -40,15 +41,24 @@ export class ExplorePage extends React.Component<IProps, IState> {
             selected: defaultSelectedGalleryItem,
             galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
             collections: {'Collection 1': [defaultGalleryItem], 'Collection 2':[defaultGalleryItem, defaultGalleryItem]},
+            conditionals: {'Culture':'All', 'Medium':"All"},
             url: ''
         }
         this.setSelected = this.setSelected.bind(this);
         this.addtoCollection = this.addtoCollection.bind(this);
         this.addCollection = this.addCollection.bind(this);
+        this.changeConditional = this.changeConditional.bind(this);
     }
 
     setCurrent(newCurrent: GalleryItem): void {
         this.setState({"current": newCurrent});
+    }
+
+    changeConditional(thing:any, thing2?:any): void {
+        let clonedConditionals = { ...this.state.conditionals};
+        clonedConditionals[thing] = thing2['text'];
+        console.log(clonedConditionals);
+        this.setState({"conditionals": clonedConditionals});
     }
 
     setSelected(newSelected: GalleryItem): void {
@@ -110,11 +120,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
             <Stack horizontal>
                 <Stack grow={1}>
                     <SelectedArtwork item={this.state.current} />
-                    <Buttons 
+                    {/* <Buttons 
                         setCurrent={() => this.setCurrent(this.state.selected)} 
-                        reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/>
+                        reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/> */}
                     <Separator/>
-                    <Options/>
+                    <Options
+                        callback={this.changeConditional}
+                    />
                 </Stack>
                 <Separator vertical />
                 <Stack grow={1}>
