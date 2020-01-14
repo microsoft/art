@@ -28,13 +28,13 @@ steps:
   inputs:
     dockerVersion: '17.09.0-ce'
   displayName: Installing Docker...
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'MMLSpark Connection'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      python3 azureml/deploy.py
+# - task: AzureCLI@2
+#   inputs:
+#     azureSubscription: 'MMLSpark Connection'
+#     scriptType: 'bash'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: |
+#       python3 azureml/deploy.py
   displayName: Deploying/Updating service...
 - task: AzureCLI@2
   inputs:
