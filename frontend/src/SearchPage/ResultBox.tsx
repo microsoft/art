@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Stack, Separator } from 'office-ui-fabric-react';
+import { Stack, ImageFit, Image } from 'office-ui-fabric-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LazyLoad from 'react-lazyload';
 import { CSSTransition } from 'react-transition-group';
@@ -38,7 +38,7 @@ export default class ResultBox extends Component<IProps, IState> {
               offset={1000}
               placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
               >
-                <img className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} />
+                <Image className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
               </LazyLoad>
           </a>
         </Card.Item>

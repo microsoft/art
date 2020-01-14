@@ -41,7 +41,15 @@ export default class ResultArt extends Component<IProps, IState> {
       adaptiveHeight: true,
       responsive: [
         {
-          breakpoint: 1024,
+          breakpoint: 1680,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            infinite: true,
+          }
+        },
+        {
+          breakpoint: 1440,
           settings: {
             slidesToShow: 3,
             slidesToScroll: 3,
@@ -49,7 +57,7 @@ export default class ResultArt extends Component<IProps, IState> {
           }
         },
         {
-          breakpoint: 600,
+          breakpoint: 1000,
           settings: {
             slidesToShow: 2,
             slidesToScroll: 2,
@@ -57,7 +65,7 @@ export default class ResultArt extends Component<IProps, IState> {
           }
         },
         {
-          breakpoint: 480,
+          breakpoint: 600,
           settings: {
             slidesToShow: 1,
             slidesToScroll: 1
@@ -72,16 +80,18 @@ export default class ResultArt extends Component<IProps, IState> {
     }
 
     const listItems = imagesToDisplay.map((image:any, i:any) => (
-      <React.Fragment key={image.id}>
-        <img
+      <div className="slick-img-container">
+        <img 
           className="slick-img"
           src={image.img}
           alt={image.id}
           onClick={() => {this.props.selectImage(image.key, image.id);}}
-          style={this.props.selectedImage.key === image.key ? { borderColor: '#002050', borderWidth: '4px' } : { borderColor: '#ffffff', borderWidth: '4px' }}
+          style={this.props.selectedImage.key === image.key ?
+          { borderColor: '#002050', borderWidth: '4px' } :
+          { borderColor: '#ffffff', borderWidth: '4px' }}
         />
-      </React.Fragment>
-    ));
+      </div>
+    ))
 
     return <Slider {...settings}>{listItems}</Slider>;
   }
