@@ -43,5 +43,6 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd backend
+      az account set -s ce1dee05-8cf6-4ad6-990a-9c80868800ba
       az webapp up -n art-backend -l eastus
-    displayName: Deploying backend...
+  displayName: Deploying backend...

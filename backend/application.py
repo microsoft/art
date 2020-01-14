@@ -50,6 +50,12 @@ app = Flask(__name__)
 #     except Exception as err:
 #         return str(err)
 
+default_artwork = {
+    'img_url': "https://lh3.googleusercontent.com/J-mxAE7CPu-DXIOx4QKBtb0GC4ud37da1QK7CzbTIDswmvZHXhLm4Tv2-1H3iBXJWAW_bHm7dMl3j5wv_XiWAg55VOM=s0", 
+    'title': "De Nachtwacht", 
+    'museum': "Rijksmuseum"
+    }
+
 @app.route('/', methods=['GET'])
 def home():
     return "<p>home</p>"
@@ -60,7 +66,8 @@ def app_predict():
         if param not in request.args:
             return abort(404, description="missing arguments")
     # prediction = make_prediction(url)
-    results = [{'url': url, 'title': "prediction", 'museum': "museum test"} for i in range(int(request.args['numResults']))]
+
+    results = [default_artwork for i in range(int(request.args['numResults']))]
     return jsonify(results)
 
 @app.route('/select', methods=['GET'])
@@ -74,12 +81,12 @@ def id_to_url():
     else:
         return abort(404, description="Missing params")
 
-    return jsonify({'img_url': 'url', 'title': 'title', 'museum': museum})
+    return jsonify(default_artwork)
 
 @app.route('/search', methods=['GET'])
 def search():
     if 'query' in request.args:
-        results = [{'url': url, 'title': "prediction", 'museum': "museum test"} for i in range(5)]
+        results = [default_artwork for i in range(5)]
         return jsonify(results)
     else:
         return abort(404, description="missing query param")
