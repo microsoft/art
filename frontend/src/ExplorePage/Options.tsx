@@ -81,8 +81,8 @@ class Options extends React.Component<IProps, IState> {
 
   render() {
     return(
-      <Stack>
-        <Stack.Item align="center">
+      <Stack style={{paddingRight: 20}}>
+        <Stack.Item align="end">
           <Dropdown
             placeholder={"Select Culture"}
             label={"Culture"}
