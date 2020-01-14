@@ -34,6 +34,5 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      cd azureml
-      python3 deploy.py
+      python3 azureml/deploy.py
   displayName: Deploying/Updating service...
