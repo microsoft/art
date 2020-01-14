@@ -20,26 +20,29 @@ ws = Workspace(
     workspace_name="exten-amls"
 )
 
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-from keras.models import load_model
-from keras.preprocessing import image
-from keras.applications.resnet50 import ResNet50
+# from keras.applications.imagenet_utils import preprocess_input, decode_predictions
+# from keras.models import load_model
+# from keras.preprocessing import image
+# from keras.applications.resnet50 import ResNet50
 
-model = Model.register(
-    model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
-    model_name = "resNet50",
-    workspace = ws)
+# model = Model.register(
+#     model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"my_model.h5"),
+#     model_name = "resNet50",
+#     workspace = ws)
 
-myenv = Environment.from_conda_specification(
-    name="myenv", 
-    file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
+# myenv = Environment.from_conda_specification(
+#     name="myenv", 
+#     file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
 
-inference_config = InferenceConfig(
-    entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
-    environment=myenv)
+# inference_config = InferenceConfig(
+#     entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
+#     environment=myenv)
 
-service = Webservice(name='aci-service', workspace=ws)
-service.update(models=[model], inference_config=inference_config)
+service_name="aci-service"
+# service = AciWebservice(name=service_name, workspace=ws)
+service = AciWebservice(name=service_name, workspace=ws)
+# service.update(models=[model], inference_config=inference_config)
+service.update(auth_enabled=False)
 
 print(service.state)
 print("scoring URI: " + service.scoring_uri)
