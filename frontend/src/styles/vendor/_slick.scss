@@ -356,11 +356,19 @@
   object-fit: cover;
   height: 100%;
   width: auto;
-  max-width: 325px;
+  max-width: 300px;
   z-index: calc(#{$z-index-s} * -1);
 
-  @media (max-width: $mq-ss){
-    max-width: 100%;
+  @media (max-width: $mq-xl) {
+    max-width: 275px;
+  }
+
+  @media (max-width: $mq-m) {
+    max-width: 250px;
+  }
+
+  @media (max-width: $mq-ss) {
+    max-width: 225px;
   }
 }
 

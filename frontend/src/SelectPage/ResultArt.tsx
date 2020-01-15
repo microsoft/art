@@ -41,7 +41,7 @@ export default class ResultArt extends Component<IProps, IState> {
       adaptiveHeight: true,
       responsive: [
         {
-          breakpoint: 1680,
+          breakpoint: 1650,
           settings: {
             slidesToShow: 4,
             slidesToScroll: 4,
@@ -57,7 +57,7 @@ export default class ResultArt extends Component<IProps, IState> {
           }
         },
         {
-          breakpoint: 1000,
+          breakpoint: 980,
           settings: {
             slidesToShow: 2,
             slidesToScroll: 2,
@@ -65,7 +65,7 @@ export default class ResultArt extends Component<IProps, IState> {
           }
         },
         {
-          breakpoint: 600,
+          breakpoint: 640,
           settings: {
             slidesToShow: 1,
             slidesToScroll: 1
