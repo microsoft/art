@@ -59,6 +59,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         clonedConditionals[thing] = thing2['text'];
         console.log(clonedConditionals);
         this.setState({"conditionals": clonedConditionals});
+        this.makeAPIquery(this.state.current.url, clonedConditionals);
     }
 
     setSelected(newSelected: GalleryItem): void {
@@ -98,24 +99,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
         //     });
     }
 
-    componentDidMount() {
-        //Decode the url data
-        let url = this.props.match.params.data.toString();
-        url = decodeURIComponent(url);
-        let selectedArt = url.split("&")[0].slice(5); //gives url of artwork
-        let selectedTitle = url.split("&")[1].slice(6); //gives title of artwork
-        //Continue with other params as desired
-        const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
-        //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
-        const paintingUrl = selectedArt;
-        let newGalleryItem = new GalleryItem(
-            paintingUrl,
-            selectedTitle,
-            "WHO who, WHO who"
-        );
-
+    makeAPIquery(selectedArtURL : any, conditionals : any) {
         const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        let params = '?url='+selectedArt + '&numResults=' + '9';
+        let params = '?url='+selectedArtURL + '&numResults=' + '9';
+
+        let fields = Object.keys(conditionals);
+        fields.forEach( (element: any) => {
+            if (conditionals[element] !== "All") {
+                params = params + '&' + element + '=' + conditionals[element];
+            }
+        });
+
+        console.log(params);
+
+
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
         console.log(apiURL+params);
 
@@ -143,8 +140,26 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 console.log('malformed request:' + Http.responseText);
                 }
             }
-        }
+        }        
+    }
 
+    componentDidMount() {
+        //Decode the url data
+        let url = this.props.match.params.data.toString();
+        url = decodeURIComponent(url);
+        let selectedArt = url.split("&")[0].slice(5); //gives url of artwork
+        let selectedTitle = url.split("&")[1].slice(6); //gives title of artwork
+        //Continue with other params as desired
+        const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
+        //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
+        const paintingUrl = selectedArt;
+        let newGalleryItem = new GalleryItem(
+            paintingUrl,
+            selectedTitle,
+            "WHO who, WHO who"
+        );
+
+        this.makeAPIquery(selectedArt, this.state.conditionals);
 
 
         this.setState({"current": newGalleryItem});

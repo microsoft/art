@@ -2,12 +2,16 @@ import React from 'react';
 
 import {Image, Text, Stack, ImageFit, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
+import { Redirect } from 'react-router-dom';
 
 const spacerB = mergeStyles({
     padding: 10,
   });
 
-interface IState {}
+interface IState {
+    objIDs: any,
+    redirect: any
+}
 
 type ArtworkProps = {
     item: GalleryItem
@@ -15,7 +19,20 @@ type ArtworkProps = {
 
 class ResultArtwork extends React.Component < ArtworkProps, IState > {
 
+  constructor(props:any) {
+    super(props);
+
+    this.state = {
+      objIDs: [],
+      redirect: false,
+    };
+    this.getSimilarArtID = this.getSimilarArtID.bind(this);
+  }
+
+  jsonToURI(json:any){ return encodeURIComponent(JSON.stringify(json)); }
+
   getSimilarArtID() {
+    console.log(this.props.item);
     let imageURL = this.props.item.url;
 
     console.log(imageURL);
@@ -47,19 +64,25 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
 
 
     render() {
-      return (
-          <Stack horizontalAlign="start" verticalAlign="center" horizontal className={spacerB}>
-              <Image src={this.props.item.url} height={400} className={spacerB}/>
-              <Stack style={{"marginLeft":10}}>
-                <Text style={{"fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
-                <Text variant="large">{this.props.item.principal}</Text>
-                <Stack>
-                  <DefaultButton className="button" style={{"marginTop":10}} text="Search Similar" onClick={this.getSimilarArtID}/>
-                  <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/> 
+      if (this.state.redirect) {
+        let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
+        return <Redirect push to={link} />;
+      } else {
+
+        return (
+            <Stack horizontalAlign="start" verticalAlign="center" horizontal className={spacerB}>
+                <Image src={this.props.item.url} height={400} className={spacerB}/>
+                <Stack style={{"marginLeft":10}}>
+                  <Text style={{"fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
+                  <Text variant="large">{this.props.item.principal}</Text>
+                  <Stack>
+                    <DefaultButton className="button" style={{"marginTop":10}} text="Search Similar" onClick={this.getSimilarArtID}/>
+                    <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/> 
+                  </Stack>
                 </Stack>
-              </Stack>
-          </Stack>
-      )
+            </Stack>
+        )
+      }
 
 
     }
