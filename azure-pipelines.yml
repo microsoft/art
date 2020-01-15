@@ -18,16 +18,16 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.6'
-  displayName: Setting Python Version...
-- script: pip install -r azureml/requirements.txt
-  displayName: 'Installing dependencies...'
-- task: DockerInstaller@0
-  inputs:
-    dockerVersion: '17.09.0-ce'
-  displayName: Installing Docker...
+# - task: UsePythonVersion@0
+#   inputs:
+#     versionSpec: '3.6'
+#   displayName: Setting Python Version...
+# - script: pip install -r azureml/requirements.txt
+#   displayName: 'Installing dependencies...'
+# - task: DockerInstaller@0
+#   inputs:
+#     dockerVersion: '17.09.0-ce'
+#   displayName: Installing Docker...
 # - task: AzureCLI@2
 #   inputs:
 #     azureSubscription: 'MMLSpark Connection'
@@ -43,6 +43,6 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd backend
-      az account set -s ce1dee05-8cf6-4ad6-990a-9c80868800ba
-      az webapp up -n art-backend -l eastus
+      az account show
+      az webapp up -n "art-backend"
   displayName: Deploying backend...
