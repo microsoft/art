@@ -19,14 +19,21 @@ const headerClass = mergeStyles({
   boxShadow: Depths.depth8
 });
 
+const headerTitle = mergeStyles({
+  color: "black",
+  textDecoration: "none"
+})
+
 export const NavBar : React.FunctionComponent = () => {
   
   const title = () => {
     return (
-      <Text variant="xxLarge">
-        <FontIcon iconName="BranchSearch" className={iconClass} />
-        Deep Culture Explorer
-      </Text>
+      <a className={headerTitle} href="/">
+        <Text variant="xxLarge">
+          <FontIcon iconName="BranchSearch" className={iconClass} />
+          Deep Culture Explorer
+        </Text>
+      </a>
     )
   };
   const _items: ICommandBarItemProps[] = [
