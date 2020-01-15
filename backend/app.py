@@ -25,7 +25,7 @@ def app_predict():
     if int(request.args['numResults']) >= len(exploredata):
         return jsonify(exploredata)
     else:
-        return jsonify(exploredata[:int(request.args['numResults'])-1])
+        return jsonify(exploredata[:int(request.args['numResults'])])
 
 @app.route('/select', methods=['GET'])
 def id_to_url():
