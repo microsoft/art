@@ -82,35 +82,69 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
     componentWillMount() {
-        const api_key = process.env.REACT_APP_RIJKSMUSEUM_API_KEY;
-        const url = `https://www.rijksmuseum.nl/api/en/collection?key=${api_key}&ps=9`;
+        // const api_key = process.env.REACT_APP_RIJKSMUSEUM_API_KEY;
+        // const url = `https://www.rijksmuseum.nl/api/en/collection?key=${api_key}&ps=9`;
 
-        fetch(url)
-            .then((res) => {
-                return res.json();
-            })
-            .then((resJson: any) => {
-                let newItems: GalleryItem[] = [];
-                resJson.artObjects.forEach((obj:any) => {
-                    newItems.push(new GalleryItem(obj.webImage.url, obj.title, obj.principalOrFirstMaker));
-                });
-                this.setGalleryItems(newItems);
-            });
+        // fetch(url)
+        //     .then((res) => {
+        //         return res.json();
+        //     })
+        //     .then((resJson: any) => {
+        //         let newItems: GalleryItem[] = [];
+        //         resJson.artObjects.forEach((obj:any) => {
+        //             newItems.push(new GalleryItem(obj.webImage.url, obj.title, obj.principalOrFirstMaker));
+        //         });
+        //         this.setGalleryItems(newItems);
+        //     });
     }
 
     componentDidMount() {
         //Decode the url data
-        let url = this.props.match.params.id.toString();
+        let url = this.props.match.params.data.toString();
         url = decodeURIComponent(url);
-        let selectedArt = url.split("&")[0].slice(4); //gives id of artwork
+        let selectedArt = url.split("&")[0].slice(5); //gives url of artwork
+        let selectedTitle = url.split("&")[1].slice(6); //gives title of artwork
+        //Continue with other params as desired
         const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
         //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
         const paintingUrl = selectedArt;
         let newGalleryItem = new GalleryItem(
             paintingUrl,
-            "WHOOOOO AM I",
+            selectedTitle,
             "WHO who, WHO who"
         );
+
+        const apiURL = 'http://art-backend.azurewebsites.net/explore';
+        let params = '?url='+selectedArt + '&numResults=' + '9';
+        //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
+        console.log(apiURL+params);
+
+        const Http = new XMLHttpRequest();
+        Http.open('GET', apiURL+params);
+
+        Http.send();
+        Http.onreadystatechange = e => {
+            if (Http.readyState === 4) {
+                try {
+                    let response = JSON.parse(Http.responseText);
+                    console.log(response);
+                    //let ids = response.results.map((result:any) => result.ObjectID);
+                    let pieces = response.map((result:any) => new GalleryItem(
+                        result["img_url"],
+                        result["title"],
+                        result["museum"]
+                    ));
+
+                    this.setState({"galleryItems": pieces, "selected": pieces[0]});
+
+                    
+                    
+                } catch (e) {
+                console.log('malformed request:' + Http.responseText);
+                }
+            }
+        }
+
 
 
         this.setState({"current": newGalleryItem});

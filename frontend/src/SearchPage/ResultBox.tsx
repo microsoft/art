@@ -29,7 +29,7 @@ export default class ResultBox extends Component<IProps, IState> {
 
   exploreArtUrlSuffix() {
     let urlBase = '/explore/';
-    let url = '?id=' + this.props.data.Thumbnail_Url;
+    let url = '?url=' + this.props.data.Thumbnail_Url + '&title='+this.props.data.Title;
     url = encodeURIComponent(url);
     return urlBase + url;
   }

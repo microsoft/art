@@ -25,7 +25,7 @@ export class App extends React.Component {
                         <NavBar />
                     </Stack>
                     <Route exact path="/" component={SelectPage} />
-                    <Route exact path="/explore/:id" component={ExplorePage} />
+                    <Route exact path="/explore/:data" component={ExplorePage} />
                     <Route exact path="/search/:id" component={SearchPage} />
                     <Route exact path="/select" component={SelectPage} />
                 </Stack>

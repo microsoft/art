@@ -308,14 +308,16 @@ class SelectPage extends Component<IProps, IState> {
       
 
       if (randomId) {
-        let url = '?id=' + thumbnailRoot + randomId.toString() + ".jpg";
-        url = encodeURIComponent(url);
+        let urlURL = '?url=' + thumbnailRoot + randomId.toString() + ".jpg";
+        let titleURL = '&title=' + "WHOOOOO ARE YOU?";
+        let url = encodeURIComponent(urlURL+titleURL);
         return urlBase + url;
       }
 
     } else {
-      let url = '?id=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
-      url = encodeURIComponent(url);
+      let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
+      let titleURL = '&title=' + "WHOOOOO ARE YOU?";
+      let url = encodeURIComponent(urlURL+titleURL);
       return urlBase + url;
     }
 
