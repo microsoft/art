@@ -12,16 +12,14 @@ interface IState {
 }
 
 //const NUM_IMAGES_SEARCH_PAGE = 12;
-const NUM_FOR_SELECT = 7;
+const NUM_FOR_SELECT = 2;
 
 const dropdownOptions: IDropdownOption[] = [
     { key: 'optionAll', text: 'All' },
-    { key: 'optionArmor', text: 'Armor' },
-    { key: 'optionEwers', text: 'Ewers' },
-    { key: 'optionGoblets', text: 'Goblets' },
-    { key: 'optionPurses', text: 'Purses' },
-    { key: 'optionTeapots', text: 'Teapots' },
-    { key: 'optionVases', text: 'Vases' },
+    { key: 'optionAmerican', text: 'American' },
+    { key: 'optionFrench', text: 'French' },
+    { key: 'optionGerman', text: 'German' },
+    { key: 'optionItalian', text: 'Italian' },
 ]
 
 const dropdownStyles: Partial<IDropdownStyles> = {

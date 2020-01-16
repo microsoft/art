@@ -112,6 +112,7 @@ class SelectPage extends Component<IProps, IState> {
       choiceLists: { 0: [], 1: [] }, //I really do not like this, hard coded so theres something to reference
       selectedIndex: 0,
       selectedImage: {
+        url: '',
         id: 0,
         key: -1,
       },
@@ -156,8 +157,8 @@ class SelectPage extends Component<IProps, IState> {
    * While doing so, also populates choiceLists with subset lists, each list contianing one ObjID from each category
    * @returns {int[]} - list of object IDs to be displayed
    */
-  getLandingPage() {
-    let categories = Object.keys(this.state.curatedImages);
+  getLandingPage(input:any) {
+    let categories = Object.keys(input);
     let landingPageList: any[] = [];
 
     let choiceLists:any = {};
@@ -166,7 +167,7 @@ class SelectPage extends Component<IProps, IState> {
     }
 
     for (let i = 0; i < categories.length; i++) {
-      let list = this.state.curatedImages[categories[i]];
+      let list = input[categories[i]];
       let choices = this.pickNUniqueFromList(list, NUM_FROM_EACH_CAT);
       landingPageList = landingPageList.concat(choices);
 
@@ -177,7 +178,7 @@ class SelectPage extends Component<IProps, IState> {
 
     this.setState({
       choiceLists: choiceLists,
-      curatedImages: Object.assign({}, this.state.curatedImages, { All: landingPageList })
+      curatedImages: Object.assign({}, input, { All: landingPageList })
     });
 
     return landingPageList;
@@ -185,8 +186,31 @@ class SelectPage extends Component<IProps, IState> {
 
   //these are the initial images that are displayed when the page loads
   componentDidMount() {
-    let landingPageList = this.getLandingPage();
-    this.objIDsToImages(landingPageList);
+
+    const apiURL = 'http://art-backend.azurewebsites.net/curated'
+    const Http = new XMLHttpRequest();
+    Http.open('GET', apiURL);
+
+    Http.send();
+    Http.onreadystatechange = e => {
+        if (Http.readyState === 4) {
+            try {
+                let response = JSON.parse(Http.responseText);
+                console.log(response);
+                //let ids = response.results.map((result:any) => result.ObjectID);
+
+                //this.setState({"curatedImages": response});
+                let landingPageList = this.getLandingPage(response);
+                //this.objIDsToImages(landingPageList);
+                this.objsToImages(landingPageList);
+
+                
+                
+            } catch (e) {
+            console.log('malformed request:' + Http.responseText);
+            }
+        }
+    }    
   }
 
   /**
@@ -194,11 +218,13 @@ class SelectPage extends Component<IProps, IState> {
    * @param {int} key
    * @param {int} ID - objID of the art being selected
    */
-  changeSelectedImage(key: any, ID: any) {
+  changeSelectedImage(img: any, key: any, ID: any) {
+    console.log(ID);
     //Unclear if this is a better system or not
     if (ID === this.state.selectedImage.id) {
       this.setState({
         selectedImage: {
+          url: '',  
           id: 0,
           key: -1,
         },
@@ -206,6 +232,7 @@ class SelectPage extends Component<IProps, IState> {
     } else {
       this.setState({
         selectedImage: {
+          url: img,  
           id: ID,
           key: key,
         },
@@ -218,7 +245,8 @@ class SelectPage extends Component<IProps, IState> {
    * @param {int[]} imageIDs - list of object IDs to get the images for
    */
   getImageIDs(imageIDs:any) {
-    this.objIDsToImages(imageIDs);
+    //this.objIDsToImages(imageIDs);
+    this.objsToImages(imageIDs);
   }
 
   /**
@@ -229,6 +257,16 @@ class SelectPage extends Component<IProps, IState> {
       categorySelected: true,
       imgObjects: [],
     });
+  }
+
+
+  objsToImages(objs:any) {
+      let imgObjs = objs.map((obj:any) => ({img: obj["img_url"], id: obj["title"], key: obj["title"]}));
+      console.log(imgObjs);
+      
+      this.setState({
+        imgObjects: imgObjs,
+      });
   }
 
   /**
@@ -299,7 +337,6 @@ class SelectPage extends Component<IProps, IState> {
 
   exploreArtUrlSuffix() {
     let urlBase = '/explore/';
-    const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
     
     // Randomly selects an image if no image is selected from the array of imgObjects and category not selected
     if(this.state.selectedImage.id === 0){
@@ -308,14 +345,17 @@ class SelectPage extends Component<IProps, IState> {
       
 
       if (randomId) {
-        let urlURL = '?url=' + thumbnailRoot + randomId.toString() + ".jpg";
+        //let urlURL = '?url=' + thumbnailRoot + randomId.toString() + ".jpg";
+        let urlURL = '?url=' + randomId.url;
         let titleURL = '&title=' + "WHOOOOO ARE YOU?";
         let url = encodeURIComponent(urlURL+titleURL);
         return urlBase + url;
       }
 
     } else {
-      let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
+      //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
+      console.log(this.state.selectedImage);
+      let urlURL = '?url=' + this.state.selectedImage.url;
       let titleURL = '&title=' + "WHOOOOO ARE YOU?";
       let url = encodeURIComponent(urlURL+titleURL);
       return urlBase + url;
@@ -335,13 +375,14 @@ class SelectPage extends Component<IProps, IState> {
     const data = new FormData();
 
 
-    let selID = this.state.selectedImage.id;
+    let selID = this.state.selectedImage.url;
     if (this.state.selectedImage.id === 0) {
-        let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
+        let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.url);
         selID = imgSet[Math.floor(Math.random()*imgSet.length)];
     }
 
-    const imageURL = 'https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/' + selID.toString() + '.jpg';
+    //const imageURL = 'https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/' + selID.toString() + '.jpg';
+    const imageURL = selID;
 
     data.append('urlInput', imageURL);
 
