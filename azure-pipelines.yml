@@ -18,31 +18,21 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# - task: UsePythonVersion@0
-#   inputs:
-#     versionSpec: '3.6'
-#   displayName: Setting Python Version...
-# - script: pip install -r azureml/requirements.txt
-#   displayName: 'Installing dependencies...'
-# - task: DockerInstaller@0
-#   inputs:
-#     dockerVersion: '17.09.0-ce'
-#   displayName: Installing Docker...
-# - task: AzureCLI@2
-#   inputs:
-#     azureSubscription: 'MMLSpark Connection'
-#     scriptType: 'bash'
-#     scriptLocation: 'inlineScript'
-#     inlineScript: |
-#       python3 azureml/deploy.py
-# displayName: Deploying/Updating service...
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+  displayName: Setting Python Version...
+- script: pip install -r azureml/requirements.txt
+  displayName: 'Installing dependencies...'
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
+  displayName: Installing Docker...
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      cd backend
-      az account show
-      az webapp up -n "art-backend"
-  displayName: Deploying backend...
+      python3 azureml/updateaci.py
+displayName: Deploying/Updating service...
