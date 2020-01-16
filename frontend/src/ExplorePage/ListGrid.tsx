@@ -23,7 +23,7 @@ class ListGrid extends React.Component<IProps, IState> {
 
         this.props.items.forEach((item: GalleryItem, i: number) => {
             grid.push(
-                <div className="explore__card-img-container">
+                <div className="explore__card-img-container" onClick={()=>this.props.setSelected(item)}>
                     <img alt={item.title} className="explore__card-img" src={item.url}/>
                 </div>
             );
@@ -34,14 +34,14 @@ class ListGrid extends React.Component<IProps, IState> {
 
     render(): JSX.Element {
         const settings = {
-            className: 'center',
+            className: "explore__slider",
             centerMode: true,
             infinite: true,
             centerPadding: '60px',
             slidesToShow: 5,
             speed: 500,
             swipeToSlide: true,
-            // adaptiveHeight: true,
+            adaptiveHeight: true,
             responsive: [
               {
                 breakpoint: 1650,

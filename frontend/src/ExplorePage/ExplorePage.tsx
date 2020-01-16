@@ -169,27 +169,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.setState({ "current": newGalleryItem });
     }
 
-    // render() {
-    //     return (
-    //         <Stack>
-    //             <Stack horizontal>
-    //                 <Stack className={halfStack} grow={1}>
-    //                     <SelectedArtwork item={this.state.current} />
-    //                     <Separator />
-    //                     <Options callback={this.changeConditional}/>
-    //                 </Stack>
-    //                 <Separator vertical />
-    //                 <Stack className={halfStack} grow={1}>
-    //                     <ResultArtwork item={this.state.selected} />
-    //                     <Separator />
-    //                     {/* <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} /> */}
-    //                     <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} />
-    //                 </Stack>
-    //             </Stack>
-    //         </Stack>
-    //     )
-    // }
-
     render() {
         return (
             <Stack>

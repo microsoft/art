@@ -5,6 +5,15 @@
     width: 500px;
   }
 
+  &__top-stack {
+    height: 50%;
+  }
+
+  &__main-images {
+    height: 40vh;
+    padding: 10px;
+  }
+
   &__card-img {
     height: 100%;
     max-width: 100%;
@@ -29,8 +38,12 @@
   }
 
   &__card-img-container {
-    height: 98%;
+    height: 100%;
     outline: none;
+  }
+
+  &__slider {
+    // height: 80%;
   }
 
   &__grid-list-container {

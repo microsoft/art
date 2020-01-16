@@ -68,7 +68,7 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
             return <Redirect push to={link} />;
         } else {
             return (
-                <Stack horizontalAlign="end" verticalAlign="center" horizontal className={spacerB}>
+                <Stack horizontalAlign="end" verticalAlign="center" horizontal className="explore__main-images">
                     <Stack verticalAlign="end" style={{"marginRight":10}}>
                       <Text style={{"textAlign":"right", "fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
                       <Text style={{"textAlign":"right"}} variant="large">{this.props.item.principal}</Text>
@@ -77,7 +77,7 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                         <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/>
                       </Stack>
                     </Stack>                    
-                    <Image src={this.props.item.url} height={400} className={spacerB}/>   
+                    <Image height={400} src={this.props.item.url} className={spacerB}/>   
                 </Stack>
             )
         }
