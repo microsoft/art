@@ -338,13 +338,12 @@ class SelectPage extends Component<IProps, IState> {
     
     // Randomly selects an image if no image is selected from the array of imgObjects and category not selected
     if(this.state.selectedImage.id === 0){
-      let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.id);
+      let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.img);
       let randomId = imgSet[Math.floor(Math.random()*imgSet.length)];
       
-
       if (randomId) {
         //let urlURL = '?url=' + thumbnailRoot + randomId.toString() + ".jpg";
-        let urlURL = '?url=' + randomId.url;
+        let urlURL = '?url=' + randomId;
         let titleURL = '&title=' + "WHOOOOO ARE YOU?";
         let url = encodeURIComponent(urlURL+titleURL);
         return urlBase + url;
@@ -374,7 +373,7 @@ class SelectPage extends Component<IProps, IState> {
 
     let selID = this.state.selectedImage.url;
     if (this.state.selectedImage.id === 0) {
-        let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.url);
+        let imgSet = this.state.imgObjects.slice(0, NUM_MAX_RESULTS).map((ob:any) => ob.img);
         selID = imgSet[Math.floor(Math.random()*imgSet.length)];
     }
 
