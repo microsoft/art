@@ -111,7 +111,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let fields = Object.keys(conditionals);
         fields.forEach( (element: any) => {
             if (conditionals[element] !== "All") {
-                params = params + '&' + element + '=' + conditionals[element];
+                params = params + '&' + element.toLowerCase() + '=' + conditionals[element];
             }
         });
 
