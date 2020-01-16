@@ -39,7 +39,6 @@ ws = Workspace(
 #     environment=myenv)
 
 service_name="aci-service"
-# service = AciWebservice(name=service_name, workspace=ws)
 service = AciWebservice(name=service_name, workspace=ws)
 # service.update(models=[model], inference_config=inference_config)
 service.update(auth_enabled=False)
