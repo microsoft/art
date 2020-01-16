@@ -18,9 +18,9 @@ interface IProps {
 
 interface IState {};
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width:300 }
-}
+// const dropdownStyles: Partial<IDropdownStyles> = {
+//   dropdown: { width:300 }
+// }
 
 // Options for filtering the art culture
 const cultureOptions: IDropdownOption[] = [
@@ -68,7 +68,6 @@ class Options extends React.Component<IProps, IState> {
               placeholder={"Select " + category}
               label={category}
               options={cultureOptions}
-              styles={dropdownStyles}
               className={dropdown}
               onChange={this.props.callback}
             />
@@ -81,34 +80,28 @@ class Options extends React.Component<IProps, IState> {
 
   render() {
     return(
-      <Stack horizontal horizontalAlign="space-around" style={{width: "50%", margin: "auto"}}>
-        <Stack.Item>
+      <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
+        <Stack.Item className="explore__dropdown">
           <Dropdown
             placeholder={"Select Culture"}
             label={"Culture"}
             options={cultureOptions}
-            styles={dropdownStyles}
-            className={dropdown}
             onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
           />
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className="explore__dropdown">
           <Dropdown
             placeholder={"Select Medium"}
             label={"Medium"}
             options={mediumOptions}
-            styles={dropdownStyles}
-            className={dropdown}
             onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
           />
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className="explore__dropdown">
           <Dropdown
             placeholder={"Select Nothing"}
             label={"Nothing"}
             options={mediumOptions}
-            styles={dropdownStyles}
-            className={dropdown}
           />
         </Stack.Item>
       </Stack>
