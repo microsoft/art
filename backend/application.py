@@ -4,6 +4,9 @@ from werkzeug.utils import secure_filename
 from curated_list import curated_list
 from exploredata import exploredata
 
+BAD_REQUEST_STATUS_CODE = 400
+NOT_FOUND_STATUS_CODE = 404
+
 app = Flask(__name__)
 
 default_artwork = {
@@ -14,27 +17,35 @@ default_artwork = {
 
 @app.route('/', methods=['GET'])
 def home():
-    return "<p>home</p>"
+    return jsonify({ "status": "ok", "version": "1.0.0" })
 
 @app.route('/explore', methods=['GET'])
-def app_predict():
+def explore():
     for param in ['id', 'museum', 'numResults']:
         if param not in request.args:
-            jsonify({ "error": "missing the id or museum or numResults parameter" }), 404
+            jsonify({ "error": "id, museum, and numResults parameter is required" }), BAD_REQUEST_STATUS_CODE
+    
+    try:
+        numResults = int(request.args['numResults'])
+    except:
+        return jsonify({ "error": "numResults must be an integer" }), BAD_REQUEST_STATUS_CODE
 
-    if int(request.args['numResults']) >= len(exploredata):
+    if numResults >= len(exploredata):
         return jsonify(exploredata)
     else:
-        return jsonify(exploredata[:int(request.args['numResults'])])
+        return jsonify(exploredata[:numResults])
 
 @app.route('/select', methods=['GET'])
-def id_to_url():
+def select():
     if 'id' in request.args and 'museum' in request.args:
         for art in exploredata:
             if art['id'] == request.args['id'] and art['museum'] == request.args['museum']:
                 return jsonify(art)
+        
+        return jsonify({ "error": "art object with given id and museum not found" }), NOT_FOUND_STATUS_CODE
+
     else:
-        return jsonify({ "error": "missing the id or museum parameter" }), 404
+        return jsonify({ "error": "id and museum parameter is required" }), BAD_REQUEST_STATUS_CODE
 
 
 @app.route('/search', methods=['GET'])
@@ -42,8 +53,8 @@ def search():
     if 'query' in request.args:
         return jsonify(exploredata)
     else:
-        return jsonify({ "error": "missing query parameter" }), 404
+        return jsonify({ "error": "query parameter is required" }), BAD_REQUEST_STATUS_CODE
 
 @app.route('/curated', methods=['GET'])
-def get_curated_list():
+def curated():
     return jsonify(curated_list)
