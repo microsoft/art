@@ -1,10 +1,9 @@
 import React from 'react';
-import { Stack, Separator, HighContrastSelectorBlack, mergeStyles } from 'office-ui-fabric-react';
+import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
 import SelectedArtwork from './SelectedArtwork';
 import ResultArtwork from './ResultArtwork';
 import Options from './Options';
 import GalleryItem from './GalleryItem';
-// import ListGrid from './Gallery';
 import ListGrid from './ListGrid';
 
 interface IProps {
@@ -114,11 +113,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
             }
         });
 
-        console.log(params);
-
-
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
-        console.log(apiURL + params);
 
         const Http = new XMLHttpRequest();
         Http.open('GET', apiURL + params);
@@ -128,7 +123,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
             if (Http.readyState === 4) {
                 try {
                     let response = JSON.parse(Http.responseText);
-                    console.log(response);
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = response.map((result: any) => new GalleryItem(
                         result["img_url"],
@@ -154,7 +148,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let selectedArt = url.split("&")[0].slice(5); //gives url of artwork
         let selectedTitle = url.split("&")[1].slice(6); //gives title of artwork
         //Continue with other params as desired
-        const thumbnailRoot = "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/";
         //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
         const paintingUrl = selectedArt;
         let newGalleryItem = new GalleryItem(

@@ -80,7 +80,7 @@ export default class ResultArt extends Component<IProps, IState> {
     }
 
     const listItems = imagesToDisplay.map((image:any, i:any) => (
-      <div className="slick-img-container">
+      <div className="slick-img-container" key={image.id}>
         <img 
           className="slick-img"
           src={image.img}

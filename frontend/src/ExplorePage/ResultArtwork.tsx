@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Image, Text, Stack, ImageFit, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
+import {Image, Text, Stack, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 
@@ -32,10 +32,7 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
   jsonToURI(json:any){ return encodeURIComponent(JSON.stringify(json)); }
 
   getSimilarArtID() {
-    console.log(this.props.item);
     let imageURL = this.props.item.url;
-
-    console.log(imageURL);
 
     const apiURL = 'https://gen-studio-apim.azure-api.net/met-reverse-search-2/FindSimilarImages/url';
     const key = '?subscription-key=7c02fa70abb8407fa552104e0b460c50&neighbors=20';

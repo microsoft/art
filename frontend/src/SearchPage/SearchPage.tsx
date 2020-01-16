@@ -1,5 +1,5 @@
 import React from 'react';
-import {Stack, Separator, mergeStyles} from 'office-ui-fabric-react';
+import {Stack, Separator} from 'office-ui-fabric-react';
 import SearchControl from './SearchControl';
 import TagList from './TagList';
 import SearchGrid from './SearchGrid';
@@ -80,7 +80,7 @@ export class SearchPage extends React.Component<IProps, IState> {
             ).join(" or ")
         }
     
-        console.log(query)
+        //console.log(query)
         let self = this
         fetch(azureSearchUrl + query, { headers: { 'api-key': apiKey } })
           .then(function(response) {

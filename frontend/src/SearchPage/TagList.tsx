@@ -1,5 +1,5 @@
 import React, { Component, ChangeEvent } from 'react';
-import { DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { DefaultButton} from 'office-ui-fabric-react';
 
 interface IProps {
     activeFilters:any,
@@ -8,9 +8,6 @@ interface IProps {
     selectAndApplyFilters:any
 }
 
-const buttonStyle = mergeStyles({
-
-})
 
 /**
  * List of tags that can be used to filter results

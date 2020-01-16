@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Image, Text, Stack, ImageFit, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
+import {Image, Text, Stack, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 

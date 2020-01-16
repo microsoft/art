@@ -1,6 +1,4 @@
 import React from 'react';
-import { Stack, Image, ImageFit} from 'office-ui-fabric-react';
-import { Card } from '@uifabric/react-cards';
 import GalleryItem from './GalleryItem';
 import Slider from 'react-slick';
 
@@ -14,16 +12,16 @@ interface IState {
 }
 
 class ListGrid extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
-    }
+    // constructor(props: IProps) {
+    //     super(props);
+    // }
 
     createGrid(): JSX.Element[] {
         let grid: JSX.Element[] = [];
 
         this.props.items.forEach((item: GalleryItem, i: number) => {
             grid.push(
-                <div className="explore__card-img-container" onClick={()=>this.props.setSelected(item)}>
+                <div className="explore__card-img-container" key={i} onClick={()=>this.props.setSelected(item)}>
                     <img alt={item.title} className="explore__card-img" src={item.url}/>
                 </div>
             );

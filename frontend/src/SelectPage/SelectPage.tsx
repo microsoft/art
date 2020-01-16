@@ -219,7 +219,6 @@ class SelectPage extends Component<IProps, IState> {
    * @param {int} ID - objID of the art being selected
    */
   changeSelectedImage(img: any, key: any, ID: any) {
-    console.log(ID);
     //Unclear if this is a better system or not
     if (ID === this.state.selectedImage.id) {
       this.setState({
@@ -262,7 +261,6 @@ class SelectPage extends Component<IProps, IState> {
 
   objsToImages(objs:any) {
       let imgObjs = objs.map((obj:any) => ({img: obj["img_url"], id: obj["title"], key: obj["title"]}));
-      console.log(imgObjs);
       
       this.setState({
         imgObjects: imgObjs,
@@ -354,7 +352,6 @@ class SelectPage extends Component<IProps, IState> {
 
     } else {
       //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
-      console.log(this.state.selectedImage);
       let urlURL = '?url=' + this.state.selectedImage.url;
       let titleURL = '&title=' + "WHOOOOO ARE YOU?";
       let url = encodeURIComponent(urlURL+titleURL);
