@@ -76,8 +76,8 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                         <DefaultButton className="button" style={{"marginTop":10}} text="Search Similar" onClick={this.getSimilarArtID}/>
                         <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/>
                       </Stack>
-                    </Stack>                    
-                    <Image height={400} src={this.props.item.url} className={spacerB}/>   
+                    </Stack>
+                      <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
                 </Stack>
             )
         }

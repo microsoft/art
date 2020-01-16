@@ -20,7 +20,8 @@ interface IState {
 }
 
 const halfStack = mergeStyles({
-    width: "50%"
+    width: "50%",
+    height: "100%"
 })
 
 const defaultGalleryItem = new GalleryItem(
@@ -165,7 +166,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         return (
             <Stack>
-                <Stack horizontal>
+                <Stack className="explore__top-stack" horizontal>
                     <Stack.Item className={halfStack} grow={1}>
                         <SelectedArtwork item={this.state.current} />
                     </Stack.Item>
