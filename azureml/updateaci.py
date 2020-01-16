@@ -43,5 +43,7 @@ service = AciWebservice(name=service_name, workspace=ws)
 # service.update(models=[model], inference_config=inference_config)
 service.update(auth_enabled=False)
 
-print(service.state)
-print("scoring URI: " + service.scoring_uri)
+service.wait_for_deployment(True)
+
+print("Status: " + service.state)
+print("Scoring URI: " + service.scoring_uri)
