@@ -13,6 +13,7 @@ from azureml.core.environment import Environment, DEFAULT_GPU_IMAGE
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.model import Model
 from azureml.core.webservice import AksWebservice
+from azureml.exceptions import WebserviceException
 
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
@@ -39,17 +40,33 @@ inference_config = InferenceConfig(
     environment=myenv)
 
 resource_group = 'extern2020'
-cluster_name = 'art-aks'
-service_name = 'myserviceart'
+cluster_name = 'aks-gpu-new'
+service_name = 'artgpuservice'
 
-try:
+try:#if cluster and service exists
     aks_target = AksCompute(ws, cluster_name)
     print("Updating existing service...")
     service = AksWebservice(name=service_name, workspace=ws)
     service.update(models=[model], inference_config=inference_config)
     service.wait_for_deployment(show_output=True)
-except ComputeTargetException:
-    # cluster doesn't exist
+except WebserviceException: #if cluster but no service
+    print("Deploying new service...")
+    #creating a new service
+    attach_config = AksCompute.attach_configuration(
+        resource_group = resource_group,
+        cluster_name = cluster_name,
+        cluster_purpose = AksCompute.ClusterPurpose.DEV_TEST)
+    aks_target = AksCompute(ws, cluster_name)
+
+    gpu_aks_config = AksWebservice.deploy_configuration(
+        autoscale_enabled=False,
+        num_replicas=3,
+        cpu_cores=2,
+        memory_gb=4,
+        auth_enabled=False)
+    service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
+    service.wait_for_deployment(show_output = True)
+except ComputeTargetException: # cluster doesn't exist
     print("Creating new cluster...")
     # Provision AKS cluster with GPU machine
     prov_config = AksCompute.provisioning_configuration(
@@ -61,7 +78,7 @@ except ComputeTargetException:
         workspace=ws, name=cluster_name, provisioning_configuration=prov_config
     )
     aks_target.wait_for_completion(show_output=True)
-    
+
     print("Deploying new service...")
     gpu_aks_config = AksWebservice.deploy_configuration(
         autoscale_enabled=False,
