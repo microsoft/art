@@ -38,7 +38,7 @@ export default class ResultArt extends Component<IProps, IState> {
       slidesToShow: 5,
       speed: 500,
       swipeToSlide: true,
-      adaptiveHeight: true,
+      // adaptiveHeight: true,
       responsive: [
         {
           breakpoint: 1650,

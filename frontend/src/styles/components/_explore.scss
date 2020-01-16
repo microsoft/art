@@ -2,6 +2,42 @@
   width: 100%;
 
   &__grid {
+    width: 500px;
+  }
+
+  &__card-img {
+    height: 100%;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    object-fit: cover;
+    box-shadow: 0px 0px 3px gray;
+    max-width: 300px;
+    z-index: calc(#{$z-index-s} * -1);
+
+    @media (max-width: $mq-xl) {
+      max-width: 275px;
+    }
+
+    @media (max-width: $mq-m) {
+      max-width: 250px;
+    }
+
+    @media (max-width: $mq-ss) {
+      max-width: 225px;
+    }
+  }
+
+  &__card-img-container {
+    height: 98%;
+    outline: none;
+  }
+
+  &__grid-list-container {
+    width: 100%
+  }
+
+  &__grid_old {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 1.5rem;

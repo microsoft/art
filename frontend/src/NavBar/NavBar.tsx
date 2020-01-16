@@ -21,7 +21,9 @@ const headerClass = mergeStyles({
 
 const headerTitle = mergeStyles({
   color: "black",
-  textDecoration: "none"
+  textDecoration: "none",
+  userSelect: "none",
+  outline: "none"
 })
 
 export const NavBar : React.FunctionComponent = () => {

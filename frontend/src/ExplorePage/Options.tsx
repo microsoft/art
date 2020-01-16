@@ -81,8 +81,8 @@ class Options extends React.Component<IProps, IState> {
 
   render() {
     return(
-      <Stack style={{paddingRight: 20}}>
-        <Stack.Item align="end">
+      <Stack horizontal horizontalAlign="space-around" style={{width: "50%", margin: "auto"}}>
+        <Stack.Item>
           <Dropdown
             placeholder={"Select Culture"}
             label={"Culture"}
@@ -91,6 +91,8 @@ class Options extends React.Component<IProps, IState> {
             className={dropdown}
             onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
           />
+        </Stack.Item>
+        <Stack.Item>
           <Dropdown
             placeholder={"Select Medium"}
             label={"Medium"}
@@ -98,6 +100,15 @@ class Options extends React.Component<IProps, IState> {
             styles={dropdownStyles}
             className={dropdown}
             onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Dropdown
+            placeholder={"Select Nothing"}
+            label={"Nothing"}
+            options={mediumOptions}
+            styles={dropdownStyles}
+            className={dropdown}
           />
         </Stack.Item>
       </Stack>

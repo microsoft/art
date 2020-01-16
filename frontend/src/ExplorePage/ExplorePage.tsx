@@ -1,11 +1,11 @@
 import React from 'react';
-import {Stack, Separator} from 'office-ui-fabric-react';
+import { Stack, Separator, HighContrastSelectorBlack, mergeStyles } from 'office-ui-fabric-react';
 import SelectedArtwork from './SelectedArtwork';
 import ResultArtwork from './ResultArtwork';
 import Options from './Options';
 import GalleryItem from './GalleryItem';
-import ListGrid from './Gallery';
-import {Buttons} from './Buttons';
+// import ListGrid from './Gallery';
+import ListGrid from './ListGrid';
 
 interface IProps {
     match: any
@@ -20,6 +20,10 @@ interface IState {
     url: any
 }
 
+const halfStack = mergeStyles({
+    width: "50%"
+})
+
 const defaultGalleryItem = new GalleryItem(
     "https://lh3.googleusercontent.com/J-mxAE7CPu-DXIOx4QKBtb0GC4ud37da1QK7CzbTIDswmvZHXhLm4Tv2-1H3iBXJWAW_bHm7dMl3j5wv_XiWAg55VOM=s0",
     "The Night Watch",
@@ -33,15 +37,15 @@ const defaultSelectedGalleryItem = new GalleryItem(
 )
 
 export class ExplorePage extends React.Component<IProps, IState> {
-    
-    constructor(props:any) {
+
+    constructor(props: any) {
         super(props);
         this.state = {
             current: defaultGalleryItem,
             selected: defaultSelectedGalleryItem,
-            galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
-            collections: {'Collection 1': [defaultGalleryItem], 'Collection 2':[defaultGalleryItem, defaultGalleryItem]},
-            conditionals: {'Culture':'All', 'Medium':"All"},
+            galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
+            collections: { 'Collection 1': [defaultGalleryItem], 'Collection 2': [defaultGalleryItem, defaultGalleryItem] },
+            conditionals: { 'Culture': 'All', 'Medium': "All" },
             url: ''
         }
         this.setSelected = this.setSelected.bind(this);
@@ -51,34 +55,34 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
     setCurrent(newCurrent: GalleryItem): void {
-        this.setState({"current": newCurrent});
+        this.setState({ "current": newCurrent });
     }
 
-    changeConditional(thing:any, thing2?:any): void {
-        let clonedConditionals = { ...this.state.conditionals};
+    changeConditional(thing: any, thing2?: any): void {
+        let clonedConditionals = { ...this.state.conditionals };
         clonedConditionals[thing] = thing2['text'];
         console.log(clonedConditionals);
-        this.setState({"conditionals": clonedConditionals});
+        this.setState({ "conditionals": clonedConditionals });
     }
 
     setSelected(newSelected: GalleryItem): void {
-        this.setState({"selected": newSelected});
+        this.setState({ "selected": newSelected });
     }
 
     setGalleryItems(newItems: GalleryItem[]): void {
-        this.setState({"galleryItems": newItems});
+        this.setState({ "galleryItems": newItems });
     }
 
-    addtoCollection(collection: string): void{
-        let newcollect = {...this.state.collections};
+    addtoCollection(collection: string): void {
+        let newcollect = { ...this.state.collections };
         newcollect[collection].push(this.state.current);
-        this.setState({'collections': newcollect});
+        this.setState({ 'collections': newcollect });
     }
 
-    addCollection(collection:string): void{
-        let newcollect = {...this.state.collections};
+    addCollection(collection: string): void {
+        let newcollect = { ...this.state.collections };
         newcollect[collection] = [this.state.current];
-        this.setState({'collections': newcollect});
+        this.setState({ 'collections': newcollect });
     }
 
     componentWillMount() {
@@ -115,12 +119,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
         );
 
         const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        let params = '?url='+selectedArt + '&numResults=' + '9';
+        let params = '?url=' + selectedArt + '&numResults=' + '9';
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
-        console.log(apiURL+params);
+        console.log(apiURL + params);
 
         const Http = new XMLHttpRequest();
-        Http.open('GET', apiURL+params);
+        Http.open('GET', apiURL + params);
 
         Http.send();
         Http.onreadystatechange = e => {
@@ -129,47 +133,68 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let response = JSON.parse(Http.responseText);
                     console.log(response);
                     //let ids = response.results.map((result:any) => result.ObjectID);
-                    let pieces = response.map((result:any) => new GalleryItem(
+                    let pieces = response.map((result: any) => new GalleryItem(
                         result["img_url"],
                         result["title"],
                         result["museum"]
                     ));
 
-                    this.setState({"galleryItems": pieces, "selected": pieces[0]});
+                    this.setState({ "galleryItems": pieces, "selected": pieces[0] });
 
-                    
-                    
+
+
                 } catch (e) {
-                console.log('malformed request:' + Http.responseText);
+                    console.log('malformed request:' + Http.responseText);
                 }
             }
         }
 
 
 
-        this.setState({"current": newGalleryItem});
-      }    
+        this.setState({ "current": newGalleryItem });
+    }
+
+    // render() {
+    //     return (
+    //         <Stack>
+    //             <Stack horizontal>
+    //                 <Stack className={halfStack} grow={1}>
+    //                     <SelectedArtwork item={this.state.current} />
+    //                     <Separator />
+    //                     <Options callback={this.changeConditional}/>
+    //                 </Stack>
+    //                 <Separator vertical />
+    //                 <Stack className={halfStack} grow={1}>
+    //                     <ResultArtwork item={this.state.selected} />
+    //                     <Separator />
+    //                     {/* <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} /> */}
+    //                     <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} />
+    //                 </Stack>
+    //             </Stack>
+    //         </Stack>
+    //     )
+    // }
 
     render() {
         return (
-            <Stack horizontal>
-                <Stack grow={1}>
-                    <SelectedArtwork item={this.state.current} />
-                    {/* <Buttons 
-                        setCurrent={() => this.setCurrent(this.state.selected)} 
-                        reset={() => {this.setCurrent(defaultGalleryItem); this.setSelected(defaultSelectedGalleryItem)}}/> */}
-                    <Separator/>
-                    <Options
-                        callback={this.changeConditional}
-                    />
+            <Stack>
+                <Stack horizontal>
+                    <Stack.Item className={halfStack} grow={1}>
+                        <SelectedArtwork item={this.state.current} />
+                    </Stack.Item>
+                    <Stack.Item className={halfStack} grow={1}>
+                        <ResultArtwork item={this.state.selected} />
+                    </Stack.Item>
                 </Stack>
-                <Separator vertical />
-                <Stack grow={1}>
-                    <ResultArtwork item={this.state.selected} />
-                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected}/>
-                </Stack>
+                <Separator />
+                <Stack.Item>
+                    <Options callback={this.changeConditional} />
+                </Stack.Item>
+                <Stack.Item>
+                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} />
+                </Stack.Item>
             </Stack>
-        );
+        )
     }
 }
 
