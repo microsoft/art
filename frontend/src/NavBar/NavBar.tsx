@@ -3,6 +3,7 @@ import {Text, FontIcon, mergeStyles} from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import {CommandBar, ICommandBarItemProps} from 'office-ui-fabric-react/lib/CommandBar';
 import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
+import mosaicLogo from './mosaicLogo.png';
 
 // initialize icons
 initializeIcons();
@@ -16,7 +17,7 @@ const iconClass = mergeStyles({
 const headerClass = mergeStyles({
   paddingBottom: 10,
   paddingTop: 10,
-  boxShadow: Depths.depth8
+  boxShadow: Depths.depth8,
 });
 
 const headerTitle = mergeStyles({
@@ -26,14 +27,17 @@ const headerTitle = mergeStyles({
   outline: "none"
 })
 
+const logoStyle = mergeStyles({
+  height: "100%"
+})
+
 export const NavBar : React.FunctionComponent = () => {
   
   const title = () => {
     return (
       <a className={headerTitle} href="/">
         <Text variant="xxLarge">
-          <FontIcon iconName="BranchSearch" className={iconClass} />
-          Deep Culture Explorer
+          <img className={logoStyle} src={mosaicLogo}/>
         </Text>
       </a>
     )
@@ -41,7 +45,7 @@ export const NavBar : React.FunctionComponent = () => {
   const _items: ICommandBarItemProps[] = [
     {
       key: 'title',
-      text: 'Deep Culture Explorer',
+      text: 'mosaic',
       iconProps: { iconName: 'BranchSearch' },
       commandBarButtonAs: title,
     }
