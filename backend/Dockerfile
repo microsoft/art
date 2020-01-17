@@ -1,4 +1,7 @@
-FROM python:3
+FROM ubuntu:18.04
+
+RUN apt-get update -y && \
+    apt-get install -y python-pip python-dev
 
 WORKDIR /usr/src/app
 
@@ -7,4 +10,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "./app.py" ]
+CMD [ "python", "./application.py" ]

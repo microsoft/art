@@ -1,3 +1,4 @@
+# coding=utf-8
 exploredata = [
     {'title': 'Double Face Banyan',
     'artist': 'anonymous',

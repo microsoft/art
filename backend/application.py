@@ -58,3 +58,6 @@ def search():
 @app.route('/curated', methods=['GET'])
 def curated():
     return jsonify(curated_list)
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0')
