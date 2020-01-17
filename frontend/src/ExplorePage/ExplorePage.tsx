@@ -179,7 +179,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <Options callback={this.changeConditional} />
                 </Stack.Item>
                 <Stack.Item>
-                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} />
+                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} selected={this.state.selected}/>
                 </Stack.Item>
             </Stack>
         )

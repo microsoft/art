@@ -4,7 +4,8 @@ import Slider from 'react-slick';
 
 interface IProps {
     items: GalleryItem[],
-    setSelected: (item: GalleryItem) => void
+    setSelected: (item: GalleryItem) => void,
+    selected: GalleryItem
 }
 
 interface IState {
@@ -22,7 +23,7 @@ class ListGrid extends React.Component<IProps, IState> {
         this.props.items.forEach((item: GalleryItem, i: number) => {
             grid.push(
                 <div className="explore__card-img-container" key={i} onClick={()=>this.props.setSelected(item)}>
-                    <img alt={item.title} className="explore__card-img" src={item.url}/>
+                    <img alt={item.title} className="explore__card-img" style={item.url === this.props.selected.url ? {"border":"4px solid black"} : {"border":"4px solid white"}} src={item.url}/>
                 </div>
             );
         })
