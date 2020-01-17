@@ -12,7 +12,7 @@ interface IState {
 }
 
 //const NUM_IMAGES_SEARCH_PAGE = 12;
-const NUM_FOR_SELECT = 2;
+const NUM_FOR_SELECT = 1;
 
 const dropdownOptions: IDropdownOption[] = [
     { key: 'optionAll', text: 'All' },

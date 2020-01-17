@@ -36,7 +36,7 @@ class ListGrid extends React.Component<IProps, IState> {
             centerMode: true,
             infinite: true,
             centerPadding: '60px',
-            slidesToShow: 5,
+            slidesToShow: 6,
             speed: 500,
             swipeToSlide: true,
             adaptiveHeight: true,
@@ -44,16 +44,16 @@ class ListGrid extends React.Component<IProps, IState> {
               {
                 breakpoint: 1650,
                 settings: {
-                  slidesToShow: 4,
-                  slidesToScroll: 4,
+                  slidesToShow: 5,
+                  slidesToScroll: 5,
                   infinite: true,
                 }
               },
               {
                 breakpoint: 1440,
                 settings: {
-                  slidesToShow: 3,
-                  slidesToScroll: 3,
+                  slidesToShow: 4,
+                  slidesToScroll: 4,
                   infinite: true
                 }
               },

@@ -73,8 +73,8 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                       <Text style={{"textAlign":"right", "fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
                       <Text style={{"textAlign":"right"}} variant="large">{this.props.item.principal}</Text>
                       <Stack>
-                        <DefaultButton className="button" style={{"marginTop":10}} text="Search Similar" onClick={this.getSimilarArtID}/>
-                        <DefaultButton className="button" style={{"marginTop":10}} text="View Source"/>
+                        <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
+                        <DefaultButton className="explore__buttons button" text="View Source"/>
                       </Stack>
                     </Stack>
                       <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
