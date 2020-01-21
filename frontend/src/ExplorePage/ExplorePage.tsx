@@ -197,11 +197,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
-                    <Stack horizontalAlign="center">
-                        <Stack.Item className={halfStack} grow={1}>
+                    <Stack horizontal horizontalAlign="space-around" wrap>
+                        <Stack.Item grow={1}>
                             <SelectedArtwork item={this.state.current} />
                         </Stack.Item>
-                        <Stack.Item className={halfStack} grow={1}>
+                        <Stack.Item grow={1}>
                             <ResultArtwork item={this.state.selected} />
                         </Stack.Item>
                     </Stack>

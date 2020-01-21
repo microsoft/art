@@ -3,8 +3,8 @@ import React from 'react';
 import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
-import { HideAt } from 'react-with-breakpoints';
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
 
 const spacerB = mergeStyles({
   padding: 10,
@@ -85,15 +85,23 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
                   <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
                     <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                   </TwitterShareButton>
+                  <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                    <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                  </LinkedinShareButton>
                 </Stack>
-
               </Stack>
             </Stack>
+            <Stack>
+              <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
+            </Stack>
           </HideAt>
-          <Stack>
-            <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
-            <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
-          </Stack>
+          <ShowAt breakpoint="mediumAndBelow">
+            <Stack>
+              <Image height={"300px"} src={this.props.item.url} className={spacerB} />
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Result</Text>
+            </Stack>
+          </ShowAt>
         </Stack>
       )
     }
