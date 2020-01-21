@@ -9,7 +9,7 @@ import SelectPage from "./SelectPage/SelectPage";
 import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 const btmMargin = mergeStyles({
-    marginBottom: 25,
+    marginBottom: 15,
 });
 
 interface IProps {};

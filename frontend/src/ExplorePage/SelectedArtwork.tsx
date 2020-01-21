@@ -77,10 +77,10 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                         <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
                         <DefaultButton className="explore__buttons button" text="View Source"/>
                         <Stack horizontal>
-                          <FacebookShareButton className="explore__share-button" url={window.location.href}>
+                          <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
                             <FacebookIcon size={32} round={true} iconBgStyle={{"fill":"black"}} />
                           </FacebookShareButton>
-                          <TwitterShareButton className="explore__share-button" url={window.location.href}>
+                          <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
                             <TwitterIcon size={32} round={true}  iconBgStyle={{"fill":"black"}} />
                           </TwitterShareButton>
                         </Stack>
