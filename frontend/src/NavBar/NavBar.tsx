@@ -27,6 +27,14 @@ const headerTitle = mergeStyles({
   outline: "none"
 })
 
+const learning = mergeStyles({
+  color: "black",
+  textDecoration: "none",
+  userSelect: "none",
+  outline: "none",
+  paddingTop: "8px"
+})
+
 const logoStyle = mergeStyles({
   height: "100%"
 })
@@ -42,18 +50,37 @@ export const NavBar : React.FunctionComponent = () => {
       </a>
     )
   };
+
+  const learnMore = () => {
+    return (
+      <a className={learning} href="/about">
+        <Text variant="xxLarge">
+          Learn More
+        </Text>
+      </a>
+    )
+  };
+
   const _items: ICommandBarItemProps[] = [
     {
       key: 'title',
       text: 'mosaic',
-      iconProps: { iconName: 'BranchSearch' },
       commandBarButtonAs: title,
     }
   ];
 
+  const _faritems: ICommandBarItemProps[] = [
+    {
+      key: 'learnMore',
+      text: 'learnMore',
+      commandBarButtonAs: learnMore,
+    }
+  ]
+
   return (
     <CommandBar
       items={_items}
+      farItems={_faritems}
       className={headerClass}
       style={{ color: 'purple' }}
     />

@@ -88,7 +88,7 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
                   <Stack>
                     <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
                     <DefaultButton className="explore__buttons button" text="View Source"/> 
-                    <DefaultButton className ="explore__buttons button" text="Explore Similar" href={this.exploreArtUrlSuffix()} />
+                    <DefaultButton className ="explore__buttons button" text="Find Related" href={this.exploreArtUrlSuffix()} />
                   </Stack>
                 </Stack>
             </Stack>
