@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Dropdown, IDropdownOption, IDropdownStyles} from 'office-ui-fabric-react';
+import { Text, Stack, Dropdown, IDropdownOption } from 'office-ui-fabric-react';
 import { mergeStyles } from '@uifabric/merge-styles';
 
 const dropdown = mergeStyles({
@@ -80,30 +80,33 @@ class Options extends React.Component<IProps, IState> {
 
   render() {
     return(
-      <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
-        <Stack.Item className="explore__dropdown">
-          <Dropdown
-            placeholder={"Select Culture"}
-            label={"Culture"}
-            options={cultureOptions}
-            onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
-          />
-        </Stack.Item>
-        <Stack.Item className="explore__dropdown">
-          <Dropdown
-            placeholder={"Select Medium"}
-            label={"Medium"}
-            options={mediumOptions}
-            onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
-          />
-        </Stack.Item>
-        <Stack.Item className="explore__dropdown">
-          <Dropdown
-            placeholder={"Select Nothing"}
-            label={"Nothing"}
-            options={mediumOptions}
-          />
-        </Stack.Item>
+      <Stack>
+        <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="xLarge">Artwork Qualities</Text>
+        <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
+          <Stack.Item className="explore__dropdown">
+            <Dropdown
+              placeholder={"Select Culture"}
+              label={"Culture"}
+              options={cultureOptions}
+              onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
+            />
+          </Stack.Item>
+          <Stack.Item className="explore__dropdown">
+            <Dropdown
+              placeholder={"Select Medium"}
+              label={"Medium"}
+              options={mediumOptions}
+              onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
+            />
+          </Stack.Item>
+          <Stack.Item className="explore__dropdown">
+            <Dropdown
+              placeholder={"Select Nothing"}
+              label={"Nothing"}
+              options={mediumOptions}
+            />
+          </Stack.Item>
+        </Stack>
       </Stack>
     );
   }

@@ -86,7 +86,10 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                         </Stack>
                       </Stack>
                     </Stack>
+                    <Stack>
                       <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
+                      <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="large">Original</Text>
+                    </Stack>
                 </Stack>
             )
         }

@@ -78,7 +78,10 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
 
         return (
             <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
-                <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
+                <Stack>
+                  <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
+                  <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="large">Result</Text>
+                </Stack>
                 <Stack style={{"marginLeft":10}}>
                   <Text style={{"fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
                   <Text variant="large">{this.props.item.principal}</Text>
