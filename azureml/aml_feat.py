@@ -4,9 +4,8 @@ from azureml.core import Experiment, Workspace
 from azureml.core.environment import Environment
 from azureml.core import Datastore
 from azureml.core import ScriptRunConfig
+from azureml.train.estimator import Estimator
 import os 
-
-import dbutils
 
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
@@ -14,35 +13,36 @@ ws = Workspace(
     workspace_name="exten-amls"
 )
 
-myenv = Environment.from_conda_specification(
-    name="myenv", 
-    file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
-
 datastore = Datastore.register_azure_blob_container(
     workspace=ws,
-    datastore_name='art-data-rijks',
+    datastore_name='artdatarijks',
     container_name='rijks',
     account_name='mmlsparkdemo',
-    account_key='',
+    sas_token="HWlVUfk%2FiAqoFonULFdGV3D8kONZl7W7GuIb0rF3vRw%3D",
     create_if_not_exists=True)
 
-# Create a new runconfig object
-run_temp_compute = RunConfiguration(conda_dependencies=True)
+compute_target = ComputeTarget(workspace=ws, name='automl-compute')
 
-run_temp_compute.environment=myenv
+exp = Experiment(workspace=ws, name='my_experiment')
 
-# Signal that you want to use AmlCompute to execute the script
-run_temp_compute.target = "amlcompute"
+estimator = Estimator(
+    source_directory = "azureml",
+    entry_script = "featurize.py",
+    script_params = {
+        "--data-dir": datastore.as_mount()
+    },
+    conda_dependencies_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"),
+    compute_target=compute_target
+)
 
-# AmlCompute is created in the same region as your workspace
-# Set the VM size for AmlCompute from the list of supported_vmsizes
-run_temp_compute.amlcompute.vm_size = 'STANDARD_D2_V2'
-
-experiment_name = 'my_experiment'
-
-
-exp = Experiment(workspace=ws, name=experiment_name)
-
-src = ScriptRunConfig(source_directory = 'azureml', script = 'featurize.py', run_config = run_temp_compute)
-run = exp.submit(src)
+run = exp.submit(estimator)
 run.wait_for_completion(show_output = True)
+
+run.register_model(
+    model_name="art-features",
+    model_path="outputs/features_resnet.pkl"
+)
+run.register_model(
+    model_name="art-metadata",
+    model_path="outputs/metadata_resnet.pkl"
+)

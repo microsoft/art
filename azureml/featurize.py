@@ -10,8 +10,7 @@ from urllib.request import urlopen
 import math
 import glob
 import random
-
-
+import argparse
 
 batch_size = 256
 img_width = 225
@@ -20,13 +19,14 @@ model = "resnet"
 
 os.environ["CUDA_VISIBLE_DEVICES"] = str(2)
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--data-dir", type=str, dest="data_folder")
+data_folder = parser.parse_args().data_folder
 
-#files = glob.glob("data/fonts/32x32/**/*.png")
-#files = glob.glob("/mnt/phd-projects/conditional_knn/data/celebAHQ/*.jpg")
-files = glob.glob("/mnt/rijks/resized_images/*.jpg")
+files = glob.glob(os.path.join(data_folder, "resized_images/AK-BR*.jpg"))
+print("Found {} images...".format(len(files)))
 
-
-output_root = 'features/rijks'  # root folder filepath. All data from this notebookwill be saved to this directory
+output_root = './outputs'  # root folder filepath. All data from this notebookwill be saved to this directory
 features_fn = os.path.join(output_root,'features_{}.pkl'.format(model))  # name of the np array of size (sample_length, img_length) will be saved. These are the featurized versions of the images
 files_fn = os.path.join(output_root, 'metadata_{}.pkl'.format(model))  # helper table that tracks the name & URL for each row
 
@@ -34,17 +34,21 @@ files_fn = os.path.join(output_root, 'metadata_{}.pkl'.format(model))  # helper 
 if model == "resnet":
     from keras.applications.resnet50 import preprocess_input
     from keras.applications.resnet50 import ResNet50
-    keras_model = ResNet50(input_shape=[img_width, img_height, 3],
-                           weights='imagenet',
-                           include_top=False,
-                           pooling='avg')
+    keras_model = ResNet50(
+        input_shape=[img_width, img_height, 3],
+        weights='imagenet',
+        include_top=False,
+        pooling='avg'
+    )
 elif model == "densenet":
     from keras.applications.densenet import preprocess_input
     from keras.applications.densenet import DenseNet121
-    keras_model = DenseNet121(input_shape=[img_width, img_height, 3],
-                           weights='imagenet',
-                           include_top=False,
-                           pooling='avg')
+    keras_model = DenseNet121(
+        input_shape=[img_width, img_height, 3],
+        weights='imagenet',
+        include_top=False,
+        pooling='avg'
+    )
 
 def batch(iterable, n):
     current_batch = []
