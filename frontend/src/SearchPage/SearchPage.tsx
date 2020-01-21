@@ -183,7 +183,7 @@ export class SearchPage extends React.Component<IProps, IState> {
 
           </Stack>
       )
-  }
+    }
 }
 
 export default SearchPage
