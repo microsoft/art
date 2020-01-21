@@ -3,6 +3,7 @@ import React from 'react';
 import {Image, Text, Stack, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
 
 const spacerB = mergeStyles({
     padding: 10,
@@ -75,6 +76,14 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
                       <Stack>
                         <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
                         <DefaultButton className="explore__buttons button" text="View Source"/>
+                        <Stack horizontal>
+                          <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                            <FacebookIcon size={32} round={true} iconBgStyle={{"fill":"black"}} />
+                          </FacebookShareButton>
+                          <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                            <TwitterIcon size={32} round={true}  iconBgStyle={{"fill":"black"}} />
+                          </TwitterShareButton>
+                        </Stack>
                       </Stack>
                     </Stack>
                       <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>

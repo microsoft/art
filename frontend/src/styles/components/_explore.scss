@@ -5,6 +5,10 @@
     width: 500px;
   }
 
+  &__share-button {
+    margin: 0px 10px;
+  }
+
   &__buttons {
     margin: 10px 0px;
     width: 250px;
@@ -75,7 +79,7 @@
   }
 
   &__grid-list-container {
-    width: 100%
+    width: 100%;
   }
 
   &__grid_old {
