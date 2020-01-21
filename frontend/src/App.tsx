@@ -6,7 +6,7 @@ import ExplorePage from './ExplorePage/ExplorePage';
 import SearchPage from "./SearchPage/SearchPage";
 import SelectPage from "./SelectPage/SelectPage";
 
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 const btmMargin = mergeStyles({
     marginBottom: 25,
@@ -24,12 +24,12 @@ export class App extends React.Component {
                     <Stack className={btmMargin}>
                         <NavBar />
                     </Stack>
-                    <Route exact path="/" component={SelectPage} />
-                    <Route exact path="/explore/:data" component={ExplorePage} />
                     <Route exact path="/search/:id" component={SearchPage} />
-                    <Route exact path="/select" component={SelectPage} />
+                    <Route exact path="/:data" component={ExplorePage} />
+                    <Route exact path="/" component={ ExplorePage } />
                 </Stack>
             </Router>
         );
     }
 }
+

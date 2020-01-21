@@ -144,23 +144,42 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     componentDidMount() {
         //Decode the url data
-        let url = this.props.match.params.data.toString();
-        url = decodeURIComponent(url);
-        let selectedArt = url.split("&")[0].slice(5); //gives url of artwork
-        let selectedTitle = url.split("&")[1].slice(6); //gives title of artwork
-        //Continue with other params as desired
-        //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
-        const paintingUrl = selectedArt;
-        let newGalleryItem = new GalleryItem(
-            paintingUrl,
-            selectedTitle,
-            "WHO who, WHO who"
-        );
+        let url = this.props.match.params.data
+        if (url) {
+            let realurl = url.toString();
+            realurl = decodeURIComponent(realurl);
+            let selectedArt = realurl.split("&")[0].slice(5); //gives url of artwork
+            let selectedTitle = realurl.split("&")[1].slice(6); //gives title of artwork
+            //Continue with other params as desired
+            //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
+            const paintingUrl = selectedArt;
+            let newGalleryItem = new GalleryItem(
+                paintingUrl,
+                selectedTitle,
+                "WHO who, WHO who"
+            );
+    
+            this.makeAPIquery(selectedArt, this.state.conditionals);
+    
+    
+            this.setState({ "current": newGalleryItem });
+        } else {
+            let selectedArt = 'https://lh3.googleusercontent.com/ib8SNTK2Qk-z64UYuu-_mI3FswMpYmmNU871wu5diDEPyjxmYJcNI4qRtqxlvKkVnrXTAxAFkuHX7DAN9ZwPFzS5fGE=s0';
+            let selectedTitle = "Lady who says 'who'";
 
-        this.makeAPIquery(selectedArt, this.state.conditionals);
-
-
-        this.setState({ "current": newGalleryItem });
+            const paintingUrl = selectedArt;
+            let newGalleryItem = new GalleryItem(
+                paintingUrl,
+                selectedTitle,
+                "WHO who, WHO who"
+            );
+    
+            this.makeAPIquery(selectedArt, this.state.conditionals);
+    
+    
+            this.setState({ "current": newGalleryItem });
+        }
+        
     }
 
     render() {

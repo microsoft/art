@@ -407,6 +407,8 @@ class SelectPage extends Component<IProps, IState> {
 
   render() {
 
+    console.log(this.state.imgObjects);
+
     if (this.state.redirect) {
         let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
         return <Redirect push to={link} />;

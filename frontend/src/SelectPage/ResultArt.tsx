@@ -79,6 +79,8 @@ export default class ResultArt extends Component<IProps, IState> {
       imagesToDisplay = imagesToDisplay.slice(0, 6);
     }
 
+    console.log(imagesToDisplay);
+
     const listItems = imagesToDisplay.map((image:any, i:any) => (
       <div className="slick-img-container" key={image.id}>
         <img 
@@ -92,6 +94,9 @@ export default class ResultArt extends Component<IProps, IState> {
         />
       </div>
     ))
+
+    console.log("listItems: ");
+    console.log(listItems);
 
     return <Slider {...settings}>{listItems}</Slider>;
   }
