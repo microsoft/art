@@ -6,7 +6,8 @@
   }
 
   &__share-button {
-    margin: 0px 10px;
+    margin: 5px 10px;
+    cursor: pointer;
   }
 
   &__buttons {
@@ -71,11 +72,6 @@
   &__card-img-container {
     height: 25vh;
     outline: none;
-  }
-
-  &__slider {
-    height: 25vh;
-    overflow: visible;
   }
 
   &__grid-list-container {

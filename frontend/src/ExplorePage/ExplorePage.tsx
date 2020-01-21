@@ -193,7 +193,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         <ResultArtwork item={this.state.selected} />
                     </Stack.Item>
                 </Stack>
-                <Separator />
+                <div style={{"width":"100%", "height":"1px", "backgroundColor":"gainsboro", "margin": "15px 0px"}}></div>
                 <Stack.Item>
                     <Options callback={this.changeConditional} />
                 </Stack.Item>

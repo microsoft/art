@@ -69,24 +69,27 @@ class SelectedArtwork extends React.Component < ArtworkProps, IState > {
             return <Redirect push to={link} />;
         } else {
             return (
-                <Stack horizontalAlign="end" verticalAlign="center" horizontal className="explore__main-images">
+                <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
                     <Stack verticalAlign="end" style={{"marginRight":10}}>
                       <Text style={{"textAlign":"right", "fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
                       <Text style={{"textAlign":"right"}} variant="large">{this.props.item.principal}</Text>
                       <Stack>
                         <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
                         <DefaultButton className="explore__buttons button" text="View Source"/>
-                        <Stack horizontal>
+                        <Stack horizontal horizontalAlign="end">
                           <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                            <FacebookIcon size={32} round={true} iconBgStyle={{"fill":"black"}} />
+                            <FacebookIcon size={35} round={true} iconBgStyle={{"fill":"black"}} />
                           </FacebookShareButton>
                           <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                            <TwitterIcon size={32} round={true}  iconBgStyle={{"fill":"black"}} />
+                            <TwitterIcon size={35} round={true}  iconBgStyle={{"fill":"black"}} />
                           </TwitterShareButton>
                         </Stack>
                       </Stack>
                     </Stack>
+                    <Stack>
                       <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
+                      <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="large">Original</Text>
+                    </Stack>
                 </Stack>
             )
         }
