@@ -21,6 +21,9 @@ const azureSearchUrl =
   'https://met-search.search.windows.net/indexes/met-index/docs?api-version=2019-05-06&';
 const apiKey = 'E05256A72E0904582D2B7671DD7E2E3E';
 
+// const azureSearchUrl = 
+// 'https://extern-search.search.windows.net/indexes/merged-art-search-1/docs/search?api-version=2019-05-06&';
+// const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
 export class SearchPage extends React.Component<IProps, IState> {
 
@@ -82,7 +85,7 @@ export class SearchPage extends React.Component<IProps, IState> {
     
         //console.log(query)
         let self = this
-        fetch(azureSearchUrl + query, { headers: { 'api-key': apiKey } })
+        fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey,  } })
           .then(function(response) {
             return response.json();
           })

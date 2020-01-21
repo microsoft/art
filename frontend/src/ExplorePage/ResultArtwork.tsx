@@ -10,7 +10,7 @@ const spacerB = mergeStyles({
 
 interface IState {
     objIDs: any,
-    redirect: any
+    redirect: any,
 }
 
 type ArtworkProps = {
@@ -59,6 +59,16 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
     };
   }
 
+  exploreArtUrlSuffix() {
+    let urlBase = '/';
+    
+      //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
+    let urlURL = '?url=' + this.props.item.url;
+    let titleURL = '&title=' + this.props.item.title;
+    let url = encodeURIComponent(urlURL+titleURL);
+    return urlBase + url;
+  }
+
 
     render() {
       if (this.state.redirect) {
@@ -75,6 +85,7 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
                   <Stack>
                     <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
                     <DefaultButton className="explore__buttons button" text="View Source"/> 
+                    <DefaultButton className ="explore__buttons button" text="Explore Similar" href={this.exploreArtUrlSuffix()} />
                   </Stack>
                 </Stack>
             </Stack>
