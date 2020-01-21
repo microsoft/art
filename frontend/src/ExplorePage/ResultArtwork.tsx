@@ -1,25 +1,26 @@
 import React from 'react';
 
-import {Image, Text, Stack, DefaultButton, mergeStyles} from 'office-ui-fabric-react';
+import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
+import { ShowAt, HideAt } from 'react-with-breakpoints';
 
 const spacerB = mergeStyles({
-    padding: 10,
-  });
+  padding: 10,
+});
 
 interface IState {
-    objIDs: any,
-    redirect: any,
+  objIDs: any,
+  redirect: any,
 }
 
 type ArtworkProps = {
-    item: GalleryItem
+  item: GalleryItem
 }
 
-class ResultArtwork extends React.Component < ArtworkProps, IState > {
+class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
-  constructor(props:any) {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -29,7 +30,7 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
   }
 
-  jsonToURI(json:any){ return encodeURIComponent(JSON.stringify(json)); }
+  jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
 
   getSimilarArtID() {
     let imageURL = this.props.item.url;
@@ -42,12 +43,12 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
 
     Http.open('POST', apiURL + key);
     //Http.send(data);
-    Http.send(JSON.stringify({"urlInput": imageURL}));
+    Http.send(JSON.stringify({ "urlInput": imageURL }));
     Http.onreadystatechange = e => {
       if (Http.readyState === 4) {
         try {
           let response = JSON.parse(Http.responseText);
-          let ids = response.results.map((result:any) => result.ObjectID);
+          let ids = response.results.map((result: any) => result.ObjectID);
           this.setState({
             "objIDs": ids,
             "redirect": true,
@@ -61,40 +62,42 @@ class ResultArtwork extends React.Component < ArtworkProps, IState > {
 
   exploreArtUrlSuffix() {
     let urlBase = '/';
-    
-      //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
+
+    //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
     let urlURL = '?url=' + this.props.item.url;
     let titleURL = '&title=' + this.props.item.title;
-    let url = encodeURIComponent(urlURL+titleURL);
+    let url = encodeURIComponent(urlURL + titleURL);
     return urlBase + url;
   }
 
 
-    render() {
-      if (this.state.redirect) {
-        let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
-        return <Redirect push to={link} />;
-      } else {
+  render() {
+    if (this.state.redirect) {
+      let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
+      return <Redirect push to={link} />;
+    } else {
 
-        return (
-            <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
-                <Stack>
-                  <Image height={"40vh"} src={this.props.item.url} className={spacerB}/>
-                  <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="large">Result</Text>
-                </Stack>
-                <Stack style={{"marginLeft":10}}>
-                  <Text style={{"fontWeight":"bold"}} variant="xLarge">{this.props.item.title}</Text>
-                  <Text variant="large">{this.props.item.principal}</Text>
-                  <Stack>
-                    <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID}/>
-                    <DefaultButton className="explore__buttons button" text="View Source"/> 
-                    <DefaultButton className ="explore__buttons button" text="Explore Similar" href={this.exploreArtUrlSuffix()} />
-                  </Stack>
-                </Stack>
+      return (
+        <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
+          <Stack>
+            <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
+            <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Result</Text>
+          </Stack>
+          <HideAt breakpoint="mediumAndBelow">
+            <Stack style={{ "marginLeft": 10 }}>
+              <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
+              <Text variant="large">{this.props.item.principal}</Text>
+              <Stack>
+                <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID} />
+                <DefaultButton className="explore__buttons button" text="View Source" />
+                <DefaultButton className="explore__buttons button" text="Explore Similar" href={this.exploreArtUrlSuffix()} />
+              </Stack>
             </Stack>
-        )
-      }
+          </HideAt>
+        </Stack>
+      )
     }
+  }
 };
 
 export default ResultArtwork;

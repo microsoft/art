@@ -5,6 +5,7 @@ import ResultArtwork from './ResultArtwork';
 import Options from './Options';
 import GalleryItem from './GalleryItem';
 import ListGrid from './ListGrid';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
 
 interface IProps {
     match: any
@@ -185,14 +186,26 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         return (
             <Stack>
-                <Stack className="explore__top-stack" horizontal>
-                    <Stack.Item className={halfStack} grow={1}>
-                        <SelectedArtwork item={this.state.current} />
-                    </Stack.Item>
-                    <Stack.Item className={halfStack} grow={1}>
-                        <ResultArtwork item={this.state.selected} />
-                    </Stack.Item>
-                </Stack>
+                <HideAt breakpoint="mediumAndBelow">
+                    <Stack horizontal>
+                        <Stack.Item className={halfStack} grow={1}>
+                            <SelectedArtwork item={this.state.current} />
+                        </Stack.Item>
+                        <Stack.Item className={halfStack} grow={1}>
+                            <ResultArtwork item={this.state.selected} />
+                        </Stack.Item>
+                    </Stack>
+                </HideAt>
+                <ShowAt breakpoint="mediumAndBelow">
+                    <Stack horizontalAlign="center">
+                        <Stack.Item className={halfStack} grow={1}>
+                            <SelectedArtwork item={this.state.current} />
+                        </Stack.Item>
+                        <Stack.Item className={halfStack} grow={1}>
+                            <ResultArtwork item={this.state.selected} />
+                        </Stack.Item>
+                    </Stack>
+                </ShowAt>
                 <div style={{"width":"100%", "height":"1px", "backgroundColor":"gainsboro", "margin": "15px 0px"}}></div>
                 <Stack.Item>
                     <Options callback={this.changeConditional} />

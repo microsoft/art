@@ -42,8 +42,11 @@
   }
 
   &__main-images {
-    // height: 35vh;
     padding: 10px;
+
+    @media (max-width: $mq-l) {
+      justify-content: center;
+    }
   }
 
   &__card-img {
