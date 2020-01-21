@@ -10,3 +10,5 @@ dependencies:
     - azureml-defaults
     - inference-schema[numpy-support]
     - flask
+    - azure-storage-blob
+    - dbutils
