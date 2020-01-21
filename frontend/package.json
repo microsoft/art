@@ -24,6 +24,7 @@
     "react-share": "^3.0.1",
     "react-slick": "^0.25.2",
     "react-transition-group": "^4.3.0",
+    "react-with-breakpoints": "^4.0.4",
     "slick-carousel": "^1.8.1",
     "typescript": "3.4.5"
   },

@@ -60,7 +60,7 @@ export default class ResultBox extends Component<IProps, IState> {
         <Card.Item>
         <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
             <Stack horizontal className="grid-card__buttons">
-              <a href={this.exploreArtUrlSuffix()} className="grid-card__button_link">Explore</a>
+              <a href={this.exploreArtUrlSuffix()} className="grid-card__button_link">Relatives</a>
               <div className="grid-card__button_sep"></div>
               <a href={this.props.data.Link_Resource} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
             </Stack>
