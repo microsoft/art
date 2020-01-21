@@ -33,7 +33,6 @@ class ListGrid extends React.Component<IProps, IState> {
 
     render(): JSX.Element {
         const settings = {
-            className: "explore__slider",
             centerMode: true,
             infinite: true,
             centerPadding: '60px',

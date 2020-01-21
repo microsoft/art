@@ -27,6 +27,7 @@
   display: block;
   margin: 0;
   padding: 0;
+  height: calc(25vh + 8px) !important;
 
   &:focus {
     outline: 0;
@@ -164,7 +165,7 @@
 }
 
 .slick-slider {
-  margin: 30px auto 50px;
+  margin: 30px auto 30px;
 }
 
 .slick-dots {
@@ -232,10 +233,10 @@
   text-transform: uppercase;
   position: relative;
   width: $arrow-size;
-  margin: 0 10px;
+  margin: 0 15px;
   @media (max-width: $mq-s) {
-    height: $arrow-size - 1rem;
-    width: $arrow-size - 1rem;
+    height: $arrow-size - 2rem;
+    width: $arrow-size - 2rem;
   }
 
   @include transition(background-color);
@@ -270,7 +271,7 @@
   }
 
   &.slick-next {
-    right: calc(#{$arrow-size} / 3);
+    right: 0;
 
     @media (min-width: $mq-s) {
       right: 0;
@@ -283,8 +284,8 @@
       background-position: -10px -48px;
       background-size: $arrow-size;
       @media (max-width: $mq-s) {
-        background-position: -8px -40px;
-        background-size: $arrow-size - 1rem;
+        background-position: -8px -34px;
+        background-size: $arrow-size - 2rem;
       }
     }
 
@@ -295,14 +296,14 @@
       background-position: -10px -48px;
       background-size: $arrow-size;
       @media (max-width: $mq-s) {
-        background-position: -8px -40px;
-        background-size: $arrow-size - 1rem;
+        background-position: -8px -34px;
+        background-size: $arrow-size - 2rem;
       }
     }
   }
 
   &.slick-prev {
-    left: calc(#{$arrow-size} / 3);
+    left: 0;
 
     @media (min-width: $mq-s) {
       left: 0;
@@ -315,8 +316,8 @@
       background-position: -10px -48px;
       background-size: $arrow-size;
       @media (max-width: $mq-s) {
-        background-position: -8px -40px;
-        background-size: $arrow-size - 1rem;
+        background-position: -8px -34px;
+        background-size: $arrow-size - 2rem;
       }
     }
 
@@ -327,8 +328,8 @@
       background-position: -10px -48px;
       background-size: $arrow-size;
       @media (max-width: $mq-s) {
-        background-position: -8px -40px;
-        background-size: $arrow-size - 1rem;
+        background-position: -8px -34px;
+        background-size: $arrow-size - 2rem;
       }
     }
   }
@@ -378,7 +379,7 @@
 }
 
 .slick-slide > div {
-  height: 337px; // Needed to show the full slide height, do not change
+  height: auto; // Needed to show the full slide height, do not change
   //height: 340px;
 
   @media (max-width: $mq-ss){
