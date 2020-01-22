@@ -9,6 +9,10 @@ import AboutPage from "./AboutPage/AboutPage";
 
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
+import { initializeIcons } from 'office-ui-fabric-react';
+
+initializeIcons();
+
 const btmMargin = mergeStyles({
     marginBottom: 15,
 });
