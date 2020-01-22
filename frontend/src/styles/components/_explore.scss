@@ -73,7 +73,7 @@
   }
 
   &__card-img-container {
-    height: 25vh;
+    height: calc(max(25vh, 200px));
     outline: none;
   }
 
