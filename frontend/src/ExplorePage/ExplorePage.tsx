@@ -14,6 +14,7 @@ interface IProps {
 interface IState {
     current: GalleryItem,
     selected: GalleryItem,
+    bestItem: GalleryItem,
     galleryItems: GalleryItem[],
     collections: any,
     conditionals: any,
@@ -44,6 +45,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.state = {
             current: defaultGalleryItem,
             selected: defaultSelectedGalleryItem,
+            bestItem: defaultSelectedGalleryItem,
             galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
             collections: { 'Collection 1': [defaultGalleryItem], 'Collection 2': [defaultGalleryItem, defaultGalleryItem] },
             conditionals: { 'Culture': 'All', 'Medium': "All" },
@@ -126,13 +128,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 try {
                     let response = JSON.parse(Http.responseText);
                     //let ids = response.results.map((result:any) => result.ObjectID);
+                    console.log(response);
                     let pieces = response.map((result: any) => new GalleryItem(
                         result["img_url"],
                         result["title"],
                         result["museum"]
                     ));
 
-                    this.setState({ "galleryItems": pieces, "selected": pieces[0] });
+                    this.setState({ "galleryItems": pieces, "selected": pieces[0], "bestItem": pieces[0] });
 
 
 
@@ -192,7 +195,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <SelectedArtwork item={this.state.current} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork item={this.state.selected} />
+                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} />
                         </Stack.Item>
                     </Stack>
                 </HideAt>
@@ -202,7 +205,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <SelectedArtwork item={this.state.current} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork item={this.state.selected} />
+                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} />
                         </Stack.Item>
                     </Stack>
                 </ShowAt>

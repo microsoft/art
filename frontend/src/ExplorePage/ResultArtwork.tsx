@@ -15,7 +15,8 @@ interface IState {
 }
 
 type ArtworkProps = {
-  item: GalleryItem
+  item: GalleryItem,
+  bestItem: GalleryItem
 }
 
 class ResultArtwork extends React.Component<ArtworkProps, IState> {
@@ -25,7 +26,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
     this.state = {
       objIDs: [],
-      redirect: false,
+      redirect: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
   }
@@ -70,7 +71,6 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     return urlBase + url;
   }
 
-
   render() {
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -82,7 +82,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack>
               <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Result</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
             </Stack>
             <Stack style={{ "marginLeft": 10 }}>
               <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
@@ -97,7 +97,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
               <Image height={"300px"} src={this.props.item.url} className={spacerB} />
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Result</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Best Match</Text>
             </Stack>
           </ShowAt>
         </Stack>
