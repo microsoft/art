@@ -35,7 +35,7 @@ export class AboutPage extends React.Component<IProps, IState> {
         return (
             <Stack className="about__panel">
                 <Pivot styles={pivotStyles} aria-label="" linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large}>
-                    <PivotItem className="about__pivot" headerText="How to use the website">
+                    <PivotItem className="about__pivot" headerText="Instructions">
                         <Stack>
                             <Text style={{"textAlign":"left", "fontWeight":"bold"}} variant="xLarge">About Me</Text>
                             <Text variant="medium">
@@ -45,7 +45,7 @@ export class AboutPage extends React.Component<IProps, IState> {
                         </Stack>
 
                     </PivotItem>
-                    <PivotItem className="about__pivot" headerText="About the Algorithm">
+                    <PivotItem className="about__pivot" headerText="Algorithm">
                         <Stack>
                             <Text style={{"textAlign":"left", "fontWeight":"bold"}} variant="xLarge">This Is About It</Text>
                             <Text variant="medium">

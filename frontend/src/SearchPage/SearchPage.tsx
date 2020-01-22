@@ -16,7 +16,7 @@ interface IState {
     results: object[]                             // Search results
 };
 
-const facetNames = ["Culture","Department"];
+const facetNames = ["Culture"];
 const azureSearchUrl =
   'https://met-search.search.windows.net/indexes/met-index/docs?api-version=2019-05-06&';
 const apiKey = 'E05256A72E0904582D2B7671DD7E2E3E';
