@@ -6,7 +6,9 @@ dependencies:
   - numpy
   - keras
   - Pillow
+  - pyspark
   - pip:
     - azureml-defaults
     - inference-schema[numpy-support]
     - flask
+    - tqdm
