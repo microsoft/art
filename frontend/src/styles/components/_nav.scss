@@ -7,10 +7,10 @@
   display: flex;
   height: $nav-unit;
   justify-content: space-between;
-  margin-bottom: $space-l;
+  margin-bottom: $space-s;
 
   @media (max-width: $mq-s) {
-    margin-bottom: $space-m;
+    margin-bottom: $space-s;
     height: $nav-unit-s;
   }
 

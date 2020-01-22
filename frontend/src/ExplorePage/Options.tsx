@@ -38,6 +38,13 @@ const mediumOptions: IDropdownOption[] = [
     { key: 'mediumArmor', text: 'Armor'}
 ];
 
+// Options for filtering the museum
+const museumOptions: IDropdownOption[] = [
+  { key: 'museumAll', text: 'All Museums'},
+  { key: 'museumMet', text: 'Metropolitan Museum of Art'},
+  { key: 'museumRijks', text: 'Rijksmuseum'}
+];
+
 class Options extends React.Component<IProps, IState> {
 
   // Debugging purposes, unnecessary
@@ -58,6 +65,10 @@ class Options extends React.Component<IProps, IState> {
       medium: {
         callback: this.handleChange,
         options: ['Painting', 'Sculpture', 'Pottery', 'Armor']
+      },
+      museum: {
+        callback: this.handleChange,
+        options: ['All', 'Metropolitan Museum of Art', 'Rijksmuseum']
       }
     };
 
@@ -103,8 +114,8 @@ class Options extends React.Component<IProps, IState> {
           </Stack.Item>
           <Stack.Item className="explore__dropdown">
             <Dropdown
-              placeholder={"Select Nothing"}
-              label={"Nothing"}
+              placeholder={"Select Museum"}
+              label={"Museum"}
               options={mediumOptions}
               responsiveMode={ResponsiveMode.large}
             />
