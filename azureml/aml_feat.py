@@ -15,13 +15,25 @@ ws = Workspace(
 
 datastore = Datastore.register_azure_blob_container(
     workspace=ws,
-    datastore_name='artdatarijks',
-    container_name='rijks',
+    datastore_name='mosaic_datastore',
+    container_name='mosaic',
     account_name='mmlsparkdemo',
-    sas_token="HWlVUfk%2FiAqoFonULFdGV3D8kONZl7W7GuIb0rF3vRw%3D",
+    sas_token="?sv=2019-02-02&ss=bf&srt=sco&sp=rlc&se=2030-01-23T04:14:29Z&st=2020-01-22T20:14:29Z&spr=https,http&sig=nPlKziG9ppu4Vt5b6G%2BW1JkxHYZ1dlm39mO2fMZlET4%3D",
     create_if_not_exists=True)
 
 compute_target = ComputeTarget(workspace=ws, name='automl-compute')
+
+# local run
+conda_dep = CondaDependencies(os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
+run_local = RunConfiguration(
+    conda_dependencies=conda_dep
+)
+src = ScriptRunConfig(
+    source_directory = "azureml", 
+    script = 'featurize.py', 
+    run_config = run_local,
+    arguments = ["--data-dir", datastore.as_mount()]
+)
 
 exp = Experiment(workspace=ws, name='my_experiment')
 
@@ -32,17 +44,19 @@ estimator = Estimator(
         "--data-dir": datastore.as_mount()
     },
     conda_dependencies_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"),
-    compute_target=compute_target
+    compute_target=compute_target,
+    use_docker=True,
+    custom_docker_image="mhamilton723/pyspark:0.2"
 )
 
 run = exp.submit(estimator)
 run.wait_for_completion(show_output = True)
 
-run.register_model(
-    model_name="art-features",
-    model_path="outputs/features_resnet.pkl"
-)
-run.register_model(
-    model_name="art-metadata",
-    model_path="outputs/metadata_resnet.pkl"
-)
+# run.register_model(
+#     model_name="art-features",
+#     model_path="outputs/features_resnet.pkl"
+# )
+# run.register_model(
+#     model_name="art-metadata",
+#     model_path="outputs/metadata_resnet.pkl"
+# )
