@@ -40,6 +40,7 @@ class ListGrid extends React.Component<IProps, IState> {
             speed: 500,
             swipeToSlide: true,
             adaptiveHeight: true,
+            focusOnSelect: true,
             responsive: [
               {
                 breakpoint: 1650,
@@ -52,8 +53,8 @@ class ListGrid extends React.Component<IProps, IState> {
               {
                 breakpoint: 1440,
                 settings: {
-                  slidesToShow: 4,
-                  slidesToScroll: 4,
+                  slidesToShow: 3,
+                  slidesToScroll: 3,
                   infinite: true
                 }
               },

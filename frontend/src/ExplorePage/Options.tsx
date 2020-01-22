@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Stack, Dropdown, IDropdownOption } from 'office-ui-fabric-react';
+import { Text, Stack, Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react';
 import { mergeStyles } from '@uifabric/merge-styles';
 
 const dropdown = mergeStyles({
@@ -88,6 +88,7 @@ class Options extends React.Component<IProps, IState> {
               placeholder={"Select Culture"}
               label={"Culture"}
               options={cultureOptions}
+              responsiveMode={ResponsiveMode.large}
               onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
             />
           </Stack.Item>
@@ -96,6 +97,7 @@ class Options extends React.Component<IProps, IState> {
               placeholder={"Select Medium"}
               label={"Medium"}
               options={mediumOptions}
+              responsiveMode={ResponsiveMode.large}
               onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
             />
           </Stack.Item>
@@ -104,6 +106,7 @@ class Options extends React.Component<IProps, IState> {
               placeholder={"Select Nothing"}
               label={"Nothing"}
               options={mediumOptions}
+              responsiveMode={ResponsiveMode.large}
             />
           </Stack.Item>
         </Stack>

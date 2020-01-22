@@ -27,7 +27,7 @@
   display: block;
   margin: 0;
   padding: 0;
-  height: calc(25vh + 8px) !important;
+  height: calc(max(25vh, 200px) + 8px) !important;
 
   &:focus {
     outline: 0;
