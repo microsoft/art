@@ -5,14 +5,12 @@ import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
-
-const spacerB = mergeStyles({
-  padding: 10,
-});
+import { CSSTransition } from 'react-transition-group';
 
 interface IState {
   objIDs: any,
-  redirect: any
+  redirect: any,
+  hover: boolean
 }
 
 type ArtworkProps = {
@@ -27,6 +25,7 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
     this.state = {
       objIDs: [],
       redirect: false,
+      hover: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
   }
@@ -92,13 +91,22 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
               </Stack>
             </Stack>
             <Stack>
-              <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
+              <Image height={"40vh"} src={this.props.item.url} className="explore__img"/>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </HideAt>
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
-              <Image height={"300px"} src={this.props.item.url} className={spacerB} />
+              <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
+                <Image height={"300px"} src={this.props.item.url} />
+                <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                  <Stack horizontal className="explore__slide-buttons">
+                    <a onClick={this.getSimilarArtID} className="explore__slide-button-link">Search</a>
+                    <div className="explore__slide-button-sep"></div>
+                    <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Details</a>
+                  </Stack>
+                </CSSTransition>
+              </div>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </ShowAt>

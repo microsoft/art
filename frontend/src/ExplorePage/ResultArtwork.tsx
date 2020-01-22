@@ -4,14 +4,12 @@ import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 import { ShowAt, HideAt } from 'react-with-breakpoints';
-
-const spacerB = mergeStyles({
-  padding: 10,
-});
+import { CSSTransition } from 'react-transition-group';
 
 interface IState {
   objIDs: any,
   redirect: any,
+  hover: boolean
 }
 
 type ArtworkProps = {
@@ -26,7 +24,8 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
     this.state = {
       objIDs: [],
-      redirect: false
+      redirect: false,
+      hover: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
   }
@@ -81,7 +80,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
         <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
           <HideAt breakpoint="mediumAndBelow">
             <Stack>
-              <Image height={"40vh"} src={this.props.item.url} className={spacerB} />
+              <Image height={"40vh"} src={this.props.item.url} className="explore__img" />
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
             </Stack>
             <Stack style={{ "marginLeft": 10 }}>
@@ -96,7 +95,18 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           </HideAt>
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
-              <Image height={"300px"} src={this.props.item.url} className={spacerB} />
+            <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
+                <Image height={"300px"} src={this.props.item.url} />
+                <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                  <Stack horizontal className="explore__slide-buttons">
+                    <a onClick={this.getSimilarArtID} className="explore__slide-button-link">Search</a>
+                    <div className="explore__slide-button-sep"></div>
+                    <a href={this.exploreArtUrlSuffix()} className="explore__slide-button-link">Related</a>
+                    <div className="explore__slide-button-sep"></div>
+                    <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Details</a>
+                  </Stack>
+                </CSSTransition>
+              </div>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Best Match</Text>
             </Stack>
           </ShowAt>

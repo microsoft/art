@@ -6,6 +6,7 @@ import Options from './Options';
 import GalleryItem from './GalleryItem';
 import ListGrid from './ListGrid';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 
 interface IProps {
     match: any
@@ -65,7 +66,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let clonedConditionals = { ...this.state.conditionals };
         clonedConditionals[thing] = thing2['text'];
         console.log(clonedConditionals);
-        this.setState({"conditionals": clonedConditionals});
+        this.setState({ "conditionals": clonedConditionals });
         this.makeAPIquery(this.state.current.url, clonedConditionals);
     }
 
@@ -106,12 +107,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
         //     });
     }
 
-    makeAPIquery(selectedArtURL : any, conditionals : any) {
+    makeAPIquery(selectedArtURL: any, conditionals: any) {
         const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        let params = '?url='+selectedArtURL + '&numResults=' + '9';
+        let params = '?url=' + selectedArtURL + '&numResults=' + '9';
 
         let fields = Object.keys(conditionals);
-        fields.forEach( (element: any) => {
+        fields.forEach((element: any) => {
             if (conditionals[element] !== "All") {
                 params = params + '&' + element.toLowerCase() + '=' + conditionals[element];
             }
@@ -143,7 +144,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     console.log('malformed request:' + Http.responseText);
                 }
             }
-        }        
+        }
     }
 
     componentDidMount() {
@@ -162,10 +163,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 selectedTitle,
                 "WHO who, WHO who"
             );
-    
+
             this.makeAPIquery(selectedArt, this.state.conditionals);
-    
-    
+
+
             this.setState({ "current": newGalleryItem });
         } else {
             let selectedArt = 'https://lh3.googleusercontent.com/ib8SNTK2Qk-z64UYuu-_mI3FswMpYmmNU871wu5diDEPyjxmYJcNI4qRtqxlvKkVnrXTAxAFkuHX7DAN9ZwPFzS5fGE=s0';
@@ -177,13 +178,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 selectedTitle,
                 "WHO who, WHO who"
             );
-    
+
             this.makeAPIquery(selectedArt, this.state.conditionals);
-    
-    
+
+
             this.setState({ "current": newGalleryItem });
         }
-        
+
     }
 
     render() {
@@ -208,13 +209,24 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} />
                         </Stack.Item>
                     </Stack>
+                    <Stack horizontal horizontalAlign="center">
+                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                            <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </FacebookShareButton>
+                        <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                            <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </TwitterShareButton>
+                        <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                            <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </LinkedinShareButton>
+                    </Stack>
                 </ShowAt>
-                <div style={{"width":"100%", "height":"1px", "backgroundColor":"gainsboro", "margin": "15px 0px"}}></div>
+                <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>
                 <Stack.Item>
                     <Options callback={this.changeConditional} />
                 </Stack.Item>
                 <Stack.Item>
-                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} selected={this.state.selected}/>
+                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} selected={this.state.selected} />
                 </Stack.Item>
             </Stack>
         )
