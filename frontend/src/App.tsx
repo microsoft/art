@@ -35,8 +35,6 @@ export class App extends React.Component {
                         <Route path="/:data" component={ExplorePage} /> 
                         <Route exact path="/" component={ ExplorePage } />
                     </Switch>
-
-                    
                 </Stack>
             </Router>
         );
