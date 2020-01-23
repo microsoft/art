@@ -8,6 +8,7 @@ import ListGrid from './ListGrid';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { Helmet } from 'react-helmet';
+import Jimp from 'jimp';
 
 interface IProps {
     match: any
@@ -17,6 +18,7 @@ interface IState {
     current: GalleryItem,
     selected: GalleryItem,
     bestItem: GalleryItem,
+    imageDataURI: string;
     galleryItems: GalleryItem[],
     collections: any,
     conditionals: any,
@@ -48,6 +50,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
             current: defaultGalleryItem,
             selected: defaultSelectedGalleryItem,
             bestItem: defaultSelectedGalleryItem,
+            imageDataURI: "",
             galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
             collections: { 'Collection 1': [defaultGalleryItem], 'Collection 2': [defaultGalleryItem, defaultGalleryItem] },
             conditionals: { 'Culture': 'All', 'Medium': "All" },
@@ -72,7 +75,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
     setSelected(newSelected: GalleryItem): void {
-        this.setState({ "selected": newSelected });
+        this.setState({ "selected": newSelected }, this.updateImageDataURI);
     }
 
     setGalleryItems(newItems: GalleryItem[]): void {
@@ -89,6 +92,27 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let newcollect = { ...this.state.collections };
         newcollect[collection] = [this.state.current];
         this.setState({ 'collections': newcollect });
+    }
+
+    updateImageDataURI() {
+        let imageHeight = 200;
+
+        Jimp.read(this.state.selected.url)
+            .then(resultImage => {
+                Jimp.read(this.state.current.url)
+                    .then(currentImage => {
+                        resultImage.resize(resultImage.getWidth()*imageHeight/resultImage.getHeight(),imageHeight)
+                        .composite(currentImage.resize(currentImage.getWidth()*imageHeight/currentImage.getHeight(),imageHeight), resultImage.getWidth()*imageHeight/resultImage.getHeight(), 0)                        
+                        .crop(0, 0, currentImage.getWidth()*imageHeight/currentImage.getHeight() + resultImage.getWidth()*imageHeight/resultImage.getHeight(), imageHeight)
+                        .getBase64Async(resultImage.getMIME())
+
+                        // resultImage.resize(200, 200).crop(0,0,400,200).composite(currentImage.resize(200, 200), 200, 0).getBase64Async(resultImage.getMIME())
+                            .then(uri => {
+                                console.log(uri)
+                                this.setState({imageDataURI: uri})
+                            })
+                    })
+            })
     }
 
     componentWillMount() {
@@ -109,7 +133,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
     makeAPIquery(selectedArtURL: any, conditionals: any) {
-        const apiURL = 'http://art-backend.azurewebsites.net/explore';
+        // const apiURL = 'http://art-backend.azurewebsites.net/explore';
+        const apiURL = 'https://extern2020apim.azure-api.net/explore';
         let params = '?url=' + selectedArtURL + '&numResults=' + '9';
 
         let fields = Object.keys(conditionals);
@@ -130,7 +155,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 try {
                     let response = JSON.parse(Http.responseText);
                     //let ids = response.results.map((result:any) => result.ObjectID);
-                    console.log(response);
                     let pieces = response.map((result: any) => new GalleryItem(
                         result["img_url"],
                         result["title"],
@@ -192,7 +216,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         return (
             <Stack>
                 <Helmet>
-                    <meta property="og:image" content={this.state.selected.url} />
+                    <meta property="og:image" content={this.state.imageDataURI} />
                 </Helmet>
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>

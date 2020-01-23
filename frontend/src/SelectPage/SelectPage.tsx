@@ -187,7 +187,8 @@ class SelectPage extends Component<IProps, IState> {
   //these are the initial images that are displayed when the page loads
   componentDidMount() {
 
-    const apiURL = 'http://art-backend.azurewebsites.net/curated'
+    // const apiURL = 'http://art-backend.azurewebsites.net/curated';
+    const apiURL = 'https://extern2020apim.azure-api.net/curated';
     const Http = new XMLHttpRequest();
     Http.open('GET', apiURL);
 
