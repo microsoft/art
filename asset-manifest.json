@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/art/frontend/static/css/main.724cd117.chunk.css",
+    "main.js": "/art/frontend/static/js/main.7a1d7ed0.chunk.js",
+    "main.js.map": "/art/frontend/static/js/main.7a1d7ed0.chunk.js.map",
+    "runtime-main.js": "/art/frontend/static/js/runtime-main.64e35f5f.js",
+    "runtime-main.js.map": "/art/frontend/static/js/runtime-main.64e35f5f.js.map",
+    "static/js/2.d027d6d2.chunk.js": "/art/frontend/static/js/2.d027d6d2.chunk.js",
+    "static/js/2.d027d6d2.chunk.js.map": "/art/frontend/static/js/2.d027d6d2.chunk.js.map",
+    "index.html": "/art/frontend/index.html",
+    "precache-manifest.168a3c3c2daa51a0541991dc4b75c877.js": "/art/frontend/precache-manifest.168a3c3c2daa51a0541991dc4b75c877.js",
+    "service-worker.js": "/art/frontend/service-worker.js",
+    "static/css/main.724cd117.chunk.css.map": "/art/frontend/static/css/main.724cd117.chunk.css.map",
+    "static/js/2.d027d6d2.chunk.js.LICENSE": "/art/frontend/static/js/2.d027d6d2.chunk.js.LICENSE",
+    "static/media/main.scss": "/art/frontend/static/media/icon-search.49c4642a.svg",
+    "static/media/mosaicLogo.png": "/art/frontend/static/media/mosaicLogo.961911a0.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.64e35f5f.js",
+    "static/js/2.d027d6d2.chunk.js",
+    "static/css/main.724cd117.chunk.css",
+    "static/js/main.7a1d7ed0.chunk.js"
+  ]
+}
