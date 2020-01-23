@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.3",
+    "@microsoft/applicationinsights-react-js": "^2.3.1",
+    "@microsoft/applicationinsights-web": "^2.3.1",
+    "@reach/router": "^1.2.1",
+    "@types/reach__router": "^1.2.6",
     "@types/react-helmet": "^5.0.15",
     "@types/react-lazyload": "^2.6.0",
     "@types/react-router": "^5.1.4",

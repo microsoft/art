@@ -9,6 +9,8 @@ import AboutPage from "./AboutPage/AboutPage";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import { initializeIcons } from 'office-ui-fabric-react';
 
+import withAppInsights from './AppInsights';
+
 initializeIcons();
 
 const btmMargin = mergeStyles({
@@ -19,7 +21,7 @@ interface IProps {};
 
 interface IState {};
 
-export class App extends React.Component {
+class App extends React.Component {
     render() {
         return (
             <Router>
@@ -39,3 +41,4 @@ export class App extends React.Component {
     }
 }
 
+export default withAppInsights(App);
