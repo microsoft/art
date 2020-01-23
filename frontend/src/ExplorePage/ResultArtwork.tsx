@@ -71,6 +71,10 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   render() {
+
+
+    let  logo = <Image height={"30px"} src={"../images/Rijks.jpg"} />
+
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
       return <Redirect push to={link} />;
