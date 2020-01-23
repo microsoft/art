@@ -23,19 +23,7 @@ datastore = Datastore.register_azure_blob_container(
 
 compute_target = ComputeTarget(workspace=ws, name='automl-compute')
 
-# local run
-conda_dep = CondaDependencies(os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
-run_local = RunConfiguration(
-    conda_dependencies=conda_dep
-)
-src = ScriptRunConfig(
-    source_directory = "azureml", 
-    script = 'featurize.py', 
-    run_config = run_local,
-    arguments = ["--data-dir", datastore.as_mount()]
-)
-
-exp = Experiment(workspace=ws, name='my_experiment')
+exp = Experiment(workspace=ws, name='featurize_artwork')
 
 estimator = Estimator(
     source_directory = "azureml",
@@ -52,11 +40,17 @@ estimator = Estimator(
 run = exp.submit(estimator)
 run.wait_for_completion(show_output = True)
 
-# run.register_model(
-#     model_name="art-features",
-#     model_path="outputs/features_resnet.pkl"
-# )
-# run.register_model(
-#     model_name="art-metadata",
-#     model_path="outputs/metadata_resnet.pkl"
-# )
+run.register_model(
+    model_name="features-culture",
+    model_path="outputs/features_culture.ball"
+)
+
+run.register_model(
+    model_name="features-classification",
+    model_path="outputs/features_classification.ball"
+)
+
+run.register_model(
+    model_name="metadata",
+    model_path="outputs/metadata.pkl"
+)

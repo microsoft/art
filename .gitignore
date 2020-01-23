@@ -132,3 +132,5 @@ dmypy.json
 .vscode/
 .azure/
 .vs/
+outputs/
+images/

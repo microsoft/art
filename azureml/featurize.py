@@ -1,18 +1,27 @@
-import pickle
-import sys
-import os
-
-import pickle
-import numpy as np
-import pandas as pd
-from PIL import Image, ImageFile
-import requests
-import math
-import glob
-import random
 import argparse
 import csv
+import glob
+import math
+import multiprocessing
+import os
+import pickle
+import random
+import sys
+
+import certifi
+import numpy as np
+import pandas as pd
+import requests
+from pyspark import SparkContext, SQLContext
+# Load into ball tree
+from pyspark.sql import SparkSession, SQLContext
+
+from ConditionalBallTree import ConditionalBallTree
+from PIL import Image, ImageFile
 from tqdm import tqdm
+
+from keras.applications.resnet50 import preprocess_input
+from keras.applications.resnet50 import ResNet50
 
 # Initialize
 batch_size = 256
@@ -22,79 +31,20 @@ model = "resnet"
 
 os.environ["CUDA_VISIBLE_DEVICES"] = str(2)
 
+# gets mount location from aml_feat.py, passed in as args
 parser = argparse.ArgumentParser()
 parser.add_argument("--data-dir", type=str, dest="data_folder")
 data_folder = parser.parse_args().data_folder
 
 csv_path =  "metadata_smol.csv"
-print("Found csv...")
 
-output_root = './outputs'  # root folder filepath. All data from this notebookwill be saved to this directory
-features_culture_fn = os.path.join(output_root,'features_culture_{}.pkl'.format(model))  # name of the np array of size (sample_length, img_length) will be saved. These are the featurized versions of the images
-features_medium_fn = os.path.join(output_root,'features_medium_{}.pkl'.format(model))  # name of the np array of size (sample_length, img_length) will be saved. These are the featurized versions of the images
-files_fn = os.path.join(output_root, 'metadata_{}.pkl'.format(model))  # helper table that tracks the name & URL for each row
-
-if model == "resnet":
-    from keras.applications.resnet50 import preprocess_input
-    from keras.applications.resnet50 import ResNet50
-    keras_model = ResNet50(
-        input_shape=[img_width, img_height, 3],
-        weights='imagenet',
-        include_top=False,
-        pooling='avg'
-    )
-elif model == "densenet":
-    from keras.applications.densenet import preprocess_input
-    from keras.applications.densenet import DenseNet121
-    keras_model = DenseNet121(
-        input_shape=[img_width, img_height, 3],
-        weights='imagenet',
-        include_top=False,
-        pooling='avg'
-    )
+# create file paths for saving balltree later
+output_root = './outputs'
+features_culture_fn = os.path.join(output_root,'features_culture.ball')
+features_classification_fn = os.path.join(output_root,'features_classification.ball') 
+metadata_fn = os.path.join(output_root, 'metadata.pkl') 
 
 # Featurize
-def batch(iterable, n):
-    """
-    Splits iterable into nested array with inner size n
-    """
-    current_batch = []
-    for item in iterable:
-        if item is not None:
-            current_batch.append(item)
-            if len(current_batch) == n:
-                yield current_batch
-                current_batch = []
-    if current_batch:
-        yield current_batch
-
-def download_image(url, id):
-    img = Image.open(requests.get(url, stream=True).raw)
-
-    # non RGB images won't have the right number of channels
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-
-    # re-size, expand dims and run through the ResNet50 model
-    img = np.array(img.resize((img_width, img_height)))
-    img = preprocess_input(img.astype(np.float))
-
-    metadata.append(id)
-    return img
-
-def load_images(images):
-    batch = []
-    for id, url in images:
-        try:
-            batch.append(download_image(url, id))
-        except Exception as e:
-            print(e)
-            try:
-                batch.append(download_image(url, id))
-            except Exception as e:
-                print("Failing a second time", e)
-    return np.array(batch)
-
 def read_metadata_csv(csv_path):
     """
     Given a path to a csv file containing metadata for musueum images,
@@ -122,32 +72,154 @@ def read_metadata_csv(csv_path):
                 for j, column_name in enumerate(row):
                     column_numbers[column_name] = j
             else:
-                images.append((row[column_numbers["id"]], row[column_numbers["Thumbnail_Url"]]))
+                images.append(
+                    {
+                        "id": row[column_numbers["id"]],
+                        "museum": row[column_numbers["Museum"]],
+                        "url": row[column_numbers["Thumbnail_Url"]],
+                        "full_size": row[column_numbers["Image_Url"]],
+                        "culture": row[column_numbers["Culture"]],
+                        "classification": row[column_numbers["Classification"]],
+                        "museum_url": row[column_numbers["Museum_Page"]],
+                        "artist": row[column_numbers["Artist"]],
+                        "title": row[column_numbers["Title"]]
+                    }
+                )
     return images
 
-images = read_metadata_csv(csv_path)
+def batch(iterable, n):
+    """
+    Splits iterable into nested array with inner size n
+    """
+    current_batch = []
+    for item in iterable:
+        if item is not None:
+            current_batch.append(item)
+            if len(current_batch) == n:
+                yield current_batch
+                current_batch = []
+    if current_batch:
+        yield current_batch
 
-batches = list(batch(images, batch_size))
-metadata = []
-data_iterator = (load_images(batch) for batch in tqdm(batches))
-predictions = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
+def download_image(image):
+    """
+    Download an image from the given url and save it to disk as filename {museum}_{id}{extension}
+    where the extension is inferred from content type. Returns None if download fails twice.
+    """
+    for _ in range(2):
+        r = requests.get(image["url"], verify=certifi.where())
+        if r.status_code == 200:
+            extension = ""
+            if r.headers["Content-Type"] == "image/jpeg":
+                extension = ".jpg"
+            elif r.headers["Content-Type"] == "image/png":
+                extension = ".png"
+            filename = os.path.join(
+                "images/", 
+                "{}_{}{}".format(
+                    image["museum"],
+                    image["id"],
+                    extension
+            ))
+            with open(filename, 'wb') as f:
+                f.write(r.content)
+            image["filename"] = filename # append filename to image object
+            return image
+    return None
 
-# Load into ball tree
-from pyspark.sql import SQLContext, SparkSession
-from pyspark import SparkContext, SQLContext
+def load_images(images, metadata):
+    """Given an array of images, return a numpy array of PIL image data
+    after reading the image's filename from disk.
+
+    If successful, append the image dict (with metadata) to the
+    provided metadata list, respectively.
+    
+    Arguments:
+        images {dict[]} -- array of dictionaries that represent images of artwork
+        metadata {dict[]} -- array of image objects to append to if reading is successful
+    
+    Returns:
+        Image[] -- an array of Pillow images
+    """
+    batch = []
+    for image in images:
+        if image.get("filename", None) is None:
+            print("Error: no filename")
+            continue # skip if no filename
+        filename = image["filename"]
+        try:
+            batch.append(load_image(filename))
+            metadata.append(image)
+        except Exception as e:
+            print(e)
+            print("Failed to load image: " + filename)
+    return np.array(batch)
+
+def load_image(filename):
+    """
+    Given a filename of a musueum image, make sure that it is an RGB image and resize and preprocess the image.
+    
+    Arguments:
+        filename {str} -- filename of the image to preprocess
+    
+    Returns:
+        img {Image}-- an Image object that has been turned into an RGB image, resized, and preprocessed
+    """
+    img = Image.open(filename)
+    # non RGB images won't have the right number of channels
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+
+    # re-size, expand dims and run through the ResNet50 model
+    img = np.array(img.resize((img_width, img_height)))
+    img = preprocess_input(img.astype(np.float))
+
+    return img
+
+metadata = read_metadata_csv(csv_path)
+
+# create directory for downloading images, then dowload images simultaneously
+print("Downloading images...")
+if not os.path.exists("images"): os.makedirs("images")
+pool = multiprocessing.Pool(processes=10)
+downloaded_images = list(tqdm(pool.imap(download_image, metadata), total=len(metadata)))
+
+# makes list of only the downlaods that succeded
+metadata = [image for image in downloaded_images if image is not None]
+
+batches = list(batch(metadata, batch_size))
+print("Loading images...")
+metadata = [] # clear metadata, images are only here if they are loaded from disk
+data_iterator = (load_images(batch, metadata) for batch in tqdm(batches, desc="Loading images..."))
+
+# featurize the images then normalize them
+keras_model = ResNet50(
+    input_shape=[img_width, img_height, 3],
+    weights='imagenet',
+    include_top=False,
+    pooling='avg'
+)
+features = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
+features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
+
+# downloading java dependencies
 spark = SparkSession.builder \
     .master("local[*]") \
     .appName("TestConditionalBallTree") \
-    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-37-45c19d0a-SNAPSHOT") \
+    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-cf48d53c-SNAPSHOT") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .config("spark.executor.heartbeatInterval", "60s") \
     .getOrCreate()
 
-from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
+# convert to list and then create the two balltrees for culture and classification(medium)
+ids =  [img["id"] for img in metadata]
+features = features.tolist()
+cbt_culture = ConditionalBallTree(features, ids, [img["culture"] for img in metadata], 50)
+cbt_classification = ConditionalBallTree(features, ids,  [img["classification"] for img in metadata], 50)
 
-cbt = ConditionalBallTree([[1.0, 2.0], [2.0, 3.0]], [1, 2], ['foo', 'bar'], 50)
-result = cbt.findMaximumInnerProducts([1.0, 2.0], {'foo'}, 5)
-expected = [(0, 5.0)]
-print(result, result == expected)
-
+# save the balltrees to output directory and pickle the museum and id metadata
 if not os.path.exists(output_root): os.makedirs(output_root)
+cbt_culture.save(features_culture_fn)
+cbt_classification.save(features_classification_fn)
+pickle.dump(metadata, open(metadata_fn, 'wb'))
+print(metadata)
