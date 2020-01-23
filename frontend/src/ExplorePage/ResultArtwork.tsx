@@ -107,7 +107,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   </Stack>
                 </CSSTransition>
               </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Best Match</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
             </Stack>
           </ShowAt>
         </Stack>

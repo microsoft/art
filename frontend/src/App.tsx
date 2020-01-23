@@ -1,6 +1,5 @@
 import React from 'react';
 import {Stack, mergeStyles} from 'office-ui-fabric-react';
-import {NavBar} from './NavBar/NavBar';
 import NavBarNew from './NavBar/NavBarNew';
 
 import ExplorePage from './ExplorePage/ExplorePage';
@@ -8,7 +7,6 @@ import SearchPage from "./SearchPage/SearchPage";
 import AboutPage from "./AboutPage/AboutPage";
 
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-
 import { initializeIcons } from 'office-ui-fabric-react';
 
 initializeIcons();

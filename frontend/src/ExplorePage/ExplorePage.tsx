@@ -7,6 +7,7 @@ import GalleryItem from './GalleryItem';
 import ListGrid from './ListGrid';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
+import { Helmet } from 'react-helmet';
 
 interface IProps {
     match: any
@@ -190,6 +191,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         return (
             <Stack>
+                <Helmet>
+                    <meta property="og:image" content={this.state.selected.url} />
+                </Helmet>
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
