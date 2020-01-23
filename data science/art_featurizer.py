@@ -15,12 +15,13 @@ import os
 import torch.nn as nn
 from torch.utils import data
 import torchvision.datasets as datasets
+from torchvision.models import SqueezeNet, ResNet
 
 
 def load_dataset(batch_size):
     """ Loads the dataset from the dataset/fonts folder with the specified batch size. """
 
-    data_path = './dataset'
+    data_path = 'dataset/art_dirs/'
     train_dataset = datasets.ImageFolder(
         root=data_path,
         transform=transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
@@ -60,7 +61,12 @@ def get_feature_vector(imgs, model, layer):
             my_embedding.copy_(o.data.squeeze())
 
         t_imgs = Variable(imgs)
-        my_embedding = torch.zeros(imgs.shape[0], vector_size(model._modules.get('fc'))) # extracts size of vector from the shape of the FC layer
+
+
+        if isinstance(model, SqueezeNet):
+            my_embedding = torch.zeros(imgs.shape[0], 1000)
+        elif isinstance(model, ResNet):
+            my_embedding = torch.zeros(imgs.shape[0], vector_size(model._modules.get('fc'))) # extracts size of vector from the shape of the FC layer
 
         h = layer.register_forward_hook(copy_data)
         model(t_imgs)
@@ -87,7 +93,7 @@ def get_filenames():
     """ Extracts filenames from the dataset/fonts folder. """
     # TODO replace with better data reading?
     total_filenames = []
-    root_dir = "./dataset_small/metadata"
+    root_dir = "dataset/art_dirs/"
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             total_filenames.append(os.path.join(root, file).replace('\\', '/'))
@@ -113,7 +119,11 @@ def process_images(model, dataset):
     total_features = []
     
     model.cuda()
-    layer = model._modules.get('avgpool')
+    if isinstance(model, ResNet):
+        layer = model._modules.get('avgpool')
+    elif isinstance(model, SqueezeNet):
+        layer = list(model.children())[-1][-1]
+
     model.eval()
 
     print(model.name)
@@ -130,7 +140,7 @@ def process_images(model, dataset):
 
     total_numpy_features = np.array(total_features)
 
-    pickle.dump(total_numpy_features, open("dataset/features-" + model.name + ".pkl", "wb"))
+    pickle.dump(total_numpy_features, open("dataset/art_features-" + model.name + ".pkl", "wb"))
     # end = time.time()
     # print(end - start)
     # print(model.name)
@@ -152,10 +162,12 @@ def run_models():
     # inception = models.inception_v3(pretrained=True)
     # googlenet = models.googlenet(pretrained=True)
     # shufflenet = models.shufflenet_v2_x1_0(pretrained=True)
-    resnext50_32x4d = models.resnext50_32x4d(pretrained=True)
+    # resnext50_32x4d = models.resnext50_32x4d(pretrained=True)
+    # resnext101_32x8d = models.resnext101_32x8d(pretrained=True)
+    # wide_resnet101_2 = models.wide_resnet101_2(pretrained=True)
     # wide_resnet50_2 = models.wide_resnet50_2(pretrained=True)
     # alexnet = models.alexnet(pretrained=True)
-    # squeezenet = models.squeezenet1_0(pretrained=True)
+    squeezenet = models.squeezenet1_1(pretrained=True)
     # vgg16 = models.vgg16(pretrained=True)
     # densenet = models.densenet161(pretrained=True)
     # mobilenet = models.mobilenet_v2(pretrained=True)
@@ -171,16 +183,18 @@ def run_models():
     # inception.name = "inception"
     # googlenet.name = "googlenet"
     # shufflenet.name = "shufflenet"
-    resnext50_32x4d.name = "resnext50_32x4d"
+    # resnext50_32x4d.name = "resnext50_32x4d"
+    # resnext101_32x8d.name = "resnext101_32x8d"
+    # wide_resnet101_2.name = "wide_resnet101_2"
     # wide_resnet50_2.name = "wide_resnet50_2"
     # alexnet.name = "alexnet"
-    # squeezenet.name = "squeezenet"
+    squeezenet.name = "squeezenet"
     # vgg16.name = "vgg16"
     # densenet.name = "densenet"
     # mobilenet.name = "mobilenet"
     # mnasnet.name = "mnasnet"
 
-    # print("Models created")
+    print("Models created")
 
     # # only needs to be run once, commented out for now
     # filenames = get_filenames()
@@ -189,8 +203,8 @@ def run_models():
 
     # all_models = [resnet18, alexnet, squeezenet, vgg16, densenet, inception, googlenet,
     #               shufflenet, mobilenet, resnext50_32x4d, wide_resnet50_2, mnasnet]
-    all_models = [resnext50_32x4d]
-    
+    all_models = [squeezenet]
+
     for model in all_models:
         process_images(model, dataset)
         print(model.name + " done")
@@ -215,7 +229,7 @@ if __name__ == '__main__':
     torch.multiprocessing.freeze_support()
 
     run_models()
-
+    # print(torch.cuda.is_available())
     # benchmark_different()
     
     # print(pickle.load(open("datasets/metadata.pkl", "rb")))
