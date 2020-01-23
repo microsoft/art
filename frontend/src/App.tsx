@@ -1,3 +1,4 @@
+// import './main.scss';
 import React from 'react';
 import {Stack, mergeStyles} from 'office-ui-fabric-react';
 import NavBarNew from './NavBar/NavBarNew';
@@ -10,6 +11,7 @@ import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom
 import { initializeIcons } from 'office-ui-fabric-react';
 
 import withAppInsights from './AppInsights';
+
 
 initializeIcons();
 

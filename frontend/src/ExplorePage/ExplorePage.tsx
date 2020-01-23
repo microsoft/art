@@ -1,3 +1,4 @@
+// import '../main.scss';
 import React from 'react';
 import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
 import SelectedArtwork from './SelectedArtwork';
