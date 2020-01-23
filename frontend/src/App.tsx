@@ -24,7 +24,7 @@ interface IState {};
 class App extends React.Component {
     render() {
         return (
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <Stack className="main" role="main">
                     <Stack className={btmMargin}>
                         <NavBarNew />

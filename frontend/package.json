@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://Microsoft.github.io/art/frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
