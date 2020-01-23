@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "homepage": "https://Microsoft.github.io/art/frontend",
+  "name": "art",
+  "homepage": "https://microsoft.github.io/art/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +13,7 @@
     "@uifabric/fluent-theme": "^0.16.7",
     "@uifabric/react-cards": "^0.109.3",
     "@uifabric/react-hooks": "^7.0.1",
+    "gh-pages": "^2.2.0",
     "jimp": "^0.9.3",
     "node-sass": "^4.13.1",
     "office-ui-fabric-react": "^6.174.0",
@@ -33,6 +34,8 @@
     "typescript": "3.4.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
