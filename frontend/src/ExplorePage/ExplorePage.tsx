@@ -1,3 +1,4 @@
+// import '../main.scss';
 import React from 'react';
 import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
 import SelectedArtwork from './SelectedArtwork';
@@ -9,6 +10,7 @@ import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { Helmet } from 'react-helmet';
 import Jimp from 'jimp';
+import { appInsights } from '../AppInsights';
 
 interface IProps {
     match: any
@@ -50,6 +52,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         }
         this.setSelected = this.setSelected.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
+        this.handleTrackEvent = this.handleTrackEvent.bind(this);
     }
 
     setCurrent(newCurrent: GalleryItem): void {
@@ -79,36 +82,32 @@ export class ExplorePage extends React.Component<IProps, IState> {
             .then(resultImage => {
                 Jimp.read(this.state.current.url)
                     .then(currentImage => {
-                        resultImage.resize(resultImage.getWidth()*imageHeight/resultImage.getHeight(),imageHeight)
-                        .composite(currentImage.resize(currentImage.getWidth()*imageHeight/currentImage.getHeight(),imageHeight), resultImage.getWidth()*imageHeight/resultImage.getHeight(), 0)                        
-                        .crop(0, 0, currentImage.getWidth()*imageHeight/currentImage.getHeight() + resultImage.getWidth()*imageHeight/resultImage.getHeight(), imageHeight)
-                        .getBase64Async(resultImage.getMIME())
+                        let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
+                        let currentImageWidth = currentImage.getWidth() * imageHeight / currentImage.getHeight();
+                        resultImage.resize(resultImageWidth, imageHeight)
+                            .crop(0, 0, resultImageWidth + currentImageWidth, imageHeight)
+                            .composite(currentImage.resize(currentImageWidth, imageHeight), resultImageWidth, 0)
+                            .getBase64Async(resultImage.getMIME())
 
-                        // resultImage.resize(200, 200).crop(0,0,400,200).composite(currentImage.resize(200, 200), 200, 0).getBase64Async(resultImage.getMIME())
+                            // resultImage.resize(200, 200).crop(0,0,400,200).composite(currentImage.resize(200, 200), 200, 0).getBase64Async(resultImage.getMIME())
                             .then(uri => {
                                 console.log(uri)
-                                this.setState({imageDataURI: uri})
+                                this.setState({ imageDataURI: uri })
                             })
                     })
             })
     }
 
-    // componentWillMount() {
-    //     // const api_key = process.env.REACT_APP_RIJKSMUSEUM_API_KEY;
-    //     // const url = `https://www.rijksmuseum.nl/api/en/collection?key=${api_key}&ps=9`;
+    /**
+     * Handles event tracking for interactions
+     * @param eventName Name of the event to send to appInsights
+     * @param properties Custom properties to include in the event data
+     */
+    async handleTrackEvent(eventName: string, properties: Object) {
+        console.log("Tracked " + eventName);
+        appInsights.trackEvent({ name: eventName, properties: properties });
+    }
 
-    //     // fetch(url)
-    //     //     .then((res) => {
-    //     //         return res.json();
-    //     //     })
-    //     //     .then((resJson: any) => {
-    //     //         let newItems: GalleryItem[] = [];
-    //     //         resJson.artObjects.forEach((obj:any) => {
-    //     //             newItems.push(new GalleryItem(obj.webImage.url, obj.title, obj.principalOrFirstMaker));
-    //     //         });
-    //     //         this.setGalleryItems(newItems);
-    //     //     });
-    // }
 
     makeAPIquery(selectedArtURL: any, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
@@ -220,32 +219,38 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <SelectedArtwork item={this.state.current} />
+                            <SelectedArtwork item={this.state.current} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} />
+                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="space-around" wrap>
                         <Stack.Item grow={1}>
-                            <SelectedArtwork item={this.state.current} />
+                            <SelectedArtwork item={this.state.current} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} />
+                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontal horizontalAlign="center">
-                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                            <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </FacebookShareButton>
-                        <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                            <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </TwitterShareButton>
-                        <LinkedinShareButton className="explore__share-button" url={window.location.href}>
-                            <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </LinkedinShareButton>
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                            <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                                <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </FacebookShareButton>
+                        </div>
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
+                            <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                                <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </TwitterShareButton>
+                        </div>
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                            <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                                <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </LinkedinShareButton>
+                        </div>
                     </Stack>
                 </ShowAt>
                 <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>

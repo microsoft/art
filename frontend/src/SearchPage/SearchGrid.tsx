@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Stack } from 'office-ui-fabric-react';
 import ResultBox from './ResultBox';
 
-interface IProps{
-    results: any
+interface IProps {
+  results: any,
+  handleTrackEvent: (eventName: string, properties: Object) => void
 };
 
 /**
@@ -14,8 +15,8 @@ export default class SearchGrid extends Component<IProps> {
   render() {
     return (
       <Stack horizontal wrap className="search__grid">
-        {this.props.results.map( (result:any) => (
-          <ResultBox key={result.id} data={result} />
+        {this.props.results.map((result: any) => (
+          <ResultBox key={result.id} data={result} handleTrackEvent={this.props.handleTrackEvent} />
         ))}
       </Stack>
     );

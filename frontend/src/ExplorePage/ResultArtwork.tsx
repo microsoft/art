@@ -5,6 +5,7 @@ import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 import { ShowAt, HideAt } from 'react-with-breakpoints';
 import { CSSTransition } from 'react-transition-group';
+import { appInsights } from '../AppInsights';
 
 interface IState {
   objIDs: any,
@@ -14,7 +15,8 @@ interface IState {
 
 type ArtworkProps = {
   item: any,
-  bestItem: any
+  bestItem: any,
+  handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
 class ResultArtwork extends React.Component<ArtworkProps, IState> {
@@ -100,9 +102,9 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
               <Text variant="large">{this.props.item.Culture}</Text>
               <Text  variant="large">{this.props.item.Classification}</Text>
               <Stack>
-                <DefaultButton className="explore__buttons button" text="Search Similar" href={this.searchArtUrlSuffix()} />
-                <DefaultButton className="explore__buttons button" text="View Source" />
-                <DefaultButton className="explore__buttons button" text="Find Related" href={this.exploreArtUrlSuffix()} />
+                <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location": "ResultImage"})}} />
+                <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", {"Location": "ResultImage"})}/>
+                <DefaultButton className="explore__buttons button" text="Matches" href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", "ResultImage")}/>
               </Stack>
             </Stack>
           </HideAt>
@@ -112,11 +114,11 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 <Image height={"300px"} src={this.props.item.Thumbnail_Url} />
                 <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                   <Stack horizontal className="explore__slide-buttons">
-                    <a href={this.searchArtUrlSuffix()} className="explore__slide-button-link">Search</a>
+                    <a href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location": "ResultImage"})}} className="explore__slide-button-link">Search</a>
                     <div className="explore__slide-button-sep"></div>
-                    <a href={this.exploreArtUrlSuffix()} className="explore__slide-button-link">Related</a>
+                    <a href="" onClick={() => this.props.handleTrackEvent("Source", {"Location": "ResultImage"})} className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Source</a>
                     <div className="explore__slide-button-sep"></div>
-                    <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Details</a>
+                    <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", {"Location": "ResultImage"})} className="explore__slide-button-link">Matches</a>
                   </Stack>
                 </CSSTransition>
               </div>

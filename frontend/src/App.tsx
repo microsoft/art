@@ -1,3 +1,4 @@
+// import './main.scss';
 import React from 'react';
 import {Stack, mergeStyles} from 'office-ui-fabric-react';
 import NavBarNew from './NavBar/NavBarNew';
@@ -9,6 +10,9 @@ import AboutPage from "./AboutPage/AboutPage";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import { initializeIcons } from 'office-ui-fabric-react';
 
+import withAppInsights from './AppInsights';
+
+
 initializeIcons();
 
 const btmMargin = mergeStyles({
@@ -19,8 +23,7 @@ interface IProps {};
 
 interface IState {};
 
-export class App extends React.Component {
-    //basename={process.env.PUBLIC_URL}
+class App extends React.Component {
     render() {
         return (
             <Router basename={process.env.PUBLIC_URL}>
@@ -41,3 +44,4 @@ export class App extends React.Component {
     }
 }
 
+export default withAppInsights(App);

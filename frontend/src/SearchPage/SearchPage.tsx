@@ -1,19 +1,20 @@
 import React from 'react';
-import {Stack, Separator} from 'office-ui-fabric-react';
+import { Stack, Separator } from 'office-ui-fabric-react';
 import SearchControl from './SearchControl';
 import TagList from './TagList';
 import SearchGrid from './SearchGrid';
+import { appInsights } from '../AppInsights';
 
 interface IProps {
   match: any
 };
 
 interface IState {
-    terms: string[],                              // Current search query terms to be displayed
-    searchFields: any,    
-    activeFilters: {[key:string]:Set<string>},    // Active tags used for filtering the search results
-    facets: {[key:string]:string[]},              // Available filtering tags for the current search terms (currently top 5 most common tags)
-    results: object[]                             // Search results
+  terms: string[],                              // Current search query terms to be displayed
+  searchFields: any,
+  activeFilters: { [key: string]: Set<string> },    // Active tags used for filtering the search results
+  facets: { [key: string]: string[] },              // Available filtering tags for the current search terms (currently top 5 most common tags)
+  results: object[]                             // Search results
 };
 
 const facetNames = ["Culture"];
@@ -398,22 +399,23 @@ const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
 export class SearchPage extends React.Component<IProps, IState> {
 
-    constructor(props:IProps) {
-        super(props);
-        this.state = {
-          terms: ['*'], // Current search query to be displayed
-          searchFields: null,
-          activeFilters: {},
-          facets: {},
-          results: []
-        };
-        this.updateTerms = this.updateTerms.bind(this);
-        this.clearActiveFilters = this.clearActiveFilters.bind(this);
-        this.selectAndApplyFilters = this.selectAndApplyFilters.bind(this);
-    
-        //AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
-        //AppInsights.trackPageView("Search Page");
-    }
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      terms: ['*'], // Current search query to be displayed
+      searchFields: null,
+      activeFilters: {},
+      facets: {},
+      results: []
+    };
+    this.updateTerms = this.updateTerms.bind(this);
+    this.clearActiveFilters = this.clearActiveFilters.bind(this);
+    this.selectAndApplyFilters = this.selectAndApplyFilters.bind(this);
+    this.handleTrackEvent = this.handleTrackEvent.bind(this);
+
+    //AppInsights.downloadAndSetup({ instrumentationKey: "7ca0d69b-9656-4f4f-821a-fb1d81338282" });
+    //AppInsights.trackPageView("Search Page");
+  }
     
     /**
      * Execute a search with no terms on startup
@@ -439,9 +441,11 @@ export class SearchPage extends React.Component<IProps, IState> {
       }
     }
 
-    filterTerm(col:any, values:any) {
-        return `search.in(${col},  '${[...values].join("|")}', '|')`
-    }
+  filterTerm(col: any, values: any) {
+    return `search.in(${col},  '${[...values].join("|")}', '|')`
+  }
+
+
     
     /**
      * This function creates a brand new search query request and refreshes all tags and results in the current state
@@ -469,7 +473,6 @@ export class SearchPage extends React.Component<IProps, IState> {
     
         console.log(query)
         let self = this
-        let thething = "https%3A%2F%2Fextern-search.search.windows.net%2Findexes%2Fmerged-art-search-3%2Fdocs%2Fsearch%3Fapi-version%3D2019-05-06%26%26search%3D%26facet%3DCulture%2Ccount%3A8"
         fetch(azureSearchUrl + query, { headers: {"Content-Type": "application/json", 'api-key': apiKey,  } })
           .then(function(response) {            
             return response.json();
@@ -486,66 +489,101 @@ export class SearchPage extends React.Component<IProps, IState> {
           });
     }
 
-    uriToJSON(urijson:any) { return JSON.parse(decodeURIComponent(urijson)); }
+  uriToJSON(urijson: any) { return JSON.parse(decodeURIComponent(urijson)); }
+
+  updateTerms(newTerms: any) {
+    this.setState({ terms: newTerms, searchFields: null }, () => this.executeSearch(true));
+  }
+
+  clearActiveFilters() {
+    this.setState({ activeFilters: {} }, () => this.executeSearch(true));
+  }
+
+  setUnion(a: any, b: any) {
+    return new Set([...a, ...b])
+  }
+
+  /**
+   * Handler for selecting and applying filters immediately
+   * @param category the category of filter to update (e.g. Culture, Department)
+   * @param value the specific filter to toggle (e.g. French, Sculputres)
+   */
+  selectAndApplyFilters(category: any, value: any) {
+    let af = this.state.activeFilters;
     
-    updateTerms(newTerms:any) {
-        this.setState({terms: newTerms, searchFields:null}, () => this.executeSearch(true));
-    }
-    
-    clearActiveFilters() {
-        this.setState({activeFilters: {}}, () => this.executeSearch(true));
-    }
-    
-    setUnion(a:any, b:any){
-        return new Set([...a, ...b])
+    // Adds the new category to active filters if it does not exist
+    if (!Object.keys(af).includes(category)) {
+      af[category] = new Set();
     }
 
-    /**
-     * Handler for selecting and applying filters immediately
-     * @param category the category of filter to update (e.g. Culture, Department)
-     * @param value the specific filter to toggle (e.g. French, Sculputres)
-     */
-    selectAndApplyFilters(category: any, value: any) {
-      let af = this.state.activeFilters;
-      
-      // Adds the new category to active filters if it does not exist
-      if (!Object.keys(af).includes(category)) {
-        af[category] = new Set();
-      }
-
-      // Toggles the active status of the filter
-      if (af[category].has(value)) {
-        af[category].delete(value);
-      }
-      else {
-        af[category].add(value);
-      }
-
-      // Update the state and search with the new active filters
-      this.setState({activeFilters: af}, ()=>this.executeSearch(false));
+    // Toggles the active status of the filter
+    if (af[category].has(value)) {
+      af[category].delete(value);
     }
-    
-    render() {
-      return (
-          <Stack className="search__topstack">
-              <SearchControl updateTerms={this.updateTerms} />
-              <Separator />
-              <Stack horizontal>
-                <Stack>
-                  <TagList
-                  activeFilters={this.state.activeFilters}
-                  facets={this.state.facets}
-                  selectAndApplyFilters={this.selectAndApplyFilters}
-                  clearActiveFilters={this.clearActiveFilters}
-                  />
-                </Stack>
-                <Separator vertical />
-                <SearchGrid results={this.state.results} />
-              </Stack>
+    else {
+      af[category].add(value);
+    }
 
+    // Update the state and search with the new active filters
+    this.setState({activeFilters: af}, ()=>this.executeSearch(false));
+  }
+    
+
+  /**
+   * Handles event tracking for interactions
+   * @param eventName Name of the event to send to appInsights
+   * @param properties Custom properties to include in the event data
+   */
+  async handleTrackEvent(eventName: string, properties: Object) {
+    console.log("Tracked " + eventName);
+    appInsights.trackEvent({ name: eventName, properties: properties });
+  }
+
+  // render() {
+  //     return (
+  //         <Stack className={topStackClass}>
+  //             <SearchControl updateTerms={this.updateTerms} />
+  //             <Separator />
+  //             <Stack horizontal>
+  //                 <Stack grow={1}>
+  //                     <TagList
+  //                     activeFilters={this.state.activeFilters}
+  //                     facets={this.state.facets}
+  //                     selectAndApplyFilters={this.selectAndApplyFilters}
+  //                     clearActiveFilters={this.clearActiveFilters}
+  //                     />
+  //                 </Stack>
+  //                 <Separator vertical />
+  //                 <Stack horizontal wrap grow={2}>
+  //                     <SearchGrid results={this.state.results} />
+  //                 </Stack>
+  //             </Stack>
+
+  //         </Stack>
+  //     )
+  // }
+
+  render() {
+    return (
+      <Stack className="search__topstack">
+        <SearchControl updateTerms={this.updateTerms} />
+        <Separator />
+        <Stack horizontal>
+          <Stack>
+            <TagList
+              activeFilters={this.state.activeFilters}
+              facets={this.state.facets}
+              selectAndApplyFilters={this.selectAndApplyFilters}
+              clearActiveFilters={this.clearActiveFilters}
+            />
           </Stack>
-      )
-    }
+          <Separator vertical />
+          <SearchGrid results={this.state.results} handleTrackEvent={this.handleTrackEvent}/>
+        </Stack>
+
+      </Stack>
+    )
+  }
 }
 
 export default SearchPage
