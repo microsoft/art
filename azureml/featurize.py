@@ -20,6 +20,8 @@ from ConditionalBallTree import ConditionalBallTree
 from PIL import Image, ImageFile
 from tqdm import tqdm
 
+import tensorflow as tf
+
 from keras.applications.resnet50 import preprocess_input
 from keras.applications.resnet50 import ResNet50
 
@@ -182,7 +184,7 @@ metadata = read_metadata_csv(csv_path)
 print("Downloading images...")
 if not os.path.exists("images"): os.makedirs("images")
 pool = multiprocessing.Pool(processes=10)
-downloaded_images = list(tqdm(pool.imap(download_image, metadata), total=len(metadata)))
+downloaded_images = list(tqdm(pool.imap(download_image, metadata), total=len(metadata), desc="Downloading"))
 
 # makes list of only the downlaods that succeded
 metadata = [image for image in downloaded_images if image is not None]
@@ -190,7 +192,7 @@ metadata = [image for image in downloaded_images if image is not None]
 batches = list(batch(metadata, batch_size))
 print("Loading images...")
 metadata = [] # clear metadata, images are only here if they are loaded from disk
-data_iterator = (load_images(batch, metadata) for batch in tqdm(batches, desc="Loading images..."))
+data_iterator = (load_images(batch, metadata) for batch in tqdm(batches, desc="Loading"))
 
 # featurize the images then normalize them
 keras_model = ResNet50(
@@ -199,6 +201,7 @@ keras_model = ResNet50(
     include_top=False,
     pooling='avg'
 )
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True)) # check if gpu is enabled
 features = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 
@@ -206,7 +209,7 @@ features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 spark = SparkSession.builder \
     .master("local[*]") \
     .appName("TestConditionalBallTree") \
-    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-cf48d53c-SNAPSHOT") \
+    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-41-ccc4ceef-SNAPSHOT") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .config("spark.executor.heartbeatInterval", "60s") \
     .getOrCreate()
@@ -222,4 +225,3 @@ if not os.path.exists(output_root): os.makedirs(output_root)
 cbt_culture.save(features_culture_fn)
 cbt_classification.save(features_classification_fn)
 pickle.dump(metadata, open(metadata_fn, 'wb'))
-print(metadata)
