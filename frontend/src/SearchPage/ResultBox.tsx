@@ -29,8 +29,10 @@ export default class ResultBox extends Component<IProps, IState> {
 
   exploreArtUrlSuffix() {
     let urlBase = '/';
-    let url = '?url=' + this.props.data.Thumbnail_Url + '&title='+this.props.data.Title;
-    url = encodeURIComponent(url);
+    let idURL = '?id=' + this.props.data.id;
+    let museumURL = '&museum=' + this.props.data.Museum;
+    let url = encodeURIComponent(idURL + museumURL);
+    console.log(url);
     return urlBase + url;
   }
 
@@ -38,7 +40,7 @@ export default class ResultBox extends Component<IProps, IState> {
     return (
       <Card className="grid-card" onMouseEnter={()=>this.setState({hover:true})} onMouseLeave={()=>this.setState({hover:false})}>
         <Card.Item className="grid-card__link">
-          <a href={this.props.data.Link_Resource} target="_blank" rel="noopener noreferrer">
+          <a href={this.props.data.Museum_Page} target="_blank" rel="noopener noreferrer">
               <LazyLoad
               throttle={250}
               height={200}
@@ -55,14 +57,14 @@ export default class ResultBox extends Component<IProps, IState> {
                 this.props.data.Title.length < 55 ? this.props.data.Title : this.props.data.Title.substring(0,55) + "..."}</div>
         </Card.Item>
         <Card.Item className="grid-card__text">
-          <div>{!this.props.data.Department ? "No description" : this.props.data.Department}</div>
+          <div>{!this.props.data.Artist ? "No known artist" : this.props.data.Artist}</div>
         </Card.Item>
         <Card.Item>
         <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
             <Stack horizontal className="grid-card__buttons">
               <a href={this.exploreArtUrlSuffix()} className="grid-card__button_link">Relatives</a>
               <div className="grid-card__button_sep"></div>
-              <a href={this.props.data.Link_Resource} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
+              <a href={this.props.data.Museum_Page} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Details</a>
             </Stack>
         </CSSTransition>
         </Card.Item>

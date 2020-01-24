@@ -13,8 +13,8 @@ interface IState {
 }
 
 type ArtworkProps = {
-  item: GalleryItem,
-  bestItem: GalleryItem
+  item: any,
+  bestItem: any
 }
 
 class ResultArtwork extends React.Component<ArtworkProps, IState> {
@@ -33,7 +33,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
 
   getSimilarArtID() {
-    let imageURL = this.props.item.url;
+    let imageURL = this.props.item.Thumbnail_Url;
 
     const apiURL = 'https://gen-studio-apim.azure-api.net/met-reverse-search-2/FindSimilarImages/url';
     const key = '?subscription-key=7c02fa70abb8407fa552104e0b460c50&neighbors=20';
@@ -60,13 +60,21 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     };
   }
 
+  searchArtUrlSuffix() {
+    let urlBase = '/search/';
+
+    let idURL = '?id=' + this.props.item.id;
+    let museumURL = '&museum=' + this.props.item.Museum;
+    let url = encodeURIComponent(idURL + museumURL);
+    return urlBase + url;
+  }
+
   exploreArtUrlSuffix() {
     let urlBase = '/';
-
-    //let urlURL = '?url=' + thumbnailRoot + this.state.selectedImage.id.toString() + ".jpg";
-    let urlURL = '?url=' + this.props.item.url;
-    let titleURL = '&title=' + this.props.item.title;
-    let url = encodeURIComponent(urlURL + titleURL);
+    let idURL = '?id=' + this.props.item.id;
+    let museumURL = '&museum=' + this.props.item.Museum;
+    let url = encodeURIComponent(idURL + museumURL);
+    //console.log(url);
     return urlBase + url;
   }
 
@@ -84,14 +92,15 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
         <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
           <HideAt breakpoint="mediumAndBelow">
             <Stack>
-              <Image height={"40vh"} src={this.props.item.url} className="explore__img" />
+              <Image height={"40vh"} src={this.props.item.Thumbnail_Url} className="explore__img" />
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
             </Stack>
             <Stack style={{ "marginLeft": 10 }}>
-              <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
-              <Text variant="large">{this.props.item.principal}</Text>
+              <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.item.Title}</Text>
+              <Text variant="large">{this.props.item.Culture}</Text>
+              <Text  variant="large">{this.props.item.Classification}</Text>
               <Stack>
-                <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID} />
+                <DefaultButton className="explore__buttons button" text="Search Similar" href={this.searchArtUrlSuffix()} />
                 <DefaultButton className="explore__buttons button" text="View Source" />
                 <DefaultButton className="explore__buttons button" text="Find Related" href={this.exploreArtUrlSuffix()} />
               </Stack>
@@ -100,10 +109,10 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
             <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                <Image height={"300px"} src={this.props.item.url} />
+                <Image height={"300px"} src={this.props.item.Thumbnail_Url} />
                 <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                   <Stack horizontal className="explore__slide-buttons">
-                    <a onClick={this.getSimilarArtID} className="explore__slide-button-link">Search</a>
+                    <a href={this.searchArtUrlSuffix()} className="explore__slide-button-link">Search</a>
                     <div className="explore__slide-button-sep"></div>
                     <a href={this.exploreArtUrlSuffix()} className="explore__slide-button-link">Related</a>
                     <div className="explore__slide-button-sep"></div>
@@ -111,7 +120,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   </Stack>
                 </CSSTransition>
               </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.id === this.props.bestItem.id ? "Best Match" : "Close Match"}</Text>
             </Stack>
           </ShowAt>
         </Stack>

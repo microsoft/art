@@ -14,7 +14,7 @@ interface IState {
 }
 
 type ArtworkProps = {
-  item: GalleryItem
+  item: any
 }
 
 class SelectedArtwork extends React.Component<ArtworkProps, IState> {
@@ -33,9 +33,7 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
 
   getSimilarArtID() {
-    let imageURL = this.props.item.url;
-
-    console.log(imageURL);
+    let imageURL = this.props.item.Thumbnail_Url;
 
     const apiURL = 'https://gen-studio-apim.azure-api.net/met-reverse-search-2/FindSimilarImages/url';
     const key = '?subscription-key=7c02fa70abb8407fa552104e0b460c50&neighbors=20';
@@ -62,6 +60,15 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
     };
   }
 
+  searchArtUrlSuffix() {
+    let urlBase = '/search/';
+
+    let idURL = '?id=' + this.props.item.id;
+    let museumURL = '&museum=' + this.props.item.Museum;
+    let url = encodeURIComponent(idURL + museumURL);
+    return urlBase + url;
+  }
+
   render() {
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -72,10 +79,11 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
         <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
           <HideAt breakpoint="mediumAndBelow">
             <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
-              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
-              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.principal}</Text>
+              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.Title}</Text>
+              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.Culture}</Text>
+              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.Classification}</Text>
               <Stack>
-                <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID} />
+                <DefaultButton className="explore__buttons button" text="Search Similar" href={this.searchArtUrlSuffix()} />
                 <DefaultButton className="explore__buttons button" text="View Source" />
                 <Stack horizontal horizontalAlign="end">
                   <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
@@ -91,17 +99,17 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
               </Stack>
             </Stack>
             <Stack>
-              <Image height={"40vh"} src={this.props.item.url} className="explore__img"/>
+              <Image height={"40vh"} src={this.props.item.Thumbnail_Url} className="explore__img"/>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </HideAt>
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
               <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                <Image height={"300px"} src={this.props.item.url} />
+                <Image height={"300px"} src={this.props.item.Thumbnail_Url} />
                 <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                   <Stack horizontal className="explore__slide-buttons">
-                    <a onClick={this.getSimilarArtID} className="explore__slide-button-link">Search</a>
+                    <a href={this.searchArtUrlSuffix()} className="explore__slide-button-link">Search</a>
                     <div className="explore__slide-button-sep"></div>
                     <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Details</a>
                   </Stack>

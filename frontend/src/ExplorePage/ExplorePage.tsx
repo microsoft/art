@@ -15,12 +15,11 @@ interface IProps {
 };
 
 interface IState {
-    current: GalleryItem,
-    selected: GalleryItem,
-    bestItem: GalleryItem,
+    current: any,
+    selected: any,
+    bestItem: any,
     imageDataURI: string;
-    galleryItems: GalleryItem[],
-    collections: any,
+    galleryItems: any[],
     conditionals: any,
     url: any
 }
@@ -30,35 +29,26 @@ const halfStack = mergeStyles({
     height: "100%"
 })
 
-const defaultGalleryItem = new GalleryItem(
-    "https://lh3.googleusercontent.com/J-mxAE7CPu-DXIOx4QKBtb0GC4ud37da1QK7CzbTIDswmvZHXhLm4Tv2-1H3iBXJWAW_bHm7dMl3j5wv_XiWAg55VOM=s0",
-    "The Night Watch",
-    "Rembrandt van Rijn"
-);
 
-const defaultSelectedGalleryItem = new GalleryItem(
-    "https://upload.wikimedia.org/wikipedia/commons/a/a4/The_Peacemakers_1868.jpg",
-    "The Peacemakers",
-    "George Peter Alexander Healy"
-)
+
+const azureSearchUrl = 
+'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
+const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
 export class ExplorePage extends React.Component<IProps, IState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            current: defaultGalleryItem,
-            selected: defaultSelectedGalleryItem,
-            bestItem: defaultSelectedGalleryItem,
+            current: {},
+            selected: {},
+            bestItem: {},
             imageDataURI: "",
-            galleryItems: [defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem, defaultGalleryItem],
-            collections: { 'Collection 1': [defaultGalleryItem], 'Collection 2': [defaultGalleryItem, defaultGalleryItem] },
+            galleryItems: [],
             conditionals: { 'Culture': 'All', 'Medium': "All" },
             url: ''
         }
         this.setSelected = this.setSelected.bind(this);
-        this.addtoCollection = this.addtoCollection.bind(this);
-        this.addCollection = this.addCollection.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
     }
 
@@ -82,18 +72,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.setState({ "galleryItems": newItems });
     }
 
-    addtoCollection(collection: string): void {
-        let newcollect = { ...this.state.collections };
-        newcollect[collection].push(this.state.current);
-        this.setState({ 'collections': newcollect });
-    }
-
-    addCollection(collection: string): void {
-        let newcollect = { ...this.state.collections };
-        newcollect[collection] = [this.state.current];
-        this.setState({ 'collections': newcollect });
-    }
-
     updateImageDataURI() {
         let imageHeight = 200;
 
@@ -115,22 +93,22 @@ export class ExplorePage extends React.Component<IProps, IState> {
             })
     }
 
-    componentWillMount() {
-        // const api_key = process.env.REACT_APP_RIJKSMUSEUM_API_KEY;
-        // const url = `https://www.rijksmuseum.nl/api/en/collection?key=${api_key}&ps=9`;
+    // componentWillMount() {
+    //     // const api_key = process.env.REACT_APP_RIJKSMUSEUM_API_KEY;
+    //     // const url = `https://www.rijksmuseum.nl/api/en/collection?key=${api_key}&ps=9`;
 
-        // fetch(url)
-        //     .then((res) => {
-        //         return res.json();
-        //     })
-        //     .then((resJson: any) => {
-        //         let newItems: GalleryItem[] = [];
-        //         resJson.artObjects.forEach((obj:any) => {
-        //             newItems.push(new GalleryItem(obj.webImage.url, obj.title, obj.principalOrFirstMaker));
-        //         });
-        //         this.setGalleryItems(newItems);
-        //     });
-    }
+    //     // fetch(url)
+    //     //     .then((res) => {
+    //     //         return res.json();
+    //     //     })
+    //     //     .then((resJson: any) => {
+    //     //         let newItems: GalleryItem[] = [];
+    //     //         resJson.artObjects.forEach((obj:any) => {
+    //     //             newItems.push(new GalleryItem(obj.webImage.url, obj.title, obj.principalOrFirstMaker));
+    //     //         });
+    //     //         this.setGalleryItems(newItems);
+    //     //     });
+    // }
 
     makeAPIquery(selectedArtURL: any, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
@@ -155,12 +133,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 try {
                     let response = JSON.parse(Http.responseText);
                     //let ids = response.results.map((result:any) => result.ObjectID);
-                    let pieces = response.map((result: any) => new GalleryItem(
-                        result["img_url"],
-                        result["title"],
-                        result["museum"]
-                    ));
-
+                    let pieces = response;
                     this.setState({ "galleryItems": pieces, "selected": pieces[0], "bestItem": pieces[0] });
 
 
@@ -174,40 +147,66 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     componentDidMount() {
         //Decode the url data
-        let url = this.props.match.params.data
+        //let url = this.props.match.params.data;
+        const url = decodeURIComponent( this.props.match.params.data); // The IDs of the images found by NN
+        console.log(url);
         if (url) {
-            let realurl = url.toString();
-            realurl = decodeURIComponent(realurl);
-            let selectedArt = realurl.split("&")[0].slice(5); //gives url of artwork
-            let selectedTitle = realurl.split("&")[1].slice(6); //gives title of artwork
-            //Continue with other params as desired
-            //const paintingUrl = thumbnailRoot + selectedArt + ".jpg";
-            const paintingUrl = selectedArt;
-            let newGalleryItem = new GalleryItem(
-                paintingUrl,
-                selectedTitle,
-                "WHO who, WHO who"
-            );
 
-            this.makeAPIquery(selectedArt, this.state.conditionals);
+            let realID = null;
+            let realMuseum = null;
+            if (url != null) {
+              realID = url.split("&")[0].slice(4);
+              realMuseum = url.split("&")[1];
+              console.log(realMuseum);
+              if (realMuseum) {
+                realMuseum = realMuseum.slice(7);
+              }
+            }
 
+            let query="&search="+realID+"&filter="+realMuseum;
+            console.log(query);
+            let self = this;
+            //Make query
+            fetch(azureSearchUrl + query, { headers: {"Content-Type": "application/json", 'api-key': apiKey,  } })
+            .then(function(response) {            
+              return response.json();
+            })
+            .then(function(responseJson) {
+                console.log(responseJson.value[0]);
+                let currImgObj = responseJson.value[0];
+                self.setState({current: responseJson.value[0]});
 
-            this.setState({ "current": newGalleryItem });
+                self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);              
+            });
         } else {
-            let selectedArt = 'https://lh3.googleusercontent.com/ib8SNTK2Qk-z64UYuu-_mI3FswMpYmmNU871wu5diDEPyjxmYJcNI4qRtqxlvKkVnrXTAxAFkuHX7DAN9ZwPFzS5fGE=s0';
-            let selectedTitle = "Lady who says 'who'";
+            let selectedArt = {
+                "@search.score": 1.7071549,
+                "id": "UlAtUC0yMDE2LTY2LTc=",
+                "Title": "Tiger",
+                "Artist": "Utagawa Kunimaro (I)",
+                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
+                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
+                "Culture": "japanese",
+                "Classification": "prints",
+                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
+                "Museum": "rijks",
+                "requestId": null,
+                "categories": [],
+                "adult": null,
+                "tags": [],
+                "description": null,
+                "metadata": null,
+                "faces": [],
+                "color": null,
+                "imageType": null,
+                "brands": [],
+                "objects": []
+            }
 
-            const paintingUrl = selectedArt;
-            let newGalleryItem = new GalleryItem(
-                paintingUrl,
-                selectedTitle,
-                "WHO who, WHO who"
-            );
-
-            this.makeAPIquery(selectedArt, this.state.conditionals);
+            this.makeAPIquery(selectedArt.Thumbnail_Url, this.state.conditionals);
 
 
-            this.setState({ "current": newGalleryItem });
+            this.setState({ current: selectedArt});
         }
 
     }

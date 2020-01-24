@@ -15,7 +15,7 @@ export default class SearchGrid extends Component<IProps> {
     return (
       <Stack horizontal wrap className="search__grid">
         {this.props.results.map( (result:any) => (
-          <ResultBox key={result.Object_ID} data={result} />
+          <ResultBox key={result.id} data={result} />
         ))}
       </Stack>
     );

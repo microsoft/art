@@ -20,6 +20,7 @@ interface IProps {};
 interface IState {};
 
 export class App extends React.Component {
+    //basename={process.env.PUBLIC_URL}
     render() {
         return (
             <Router basename={process.env.PUBLIC_URL}>
@@ -28,7 +29,8 @@ export class App extends React.Component {
                         <NavBarNew />
                     </Stack>
                     <Switch>
-                        <Route exact path="/search/:id" component={SearchPage} />
+                        <Route path="/search/:id" component={SearchPage} />
+                        <Route exact path="/search" component={SearchPage} />
                         <Route exact path="/about" component={AboutPage} />
                         <Route path="/:data" component={ExplorePage} /> 
                         <Route exact path="/" component={ ExplorePage } />
