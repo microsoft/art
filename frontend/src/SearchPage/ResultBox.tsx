@@ -61,9 +61,9 @@ export default class ResultBox extends Component<IProps, IState> {
         <Card.Item>
           <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
             <Stack horizontal className="grid-card__buttons">
-              <a href={this.props.data.Link_Resource} onClick={() => this.props.handleTrackEvent("Source", {"Location":"SearchPage"})} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Source</a>
+              <a href={this.props.data.Link_Resource} onClick={() => this.props.handleTrackEvent("Source", {"Location":"SearchPage", "ArtLink":this.props.data.Link_Resource})} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">Source</a>
               <div className="grid-card__button_sep"></div>
-              <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", {"Location":"SearchPage"})} className="grid-card__button_link">Matches</a>
+              <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", {"Location":"SearchPage", "ArtLink":this.props.data.Link_Resource})} className="grid-card__button_link">Matches</a>
             </Stack>
           </CSSTransition>
         </Card.Item>
