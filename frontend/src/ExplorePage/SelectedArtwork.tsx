@@ -14,7 +14,8 @@ interface IState {
 }
 
 type ArtworkProps = {
-  item: GalleryItem
+  item: GalleryItem,
+  handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
 class SelectedArtwork extends React.Component<ArtworkProps, IState> {
@@ -74,24 +75,31 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
             <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
               <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
               <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.principal}</Text>
-              <Stack>
-                <DefaultButton className="explore__buttons button" text="Search Similar" onClick={this.getSimilarArtID} />
-                <DefaultButton className="explore__buttons button" text="View Source" />
+              <Stack horizontalAlign="end">
+                <DefaultButton className="explore__buttons button" text="Search" onClick={() => {this.getSimilarArtID(); this.props.handleTrackEvent("Search", {"Location": "OriginalImage"})}} />
+                <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", {"Location": "OriginalImage"})} />
                 <Stack horizontal horizontalAlign="end">
-                  <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                    <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                  </FacebookShareButton>
-                  <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                    <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                  </TwitterShareButton>
-                  <LinkedinShareButton className="explore__share-button" url={window.location.href}>
-                    <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                  </LinkedinShareButton>
+                  <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                    <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                      <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                    </FacebookShareButton>
+                  </div>
+                  <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Twitter" })}>
+
+                    <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                      <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                    </TwitterShareButton>
+                  </div>
+                  <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                    <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                      <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                    </LinkedinShareButton>
+                  </div>
                 </Stack>
               </Stack>
             </Stack>
             <Stack>
-              <Image height={"40vh"} src={this.props.item.url} className="explore__img"/>
+              <Image height={"40vh"} src={this.props.item.url} className="explore__img" />
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </HideAt>
@@ -101,9 +109,9 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
                 <Image height={"300px"} src={this.props.item.url} />
                 <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                   <Stack horizontal className="explore__slide-buttons">
-                    <a onClick={this.getSimilarArtID} className="explore__slide-button-link">Search</a>
+                    <a onClick={() => {this.getSimilarArtID(); this.props.handleTrackEvent("Search", {"Location":"OriginalImage"})}} className="explore__slide-button-link">Search</a>
                     <div className="explore__slide-button-sep"></div>
-                    <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Details</a>
+                    <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer" onClick={() => this.props.handleTrackEvent("Source", {"Location":"OrignalImage"})}>Source</a>
                   </Stack>
                 </CSSTransition>
               </div>

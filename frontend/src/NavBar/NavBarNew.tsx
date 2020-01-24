@@ -23,7 +23,7 @@ class NavBarNew extends Component<IProps, IState> {
             </a>
             <a className="nav__link" href="/about">
               <div className="nav__text">
-                Learn More
+                About
               </div>
             </a>
           </nav>   
