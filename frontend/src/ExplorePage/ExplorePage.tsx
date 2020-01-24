@@ -102,9 +102,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
             .then(resultImage => {
                 Jimp.read(this.state.current.url)
                     .then(currentImage => {
-                        resultImage.resize(resultImage.getWidth()*imageHeight/resultImage.getHeight(),imageHeight)
-                        .composite(currentImage.resize(currentImage.getWidth()*imageHeight/currentImage.getHeight(),imageHeight), resultImage.getWidth()*imageHeight/resultImage.getHeight(), 0)                        
-                        .crop(0, 0, currentImage.getWidth()*imageHeight/currentImage.getHeight() + resultImage.getWidth()*imageHeight/resultImage.getHeight(), imageHeight)
+                        let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
+                        let currentImageWidth = currentImage.getWidth() * imageHeight / currentImage.getHeight();
+                        resultImage.resize(resultImageWidth,imageHeight)
+                        .crop(0, 0, resultImageWidth + currentImageWidth, imageHeight)
+                        .composite(currentImage.resize(currentImageWidth,imageHeight), resultImageWidth, 0)
                         .getBase64Async(resultImage.getMIME())
 
                         // resultImage.resize(200, 200).crop(0,0,400,200).composite(currentImage.resize(200, 200), 200, 0).getBase64Async(resultImage.getMIME())
