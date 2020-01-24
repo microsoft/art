@@ -14,15 +14,14 @@ ws = Workspace(
     workspace_name="exten-amls"
 )
 
-myenv = Environment.from_conda_specification(
-    name="myenv", 
-    file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"))
-
-myenv.docker.base_image = DEFAULT_GPU_IMAGE
-
 inference_config = InferenceConfig(
-    entry_script=os.path.join(os.path.dirname(os.path.realpath(__file__)),"score.py"),
-    environment=myenv)
+    entry_script="score.py",
+    runtime="python",
+    source_directory="azureml",
+    conda_file="myenv.yml",
+    base_image="typingkoala/art-repository:latest")
+
+model = Model(ws, name="features")
 
 resource_group = 'extern2020'
 cluster_name = 'aks-gpu2'
@@ -35,6 +34,7 @@ Deploys a service to the cluster if one by the name of service_name does not alr
 try: #if cluster and service exists
     aks_target = AksCompute(ws, cluster_name)
     service = AksWebservice(name=service_name, workspace=ws)
+    # print(service.get_logs(num_lines=5000))
     print("Updating existing service: {}".format(service_name))
     # backoff_time = 60
     # while service.state is "Unschedulable":
@@ -42,7 +42,7 @@ try: #if cluster and service exists
     #     time.wait(backoff_time)
     #     backoff_time *= 2 # exponential backoff on unschedulable failure
     service.update(inference_config=inference_config, auth_enabled=False)
-    # service.wait_for_deployment(show_output=True)
+    service.wait_for_deployment(show_output=True)
 
 except WebserviceException: #if cluster but no service
     #creating a new service
@@ -50,11 +50,11 @@ except WebserviceException: #if cluster but no service
     print("Deploying new service: {}".format(service_name))
     gpu_aks_config = AksWebservice.deploy_configuration(
         autoscale_enabled=False,
-        num_replicas=3,
+        num_replicas=1,
         cpu_cores=2,
-        memory_gb=4,
+        memory_gb=8,
         auth_enabled=False)
-    service = Model.deploy(ws, service_name, [], inference_config, gpu_aks_config, aks_target, overwrite=True)
+    service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
 except ComputeTargetException: #cluster doesn't exist
@@ -66,7 +66,7 @@ except ComputeTargetException: #cluster doesn't exist
 
     # Create the cluster
     aks_target = ComputeTarget.create(
-        workspace=ws, name=cluster_name, provisioning_configuration=prov_config
+        workspace=ws, name=cluster_name, provisioning_configuration=prov_config, 
     )
     aks_target.wait_for_completion(show_output=True)
 
@@ -77,7 +77,7 @@ except ComputeTargetException: #cluster doesn't exist
         cpu_cores=2,
         memory_gb=4,
         auth_enabled=False)
-    service = Model.deploy(ws, service_name, [], inference_config, gpu_aks_config, aks_target, overwrite=True)
+    service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
 print("State: " + service.state)
