@@ -31,7 +31,7 @@ img_width = 225
 img_height = 225
 model = "resnet"
 
-os.environ["CUDA_VISIBLE_DEVICES"] = str(2)
+os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 
 # gets mount location from aml_feat.py, passed in as args
 parser = argparse.ArgumentParser()
@@ -178,6 +178,17 @@ def load_image(filename):
 
     return img
 
+def assert_gpu():
+    """
+    This function will raise an exception if a GPU is not available to tensorflow.
+    """
+    with tf.device('/gpu:0'):
+        a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+        b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+        c = tf.matmul(a, b)
+    with tf.Session() as sess:
+        print (sess.run(c))
+
 metadata = read_metadata_csv(csv_path)
 
 # create directory for downloading images, then dowload images simultaneously
@@ -201,7 +212,9 @@ keras_model = ResNet50(
     include_top=False,
     pooling='avg'
 )
-sess = tf.Session(config=tf.ConfigProto(log_device_placement=True)) # check if gpu is enabled
+
+assert_gpu() # raises exception if gpu is not available
+
 features = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 
