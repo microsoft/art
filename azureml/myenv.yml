@@ -2,13 +2,10 @@ name: project_environment
 dependencies:
   - python=3.6.2
   - tensorflow-gpu
-  - scikit-learn
   - numpy
   - keras
   - Pillow
   - pyspark
   - pip:
-    - azureml-defaults
-    - inference-schema[numpy-support]
-    - flask
+    - azureml-defaults[services]
     - tqdm
