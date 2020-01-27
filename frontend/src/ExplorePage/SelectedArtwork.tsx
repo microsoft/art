@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
-import GalleryItem from './GalleryItem';
+import ArtObject from '../ArtObject';
 import { Redirect } from 'react-router-dom';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
@@ -14,7 +14,7 @@ interface IState {
 }
 
 type ArtworkProps = {
-  item: any,
+  artwork: ArtObject,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
@@ -34,7 +34,7 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
 
   getSimilarArtID() {
-    let imageURL = this.props.item.Thumbnail_Url;
+    let imageURL = this.props.artwork.Thumbnail_Url;
 
     const apiURL = 'https://gen-studio-apim.azure-api.net/met-reverse-search-2/FindSimilarImages/url';
     const key = '?subscription-key=7c02fa70abb8407fa552104e0b460c50&neighbors=20';
@@ -64,8 +64,8 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
   searchArtUrlSuffix() {
     let urlBase = '/search/';
 
-    let idURL = '?id=' + this.props.item.id;
-    let museumURL = '&museum=' + this.props.item.Museum;
+    let idURL = '?id=' + this.props.artwork.id;
+    let museumURL = '&museum=' + this.props.artwork.Museum;
     let url = encodeURIComponent(idURL + museumURL);
     return urlBase + url;
   }
@@ -80,8 +80,8 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
         <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
           <HideAt breakpoint="mediumAndBelow">
             <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
-              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.Title}</Text>
-              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.principal}</Text>
+              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.artwork.Title}</Text>
+              <Text style={{ "textAlign": "right" }} variant="large">{this.props.artwork.Culture}</Text>
               <Stack horizontalAlign="end">
                 <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", {"Location": "OriginalImage"})}} />
                 <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", {"Location": "OriginalImage"})} />
@@ -106,14 +106,14 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
               </Stack>
             </Stack>
             <Stack>
-              <Image height={"40vh"} src={this.props.item.Thumbnail_Url} className="explore__img"/>
+              <Image height={"40vh"} src={this.props.artwork.Thumbnail_Url} className="explore__img"/>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </HideAt>
           <ShowAt breakpoint="mediumAndBelow">
             <Stack>
               <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                <Image height={"300px"} src={this.props.item.Thumbnail_Url} />
+                <Image height={"300px"} src={this.props.artwork.Thumbnail_Url} />
                 <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                   <Stack horizontal className="explore__slide-buttons">
                     <a href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location":"OriginalImage"})}} className="explore__slide-button-link">Search</a>

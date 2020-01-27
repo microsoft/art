@@ -220,20 +220,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <SelectedArtwork item={this.state.current} handleTrackEvent={this.handleTrackEvent} />
+                            <SelectedArtwork artwork={this.state.current} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.selected} bestArtwork={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="space-around" wrap>
                         <Stack.Item grow={1}>
-                            <SelectedArtwork item={this.state.current} handleTrackEvent={this.handleTrackEvent} />
+                            <SelectedArtwork artwork={this.state.current} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork item={this.state.selected} bestItem={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.selected} bestArtwork={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontal horizontalAlign="center">
