@@ -39,6 +39,7 @@ export default class ResultBox extends Component<IProps, IState> {
   render() {
     let museumName = this.props.data.Museum === "met" ? "The Met" : "Rijksmuseum";
     return (
+
       <Card className="grid-card" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
         <Card.Item className="grid-card__link">
           <a href={this.props.data.Museum_Page} target="_blank" rel="noopener noreferrer">
@@ -52,14 +53,14 @@ export default class ResultBox extends Component<IProps, IState> {
             </LazyLoad>
           </a>
         </Card.Item>
-        <Card.Item className="grid-card__title">
-          <div>{!this.props.data.Title ?
+        <Card.Item>
+          <div className="grid-card__title">{!this.props.data.Title ?
             "Untitled Piece" :
             this.props.data.Title.length < 55 ? this.props.data.Title : this.props.data.Title.substring(0, 55) + "..."}</div>
         </Card.Item>
-        <Card.Item className="grid-card__text">
-          <div>{museumName}</div>
-          <div>{!this.props.data.Artist ? "No known artist" : this.props.data.Artist}</div>          
+        <Card.Item>
+          <div className="grid-card__text">{museumName}</div>
+          <div className="grid-card__text">{!this.props.data.Artist ? "No known artist" : this.props.data.Artist}</div>          
         </Card.Item>
         <Card.Item>
           <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
