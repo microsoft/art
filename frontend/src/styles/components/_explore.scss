@@ -194,4 +194,16 @@
     height: 100%;
     background-color: gainsboro;
   }
+
+  &__museum-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 10px;
+
+  }
+
+  &__artwork-frame {
+    position: relative;
+  }
 }
