@@ -1,3 +1,0 @@
-azureml-sdk
-tensorflow
-keras
