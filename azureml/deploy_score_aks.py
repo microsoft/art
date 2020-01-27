@@ -31,21 +31,16 @@ service_name = 'artgpuservice'
 Creates a cluster if one by the name of cluster_name does not already exist.
 Deploys a service to the cluster if one by the name of service_name does not already exist, otherwise it will update the existing service.
 """
-try: #if cluster and service exists
+try: # if cluster and service exists
     aks_target = AksCompute(ws, cluster_name)
     service = AksWebservice(name=service_name, workspace=ws)
     # print(service.get_logs(num_lines=5000))
     print("Updating existing service: {}".format(service_name))
-    # backoff_time = 60
-    # while service.state is "Unschedulable":
-    #     print("Service state is unschedulable. Retrying in {} seconds...".format(backoff_time))
-    #     time.wait(backoff_time)
-    #     backoff_time *= 2 # exponential backoff on unschedulable failure
     service.update(inference_config=inference_config, auth_enabled=False)
     service.wait_for_deployment(show_output=True)
 
-except WebserviceException: #if cluster but no service
-    #creating a new service
+except WebserviceException: # if cluster but no service
+    # creating a new service
     aks_target = AksCompute(ws, cluster_name)
     print("Deploying new service: {}".format(service_name))
     gpu_aks_config = AksWebservice.deploy_configuration(
@@ -57,7 +52,7 @@ except WebserviceException: #if cluster but no service
     service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
-except ComputeTargetException: #cluster doesn't exist
+except ComputeTargetException: # cluster doesn't exist
     print("Creating new cluster: {}".format(cluster_name))
     # Provision AKS cluster with GPU machine
     prov_config = AksCompute.provisioning_configuration(
