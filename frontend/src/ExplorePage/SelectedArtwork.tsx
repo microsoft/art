@@ -80,7 +80,7 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
         <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
           <HideAt breakpoint="mediumAndBelow">
             <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
-              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.title}</Text>
+              <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.Title}</Text>
               <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.principal}</Text>
               <Stack horizontalAlign="end">
                 <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", {"Location": "OriginalImage"})}} />

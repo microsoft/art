@@ -42,11 +42,99 @@ export class ExplorePage extends React.Component<IProps, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            current: {},
-            selected: {},
-            bestItem: {},
+            current: {
+                "@search.score": 1.7071549,
+                "id": "UlAtUC0yMDE2LTY2LTc=",
+                "Title": "Tiger",
+                "Artist": "Utagawa Kunimaro (I)",
+                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
+                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
+                "Culture": "japanese",
+                "Classification": "prints",
+                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
+                "Museum": "rijks",
+                "requestId": null,
+                "categories": [],
+                "adult": null,
+                "tags": [],
+                "description": null,
+                "metadata": null,
+                "faces": [],
+                "color": null,
+                "imageType": null,
+                "brands": [],
+                "objects": []
+            },
+            selected: {
+                "@search.score": 1.7071549,
+                "id": "UlAtUC0yMDE2LTY2LTc=",
+                "Title": "Tiger",
+                "Artist": "Utagawa Kunimaro (I)",
+                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
+                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
+                "Culture": "japanese",
+                "Classification": "prints",
+                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
+                "Museum": "rijks",
+                "requestId": null,
+                "categories": [],
+                "adult": null,
+                "tags": [],
+                "description": null,
+                "metadata": null,
+                "faces": [],
+                "color": null,
+                "imageType": null,
+                "brands": [],
+                "objects": []
+            },
+            bestItem: {
+                "@search.score": 1.7071549,
+                "id": "UlAtUC0yMDE2LTY2LTc=",
+                "Title": "Tiger",
+                "Artist": "Utagawa Kunimaro (I)",
+                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
+                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
+                "Culture": "japanese",
+                "Classification": "prints",
+                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
+                "Museum": "rijks",
+                "requestId": null,
+                "categories": [],
+                "adult": null,
+                "tags": [],
+                "description": null,
+                "metadata": null,
+                "faces": [],
+                "color": null,
+                "imageType": null,
+                "brands": [],
+                "objects": []
+            },
             imageDataURI: "",
-            galleryItems: [],
+            galleryItems: [{
+                "@search.score": 1.7071549,
+                "id": "UlAtUC0yMDE2LTY2LTc=",
+                "Title": "Tiger",
+                "Artist": "Utagawa Kunimaro (I)",
+                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
+                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
+                "Culture": "japanese",
+                "Classification": "prints",
+                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
+                "Museum": "rijks",
+                "requestId": null,
+                "categories": [],
+                "adult": null,
+                "tags": [],
+                "description": null,
+                "metadata": null,
+                "faces": [],
+                "color": null,
+                "imageType": null,
+                "brands": [],
+                "objects": []
+            }],
             conditionals: { 'Culture': 'All', 'Medium': "All" },
             url: ''
         }
@@ -146,10 +234,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     componentDidMount() {
         //Decode the url data
-        //let url = this.props.match.params.data;
-        const url = decodeURIComponent( this.props.match.params.data); // The IDs of the images found by NN
-        console.log(url);
-        if (url) {
+        if (this.props.match.params.data) {
+            const url = decodeURIComponent( this.props.match.params.data);
+            console.log(url);
 
             let realID = null;
             let realMuseum = null;
