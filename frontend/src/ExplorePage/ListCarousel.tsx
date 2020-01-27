@@ -1,18 +1,19 @@
 import React from 'react';
 import GalleryItem from './GalleryItem';
 import Slider from 'react-slick';
+import ArtObject from '../ArtObject';
 
 interface IProps {
-    items: any[],
-    setSelected: (item: any) => void,
-    selected: any
+    items: ArtObject[],
+    setResultArtwork: (item: any) => void,
+    resultArtwork: ArtObject
 }
 
 interface IState {
 
 }
 
-class ListGrid extends React.Component<IProps, IState> {
+class ListCarousel extends React.Component<IProps, IState> {
     // constructor(props: IProps) {
     //     super(props);
     // }
@@ -22,8 +23,8 @@ class ListGrid extends React.Component<IProps, IState> {
 
         this.props.items.forEach((item: any, i: number) => {
             grid.push(
-                <div className="explore__card-img-container" key={i} onClick={()=>this.props.setSelected(item)}>
-                    <img alt={item.title} className="explore__card-img" style={item.id === this.props.selected.id ? {"border":"4px solid black"} : {"border":"4px solid white"}} src={item.Thumbnail_Url}/>
+                <div className="explore__card-img-container" key={i} onClick={()=>this.props.setResultArtwork(item)}>
+                    <img alt={item.title} className="explore__card-img" style={item.id === this.props.resultArtwork.id ? {"border":"4px solid black"} : {"border":"4px solid white"}} src={item.Thumbnail_Url}/>
                 </div>
             );
         })
@@ -84,4 +85,4 @@ class ListGrid extends React.Component<IProps, IState> {
     }
 }
 
-export default ListGrid;
+export default ListCarousel;

@@ -18,7 +18,7 @@ type ArtworkProps = {
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
-class SelectedArtwork extends React.Component<ArtworkProps, IState> {
+class OriginalArtwork extends React.Component<ArtworkProps, IState> {
 
   constructor(props: any) {
     super(props);
@@ -131,4 +131,4 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
   }
 };
 
-export default SelectedArtwork;
+export default OriginalArtwork;

@@ -1,11 +1,11 @@
 // import '../main.scss';
 import React from 'react';
 import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
-import SelectedArtwork from './SelectedArtwork';
+import OriginalArtwork from './OriginalArtwork';
 import ResultArtwork from './ResultArtwork';
 import Options from './Options';
 import GalleryItem from './GalleryItem';
-import ListGrid from './ListGrid';
+import ListCarousel from './ListCarousel';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { Helmet } from 'react-helmet';
@@ -18,9 +18,9 @@ interface IProps {
 };
 
 interface IState {
-    current: ArtObject,
-    selected: ArtObject,
-    bestItem: ArtObject,
+    originalArtwork: ArtObject,
+    resultArtwork: ArtObject,
+    bestResultArtwork: ArtObject,
     imageDataURI: string;
     galleryItems: ArtObject[],
     conditionals: any
@@ -44,54 +44,72 @@ export class ExplorePage extends React.Component<IProps, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            current: defaultArtObject,
-            selected: defaultArtObject,
-            bestItem: defaultArtObject,
+            originalArtwork: defaultArtObject,
+            resultArtwork: defaultArtObject,
+            bestResultArtwork: defaultArtObject,
             imageDataURI: "",
             galleryItems: [defaultArtObject],
             conditionals: { 'Culture': 'All', 'Medium': "All" }
         }
-        this.setSelected = this.setSelected.bind(this);
+        this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
     }
 
-    setCurrent(newCurrent: ArtObject): void {
-        this.setState({ "current": newCurrent });
+    /**
+     * Updates the current original artwork
+     * @param newOriginalArtwork the new artwork to requery on
+     */
+    setOriginalArtwork(newOriginalArtwork: ArtObject): void {
+        this.setState({ originalArtwork: newOriginalArtwork });
     }
 
-    changeConditional(thing: any, thing2?: any): void {
+    /**
+     * Updates the conditional qualities to apply to the exploration
+     * @param category the category/axis to filter on (Culture, Medium, etc)
+     * @param option the new filter option to use (French, Sculptures, etc)
+     */
+    changeConditional(category: any, option?: any): void {
         let clonedConditionals = { ...this.state.conditionals };
-        clonedConditionals[thing] = thing2['text'];
+        clonedConditionals[category] = option['text'];
         console.log(clonedConditionals);
         this.setState({ "conditionals": clonedConditionals });
-        this.makeAPIquery(this.state.current.Image_Url, clonedConditionals);
+        this.makeAPIquery(this.state.originalArtwork.Thumbnail_Url, clonedConditionals);
     }
 
-    setSelected(newSelected: ArtObject): void {
-        console.log(newSelected);
-        this.setState({ "selected": newSelected }, this.updateImageDataURI);
+    /**
+     * Updates the result artwork
+     * @param newResultArtwork the artwork to set as the new result
+     */
+    setResultArtwork(newResultArtwork: ArtObject): void {
+        this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
     }
 
+    /**
+     * Updates the artworks in the gallery carousel
+     * @param newItems the new artworks to display in the gallery carousel
+     */
     setGalleryItems(newItems: ArtObject[]): void {
         this.setState({ "galleryItems": newItems });
     }
 
+    /**
+     * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
+     */
     updateImageDataURI() {
+        // Height of the composite image in pixels
         let imageHeight = 200;
 
-        Jimp.read(this.state.selected.Thumbnail_Url)
-            .then(resultImage => {
-                Jimp.read(this.state.current.Thumbnail_Url)
-                    .then(currentImage => {
+        Jimp.read(this.state.originalArtwork.Thumbnail_Url)
+            .then(originalImage => {
+                Jimp.read(this.state.resultArtwork.Thumbnail_Url)
+                    .then(resultImage => {
+                        let originalImageWidth = originalImage.getWidth() * imageHeight / originalImage.getHeight();
                         let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
-                        let currentImageWidth = currentImage.getWidth() * imageHeight / currentImage.getHeight();
-                        resultImage.resize(resultImageWidth, imageHeight)
-                            .crop(0, 0, resultImageWidth + currentImageWidth, imageHeight)
-                            .composite(currentImage.resize(currentImageWidth, imageHeight), resultImageWidth, 0)
-                            .getBase64Async(resultImage.getMIME())
-
-                            // resultImage.resize(200, 200).crop(0,0,400,200).composite(currentImage.resize(200, 200), 200, 0).getBase64Async(resultImage.getMIME())
+                        originalImage.resize(originalImageWidth, imageHeight)
+                            .crop(0, 0, originalImageWidth + resultImageWidth, imageHeight)
+                            .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
+                            .getBase64Async(originalImage.getMIME())
                             .then(uri => {
                                 console.log(uri)
                                 this.setState({ imageDataURI: uri })
@@ -111,10 +129,15 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
 
-    makeAPIquery(selectedArtURL: any, conditionals: any) {
+    /**
+     * Queries API with the original artwork with conditional qualities
+     * @param originalArtURL the image url of the original artwork
+     * @param conditionals the conditional qualities to apply to the query
+     */
+    makeAPIquery(originalArtURL: string, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
         const apiURL = 'https://extern2020apim.azure-api.net/explore';
-        let params = '?url=' + selectedArtURL + '&numResults=' + '9';
+        let params = '?url=' + originalArtURL + '&numResults=' + '9';
 
         let fields = Object.keys(conditionals);
         fields.forEach((element: any) => {
@@ -135,10 +158,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let response = JSON.parse(Http.responseText);
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = response;
-                    this.setState({ "galleryItems": pieces, "selected": pieces[0], "bestItem": pieces[0] });
-
-
-
+                    this.setState({ galleryItems: pieces,
+                                    resultArtwork: pieces[0],
+                                    bestResultArtwork: pieces[0] });
                 } catch (e) {
                     console.log('malformed request:' + Http.responseText);
                 }
@@ -174,39 +196,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
             .then(function(responseJson) {
                 console.log(responseJson.value[0]);
                 let currImgObj = responseJson.value[0];
-                self.setState({current: responseJson.value[0]});
+                self.setState({originalArtwork: responseJson.value[0]});
 
                 self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);              
             });
         } else {
-            let selectedArt = {
-                "@search.score": 1.7071549,
-                "id": "UlAtUC0yMDE2LTY2LTc=",
-                "Title": "Tiger",
-                "Artist": "Utagawa Kunimaro (I)",
-                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
-                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
-                "Culture": "japanese",
-                "Classification": "prints",
-                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
-                "Museum": "rijks",
-                "requestId": null,
-                "categories": [],
-                "adult": null,
-                "tags": [],
-                "description": null,
-                "metadata": null,
-                "faces": [],
-                "color": null,
-                "imageType": null,
-                "brands": [],
-                "objects": []
-            }
-
-            this.makeAPIquery(selectedArt.Thumbnail_Url, this.state.conditionals);
-
-
-            this.setState({ current: selectedArt});
+            let newOriginalArtwork = defaultArtObject;
+            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
+            this.setState({ originalArtwork: newOriginalArtwork});
         }
 
     }
@@ -220,20 +217,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <SelectedArtwork artwork={this.state.current} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork artwork={this.state.originalArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.selected} bestArtwork={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="space-around" wrap>
                         <Stack.Item grow={1}>
-                            <SelectedArtwork artwork={this.state.current} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork artwork={this.state.originalArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.selected} bestArtwork={this.state.bestItem} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontal horizontalAlign="center">
@@ -259,7 +256,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <Options callback={this.changeConditional} />
                 </Stack.Item>
                 <Stack.Item>
-                    <ListGrid items={this.state.galleryItems} setSelected={this.setSelected} selected={this.state.selected} />
+                    <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                 </Stack.Item>
             </Stack>
         )
