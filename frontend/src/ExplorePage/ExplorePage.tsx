@@ -11,19 +11,19 @@ import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, Lin
 import { Helmet } from 'react-helmet';
 import Jimp from 'jimp';
 import { appInsights } from '../AppInsights';
+import ArtObject from "../ArtObject";
 
 interface IProps {
     match: any
 };
 
 interface IState {
-    current: any,
-    selected: any,
-    bestItem: any,
+    current: ArtObject,
+    selected: ArtObject,
+    bestItem: ArtObject,
     imageDataURI: string;
-    galleryItems: any[],
-    conditionals: any,
-    url: any
+    galleryItems: ArtObject[],
+    conditionals: any
 }
 
 const halfStack = mergeStyles({
@@ -37,113 +37,26 @@ const azureSearchUrl =
 'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
 const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
+const defaultArtObject:ArtObject = new ArtObject("Utagawa Kunimaro (I)", "prints", "japanese", "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0", "rijks", "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7", "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg", "Tiger", "UlAtUC0yMDE2LTY2LTc=");
+
 export class ExplorePage extends React.Component<IProps, IState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            current: {
-                "@search.score": 1.7071549,
-                "id": "UlAtUC0yMDE2LTY2LTc=",
-                "Title": "Tiger",
-                "Artist": "Utagawa Kunimaro (I)",
-                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
-                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
-                "Culture": "japanese",
-                "Classification": "prints",
-                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
-                "Museum": "rijks",
-                "requestId": null,
-                "categories": [],
-                "adult": null,
-                "tags": [],
-                "description": null,
-                "metadata": null,
-                "faces": [],
-                "color": null,
-                "imageType": null,
-                "brands": [],
-                "objects": []
-            },
-            selected: {
-                "@search.score": 1.7071549,
-                "id": "UlAtUC0yMDE2LTY2LTc=",
-                "Title": "Tiger",
-                "Artist": "Utagawa Kunimaro (I)",
-                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
-                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
-                "Culture": "japanese",
-                "Classification": "prints",
-                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
-                "Museum": "rijks",
-                "requestId": null,
-                "categories": [],
-                "adult": null,
-                "tags": [],
-                "description": null,
-                "metadata": null,
-                "faces": [],
-                "color": null,
-                "imageType": null,
-                "brands": [],
-                "objects": []
-            },
-            bestItem: {
-                "@search.score": 1.7071549,
-                "id": "UlAtUC0yMDE2LTY2LTc=",
-                "Title": "Tiger",
-                "Artist": "Utagawa Kunimaro (I)",
-                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
-                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
-                "Culture": "japanese",
-                "Classification": "prints",
-                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
-                "Museum": "rijks",
-                "requestId": null,
-                "categories": [],
-                "adult": null,
-                "tags": [],
-                "description": null,
-                "metadata": null,
-                "faces": [],
-                "color": null,
-                "imageType": null,
-                "brands": [],
-                "objects": []
-            },
+            current: defaultArtObject,
+            selected: defaultArtObject,
+            bestItem: defaultArtObject,
             imageDataURI: "",
-            galleryItems: [{
-                "@search.score": 1.7071549,
-                "id": "UlAtUC0yMDE2LTY2LTc=",
-                "Title": "Tiger",
-                "Artist": "Utagawa Kunimaro (I)",
-                "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg",
-                "Image_Url": "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0",
-                "Culture": "japanese",
-                "Classification": "prints",
-                "Museum_Page": "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7",
-                "Museum": "rijks",
-                "requestId": null,
-                "categories": [],
-                "adult": null,
-                "tags": [],
-                "description": null,
-                "metadata": null,
-                "faces": [],
-                "color": null,
-                "imageType": null,
-                "brands": [],
-                "objects": []
-            }],
-            conditionals: { 'Culture': 'All', 'Medium': "All" },
-            url: ''
+            galleryItems: [defaultArtObject],
+            conditionals: { 'Culture': 'All', 'Medium': "All" }
         }
         this.setSelected = this.setSelected.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
     }
 
-    setCurrent(newCurrent: GalleryItem): void {
+    setCurrent(newCurrent: ArtObject): void {
         this.setState({ "current": newCurrent });
     }
 
@@ -152,23 +65,24 @@ export class ExplorePage extends React.Component<IProps, IState> {
         clonedConditionals[thing] = thing2['text'];
         console.log(clonedConditionals);
         this.setState({ "conditionals": clonedConditionals });
-        this.makeAPIquery(this.state.current.url, clonedConditionals);
+        this.makeAPIquery(this.state.current.Image_Url, clonedConditionals);
     }
 
-    setSelected(newSelected: GalleryItem): void {
+    setSelected(newSelected: ArtObject): void {
+        console.log(newSelected);
         this.setState({ "selected": newSelected }, this.updateImageDataURI);
     }
 
-    setGalleryItems(newItems: GalleryItem[]): void {
+    setGalleryItems(newItems: ArtObject[]): void {
         this.setState({ "galleryItems": newItems });
     }
 
     updateImageDataURI() {
         let imageHeight = 200;
 
-        Jimp.read(this.state.selected.url)
+        Jimp.read(this.state.selected.Thumbnail_Url)
             .then(resultImage => {
-                Jimp.read(this.state.current.url)
+                Jimp.read(this.state.current.Thumbnail_Url)
                     .then(currentImage => {
                         let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
                         let currentImageWidth = currentImage.getWidth() * imageHeight / currentImage.getHeight();
