@@ -24,11 +24,11 @@ datastore = Datastore.register_azure_blob_container(
 
 cluster_name = "training"
 try:
-    # connecting to pre-existing cluster
+    # Connecting to pre-existing cluster
     compute_target = ComputeTarget(ws, cluster_name)
     print("Found existing cluster...")
 except:
-    # create a new cluster to train on
+    # Create a new cluster to train on
     provisioning_config = AmlComputeProvisioningConfiguration(
         vm_size = "Standard_NC6",
         min_nodes = 0,
@@ -37,7 +37,7 @@ except:
     compute_target = ComputeTarget.create(ws, cluster_name, provisioning_config)
 compute_target.wait_for_completion(show_output=True)
 
-# create and run the experiment
+# Create and run the experiment
 exp = Experiment(workspace=ws, name='featurize_artwork')
 
 estimator = Estimator(
@@ -55,7 +55,7 @@ estimator = Estimator(
 run = exp.submit(estimator)
 run.wait_for_completion(show_output = True)
 
-# save the balltrees made in score.py and metadata
+# Save the balltrees made in score.py and metadata
 run.register_model(
     model_name="features",
     model_path="outputs/"
