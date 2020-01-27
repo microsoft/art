@@ -1,10 +1,6 @@
 import React from 'react';
-import GalleryItem from './GalleryItem';
 import Slider from 'react-slick';
 import ArtObject from '../ArtObject';
-
-import metImg from '../images/the_met_logo_crop.png';
-import rijksImg from '../images/Rijks.jpg';
 
 interface IProps {
     items: ArtObject[],

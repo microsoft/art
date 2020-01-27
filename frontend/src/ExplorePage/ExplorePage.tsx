@@ -1,15 +1,16 @@
-import React from 'react';
-import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
-import OriginalArtwork from './OriginalArtwork';
-import ResultArtwork from './ResultArtwork';
-import Options from './Options';
-import ListCarousel from './ListCarousel';
-import { HideAt, ShowAt } from 'react-with-breakpoints';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
-import { Helmet } from 'react-helmet';
+// import '../main.scss';
 import Jimp from 'jimp';
+import { mergeStyles, Stack } from 'office-ui-fabric-react';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
+import ListCarousel from './ListCarousel';
+import Options from './Options';
+import OriginalArtwork from './OriginalArtwork';
+import ResultArtwork from './ResultArtwork';
 
 interface IProps {
     match: any

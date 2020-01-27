@@ -1,17 +1,13 @@
-import React from 'react';
-
-import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { DefaultButton, Image, Stack, Text } from 'office-ui-fabric-react';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import ArtObject from '../ArtObject';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { ShowAt, HideAt } from 'react-with-breakpoints';
 import { CSSTransition } from 'react-transition-group';
-import { appInsights } from '../AppInsights';
-
-import metImg from '../images/the_met_logo_crop.png';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
+import ArtObject from '../ArtObject';
 import rijksImg from '../images/Rijks.jpg';
+import metImg from '../images/the_met_logo_crop.png';
 
-import { useConst } from '@uifabric/react-hooks';
 
 
 
@@ -125,9 +121,6 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.exploreArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
                   </a>
-                  {/* <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} />
-                <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", { "Location": "ResultImage" })} />
-                <DefaultButton className="explore__buttons button" text="Matches" href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", "ResultImage")} /> */}
                 </Stack>
               </Stack>
             </Stack>

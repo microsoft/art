@@ -1,16 +1,12 @@
+// import './main.scss';
+import { initializeIcons, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
-import {Stack, mergeStyles} from 'office-ui-fabric-react';
-import NavBarNew from './NavBar/NavBarNew';
-
-import ExplorePage from './ExplorePage/ExplorePage';
-import SearchPage from "./SearchPage/SearchPage";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AboutPage from "./AboutPage/AboutPage";
-
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import { initializeIcons } from 'office-ui-fabric-react';
-
 import withAppInsights from './AppInsights';
-
+import ExplorePage from './ExplorePage/ExplorePage';
+import NavBarNew from './NavBar/NavBarNew';
+import SearchPage from "./SearchPage/SearchPage";
 
 initializeIcons();
 
