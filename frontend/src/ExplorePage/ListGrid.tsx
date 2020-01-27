@@ -2,6 +2,9 @@ import React from 'react';
 import GalleryItem from './GalleryItem';
 import Slider from 'react-slick';
 
+import metImg from '../images/the_met_logo_crop.png';
+import rijksImg from '../images/Rijks.jpg';
+
 interface IProps {
     items: any[],
     setSelected: (item: any) => void,
@@ -24,6 +27,9 @@ class ListGrid extends React.Component<IProps, IState> {
             grid.push(
                 <div className="explore__card-img-container" key={i} onClick={()=>this.props.setSelected(item)}>
                     <img alt={item.title} className="explore__card-img" style={item.id === this.props.selected.id ? {"border":"4px solid black"} : {"border":"4px solid white"}} src={item.Thumbnail_Url}/>
+                    <a href={item.Museum_Page} target="_blank" rel="noopener noreferrer">
+                      <img alt={'museum logo'} src={item.Museum === "rijks" ? rijksImg : metImg } />
+                    </a>
                 </div>
             );
         })

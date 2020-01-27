@@ -1,11 +1,19 @@
 import React from 'react';
 
 import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 import { ShowAt, HideAt } from 'react-with-breakpoints';
 import { CSSTransition } from 'react-transition-group';
 import { appInsights } from '../AppInsights';
+
+import metImg from '../images/the_met_logo_crop.png';
+import rijksImg from '../images/Rijks.jpg';
+
+import { useConst } from '@uifabric/react-hooks';
+
+
 
 interface IState {
   objIDs: any,
@@ -82,8 +90,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
   render() {
 
-
-    let  logo = <Image height={"30px"} src={"../images/Rijks.jpg"} />
+    let musImg = (this.props.item.Museum === 'rijks') ? <Image height={"5vh"} id='musButton2' src={rijksImg} /> : <Image height={"5vh"} id='musButton2' src={metImg} />; 
 
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -95,6 +102,13 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack>
               <Image height={"40vh"} src={this.props.item.Thumbnail_Url} className="explore__img" />
+              <div>
+                <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{gapSpace: 0, target: `#musButton2`}}>
+                  <a href={this.props.item.Museum_Page} target="_blank" rel="noopener noreferrer">
+                    {musImg}
+                  </a>
+                </TooltipHost>
+              </div>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.item.url === this.props.bestItem.url ? "Best Match" : "Close Match"}</Text>
             </Stack>
             <Stack style={{ "marginLeft": 10 }}>

@@ -1,11 +1,15 @@
 import React from 'react';
 
 import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import GalleryItem from './GalleryItem';
 import { Redirect } from 'react-router-dom';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { CSSTransition } from 'react-transition-group';
+
+import metImg from '../images/the_met_logo_crop.png';
+import rijksImg from '../images/Rijks.jpg';
 
 interface IState {
   objIDs: any,
@@ -71,6 +75,7 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   render() {
+    let musImg = (this.props.item.Museum === 'rijks') ? <Image height={"5vh"} id='musButton1' src={rijksImg} /> : <Image height={"5vh"} id='musButton1' src={metImg} />; 
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
       return <Redirect push to={link} />;
@@ -81,7 +86,8 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
               <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.item.Title}</Text>
-              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.principal}</Text>
+              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.Culture}</Text>
+              <Text style={{ "textAlign": "right" }} variant="large">{this.props.item.Classification}</Text>
               <Stack horizontalAlign="end">
                 <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", {"Location": "OriginalImage"})}} />
                 <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", {"Location": "OriginalImage"})} />
@@ -107,6 +113,13 @@ class SelectedArtwork extends React.Component<ArtworkProps, IState> {
             </Stack>
             <Stack>
               <Image height={"40vh"} src={this.props.item.Thumbnail_Url} className="explore__img"/>
+              <div>
+                <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source1" calloutProps={{gapSpace: 0, target: `#musButton1`}}>
+                  <a href={this.props.item.Museum_Page} target="_blank" rel="noopener noreferrer">
+                    {musImg}
+                  </a>
+                </TooltipHost>
+              </div>
               <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
             </Stack>
           </HideAt>
