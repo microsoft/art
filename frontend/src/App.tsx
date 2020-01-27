@@ -1,4 +1,3 @@
-// import './main.scss';
 import React from 'react';
 import {Stack, mergeStyles} from 'office-ui-fabric-react';
 import NavBarNew from './NavBar/NavBarNew';

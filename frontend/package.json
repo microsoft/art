@@ -1,6 +1,5 @@
 {
   "name": "art",
-  "homepage": "https://microsoft.github.io/art/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

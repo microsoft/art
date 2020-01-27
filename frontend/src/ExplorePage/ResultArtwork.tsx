@@ -90,7 +90,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
   render() {
 
-    let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton2' src={rijksImg} /> : <Image height={"5vh"} id='musButton2' src={metImg} />; 
+    let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton2' src={rijksImg} /> : <Image height={"5vh"} id='musButton2' src={metImg} />;
 
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -98,61 +98,67 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     } else {
 
       return (
-        <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
+        <React.Fragment>
           <HideAt breakpoint="mediumAndBelow">
-            <Stack>
-              <div className="explore__artwork-frame"> 
-                <Image height={"40vh"} src={this.props.artwork.Thumbnail_Url} className="explore__img" />
-                <div className="explore__museum-icon">
-                  <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{gapSpace: 0, target: `#musButton2`}}>
-                    <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
-                      {musImg}
-                    </a>
-                  </TooltipHost>
-                </div>
-              </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
-              
-              </Stack>
-            <Stack style={{ "marginLeft": 10 }}>
-              <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.artwork.Title}</Text>
-              <Text variant="large">{this.props.artwork.Culture}</Text>
-              <Text  variant="large">{this.props.artwork.Classification}</Text>
+            <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
               <Stack>
-                <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location": "ResultImage"})}} />
-                <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", {"Location": "ResultImage"})}/>
-                <DefaultButton className="explore__buttons button" text="Matches" href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", "ResultImage")}/>
-              </Stack>
-            </Stack>
-          </HideAt>
-          <ShowAt breakpoint="mediumAndBelow">
-            <Stack>
-            <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-
-                <div className="explore__artwork-frame"> 
-                <Image height={"300px"} src={this.props.artwork.Thumbnail_Url} />
-                  <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
-                    <Stack horizontal className="explore__slide-buttons">
-                      <a href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location": "ResultImage"})}} className="explore__slide-button-link">Search</a>
-                      <div className="explore__slide-button-sep"></div>
-                      <a href="" onClick={() => this.props.handleTrackEvent("Source", {"Location": "ResultImage"})} className="explore__slide-button-link" target="_blank" rel="noopener noreferrer">Source</a>
-                      <div className="explore__slide-button-sep"></div>
-                      <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", {"Location": "ResultImage"})} className="explore__slide-button-link">Matches</a>
-                    </Stack>
-                  </CSSTransition>
+                <div className="explore__artwork-frame">
+                  <Image height={"40vh"} src={this.props.artwork.Thumbnail_Url} className="explore__img" />
                   <div className="explore__museum-icon">
-                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{gapSpace: 0, target: `#musButton2`}}>
+                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                         {musImg}
                       </a>
                     </TooltipHost>
                   </div>
                 </div>
-              </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+                <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+              </Stack>
+              <Stack style={{ "marginLeft": 10 }}>
+                <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.artwork.Title}</Text>
+                <Text variant="large">{this.props.artwork.Culture}</Text>
+                <Text variant="large">{this.props.artwork.Classification}</Text>
+                <Stack>
+                  <a href={this.searchArtUrlSuffix()}>
+                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }}>Search</button>
+                  </a>
+                  <a href={this.exploreArtUrlSuffix()}>
+                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
+                  </a>
+                  {/* <DefaultButton className="explore__buttons button" text="Search" href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} />
+                <DefaultButton className="explore__buttons button" text="Source" onClick={() => this.props.handleTrackEvent("Source", { "Location": "ResultImage" })} />
+                <DefaultButton className="explore__buttons button" text="Matches" href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", "ResultImage")} /> */}
+                </Stack>
+              </Stack>
+            </Stack>
+          </HideAt>
+          <ShowAt breakpoint="mediumAndBelow">
+            <Stack horizontal horizontalAlign="center" verticalAlign="center" className="explore__main-images">
+              <Stack>
+                <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
+                  <div className="explore__artwork-frame">
+                    <Image height={"300px"} src={this.props.artwork.Thumbnail_Url} />
+                    <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                      <Stack horizontal className="explore__slide-buttons">
+                        <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
+                        <div className="explore__slide-button-sep"></div>
+                        <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
+                      </Stack>
+                    </CSSTransition>
+                    <div className="explore__museum-icon">
+                      <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
+                        <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
+                          {musImg}
+                        </a>
+                      </TooltipHost>
+                    </div>
+                  </div>
+                </div>
+                <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+              </Stack>
             </Stack>
           </ShowAt>
-        </Stack>
+        </React.Fragment>
       )
     }
   }

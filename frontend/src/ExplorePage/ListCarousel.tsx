@@ -40,7 +40,7 @@ class ListCarousel extends React.Component<IProps, IState> {
             centerMode: true,
             infinite: true,
             centerPadding: '60px',
-            slidesToShow: 6,
+            slidesToShow: 5,
             speed: 500,
             swipeToSlide: true,
             adaptiveHeight: true,
@@ -49,8 +49,8 @@ class ListCarousel extends React.Component<IProps, IState> {
               {
                 breakpoint: 1650,
                 settings: {
-                  slidesToShow: 5,
-                  slidesToScroll: 5,
+                  slidesToShow: 4,
+                  slidesToScroll: 4,
                   infinite: true,
                 }
               },

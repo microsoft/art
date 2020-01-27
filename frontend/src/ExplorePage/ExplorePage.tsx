@@ -1,4 +1,3 @@
-// import '../main.scss';
 import React from 'react';
 import { Stack, Separator, mergeStyles } from 'office-ui-fabric-react';
 import OriginalArtwork from './OriginalArtwork';
@@ -224,7 +223,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
-                    <Stack horizontal horizontalAlign="space-around" wrap>
+                    <Stack horizontal horizontalAlign="center" wrap>
                         <Stack.Item grow={1}>
                             <OriginalArtwork artwork={this.state.originalArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>

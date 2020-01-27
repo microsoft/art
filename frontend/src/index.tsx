@@ -1,3 +1,4 @@
+import './main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -5,7 +6,6 @@ import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Customizer, mergeStyles } from 'office-ui-fabric-react';
 import { BreakpointsProvider } from 'react-with-breakpoints';
 import * as serviceWorker from './serviceWorker';
-import './main.scss';
 
 // Inject some global styles
 mergeStyles({
