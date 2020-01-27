@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Stack, ImageFit, Image } from 'office-ui-fabric-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Card } from '@uifabric/react-cards';
+import { Image, ImageFit, Stack } from 'office-ui-fabric-react';
+import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
 import { CSSTransition } from 'react-transition-group';
 
-import { Card } from '@uifabric/react-cards';
 
 interface IProps {
   key: any,
@@ -37,6 +37,7 @@ export default class ResultBox extends Component<IProps, IState> {
   }
 
   render() {
+    let museumName = this.props.data.Museum === "met" ? "The Met" : "Rijksmuseum";
     return (
       <Card className="grid-card" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
         <Card.Item className="grid-card__link">
@@ -57,7 +58,8 @@ export default class ResultBox extends Component<IProps, IState> {
             this.props.data.Title.length < 55 ? this.props.data.Title : this.props.data.Title.substring(0, 55) + "..."}</div>
         </Card.Item>
         <Card.Item className="grid-card__text">
-          <div>{!this.props.data.Artist ? "No known artist" : this.props.data.Artist}</div>
+          <div>{museumName}</div>
+          <div>{!this.props.data.Artist ? "No known artist" : this.props.data.Artist}</div>          
         </Card.Item>
         <Card.Item>
           <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">

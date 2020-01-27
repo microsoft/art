@@ -1,9 +1,9 @@
+import { Separator, Stack } from 'office-ui-fabric-react';
 import React from 'react';
-import { Stack, Separator } from 'office-ui-fabric-react';
-import SearchControl from './SearchControl';
-import TagList from './TagList';
-import SearchGrid from './SearchGrid';
 import { appInsights } from '../AppInsights';
+import SearchControl from './SearchControl';
+import SearchGrid from './SearchGrid';
+import TagList from './TagList';
 
 interface IProps {
   match: any
@@ -421,7 +421,7 @@ export class SearchPage extends React.Component<IProps, IState> {
      * Execute a search with no terms on startup
      */
     componentDidMount() {
-      const id = this.props.match.params.id; // The IDs of the images found by NN
+      const id = this.props.match.params.id; // The ID and museum of the given artwork
 
       if (id) {
         let realID = null;

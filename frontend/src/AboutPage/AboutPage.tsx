@@ -1,6 +1,5 @@
+import { Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, Stack, Text } from 'office-ui-fabric-react';
 import React from 'react';
-import { Stack, Text, Separator, Pivot, PivotItem, IPivotStyles, PivotLinkFormat, PivotLinkSize } from 'office-ui-fabric-react';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 
 interface IProps {
 };

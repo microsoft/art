@@ -1,15 +1,15 @@
-import React from 'react';
-
-import { Image, Text, Stack, DefaultButton, mergeStyles } from 'office-ui-fabric-react';
+import { DefaultButton, Image, Stack, Text } from 'office-ui-fabric-react';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import ArtObject from '../ArtObject';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, LinkedinShareButton, LinkedinIcon } from 'react-share';
-import { HideAt, ShowAt } from 'react-with-breakpoints';
+import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { CSSTransition } from 'react-transition-group';
-
-import metImg from '../images/the_met_logo_crop.png';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
+import ArtObject from '../ArtObject';
 import rijksImg from '../images/Rijks.jpg';
+import metImg from '../images/the_met_logo_crop.png';
+
+
 
 interface IState {
   objIDs: any,
@@ -135,7 +135,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                     <Stack horizontal className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => {this.props.handleTrackEvent("Search", {"Location":"OriginalImage"})}} className="explore__slide-button-link">Search</a>
                       <div className="explore__slide-button-sep"></div>
-                      <a href="" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer" onClick={() => this.props.handleTrackEvent("Source", {"Location":"OrignalImage"})}>Source</a>
+                      <a href="/" className="explore__slide-button-link" target="_blank" rel="noopener noreferrer" onClick={() => this.props.handleTrackEvent("Source", {"Location":"OrignalImage"})}>Source</a>
                     </Stack>
                 </CSSTransition>
                   <div className="explore__museum-icon">
