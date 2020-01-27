@@ -1,7 +1,7 @@
 import json
 import os
 import pickle
- from io import BytesIO
+from io import BytesIO
 
 import numpy as np
 import requests
@@ -11,15 +11,27 @@ from azureml.core.model import Model
 from keras.applications.resnet50 import ResNet50, preprocess_input
 from PIL import Image
 from pyspark.sql import SparkSession
+import tensorflow as tf
 
 from ConditionalBallTree import ConditionalBallTree
 
+def assert_gpu():
+    """
+    This function will raise an exception if a GPU is not available to tensorflow.
+    """
+    device_name = tf.test.gpu_device_name()
+    if device_name != '/device:GPU:0':
+        raise SystemError('GPU device not found')
+    print('Found GPU at: {}'.format(device_name))
 
 def init():
     global culture_model
     global classification_model
     global metadata
     global keras_model
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
+    assert_gpu()
 
     # downloading java dependencies
     spark = SparkSession.builder \
@@ -49,44 +61,95 @@ def init():
         pooling='avg'
     )
 
+def get_similar_images(img, culture=None, classification=None, n=5):
+    """Return an n-size array of image objects similar to the pillow image provided
+    using the culture or classification as a filter.
+    
+    Arguments:
+        img {Image} -- Pillow image to compare to
+        culture {str} -- string of the culture to filter
+        classification {str} -- string of the classification to filter
+        n {int} -- number of results to return
+    
+    Returns:
+        dict[] -- array of dictionaries representing artworks that are similar
+    """
+    # non RGB images won't have the right number of channels
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img = np.array(img) #PIL -> numpy
+    img = np.expand_dims(img, axis=0)
+    img = preprocess_input(img.astype(np.float))
+
+    features = keras_model.predict(img) # featurize
+    features /= np.linalg.norm(features)
+    img_feature = features[0]
+
+    if culture is not None:
+        result = culture_model.findMaximumInnerProducts(
+            img_feature, 
+            {culture}, 
+            n
+        )
+    else:
+        result = classification_model.findMaximumInnerProducts(
+            img_feature, 
+            {classification}, 
+            n
+        )
+    # find actual info
+    resultmetadata = [metadata[r[0]] for r in result] # list of metadata: museum, id, url, culture, classification
+    return resultmetadata
+
+def error_response(err_msg):
+    """Returns an error response for a given error message
+    
+    Arguments:
+        err_msg {str} -- error message
+    
+    Returns:
+        AMLResponse -- response object for the error
+    """
+    resp = AMLResponse(json.dumps({ "error": err_msg }), 400)
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
+def success_response(content):
+    """Returns a success response with the given content
+    
+    Arguments:
+        content {any} -- any json serializable data type to send to
+        the client
+    
+    Returns:
+        AMLResponse -- response object for the success
+    """
+    resp = AMLResponse(json.dumps({ "results": content }), 400)
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @rawhttp
 def run(request):
-    if request.method != 'GET':
-        return AMLResponse(json.dumps({ "error": "invalid http request method" }), 400)
-    if request.args.get('url') and request.args.get('n') and (
-        request.args.get('culture') or request.args.get('classification')
-    ):
-        try:
-            response = requests.get(request.args.get('url')) #URL -> response
-            img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
-            # non RGB images won't have the right number of channels
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
-            img = np.array(img) #PIL -> numpy
-            img = np.expand_dims(img, axis=0)
-            img = preprocess_input(img.astype(np.float))
-
-            features = keras_model.predict(img) # featurize
-            features /= np.linalg.norm(features)
-            img_feature = features[0]
-            # return AMLResponse(json.dumps(img_feature.tolist()), 200)
-
-            if request.args.get('culture', None) is not None:
-                result = culture_model.findMaximumInnerProducts(
-                    img_feature, 
-                    {request.args.get('culture')}, 
-                    request.args.get('n')
+    if request.method == 'POST':
+        # todo: support image uploads
+        return error_response("invalid http request method")
+    elif request.method == 'GET':
+        if request.args.get('url') and request.args.get('n') and (
+            request.args.get('culture') or request.args.get('classification')
+        ):
+            try:
+                response = requests.get(request.args.get('url')) #URL -> response
+                img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
+                similar_images = get_similar_images(
+                    img,
+                    culture=request.args.get('culture', None),
+                    classification=request.args.get('classification', None),
+                    n=int(request.args.get('n'))
                 )
-            else:
-                result = classification_model.findMaximumInnerProducts(
-                    img_feature, 
-                    {request.args.get('classificaton')}, 
-                    request.args.get('n')
-                )
-            # find actual info
-            # resultmetadata = [metadata[r[0]] for r in result] # list of metadata: museum, id, url, culture, classification
-            return resultmetadata
-        except Exception as err:
-            return AMLResponse(json.dumps({ "error": err }), 500)
-    else: # parameters incorrect
-        return AMLResponse(json.dumps({ "error": "url, n, and (culture or classification) are required query parameters"}), 400)
+                return success_response(similar_images)
+            except Exception as err:
+                return error_response(err)
+        else: # parameters incorrect
+            return error_response("url, n, and (culture or classification) are required query parameters")
+    else: # unsupported http method
+        return error_response("invalid http request method")
