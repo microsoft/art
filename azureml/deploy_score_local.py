@@ -15,7 +15,7 @@ inference_config = InferenceConfig(
     runtime="python",
     source_directory="azureml",
     conda_file="myenv.yml",
-    base_image="mhamilton723/pyspark:0.2")
+    base_image="typingkoala/art-repository:latest")
 
 model = Model(ws, name="features")
 
