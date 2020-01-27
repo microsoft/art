@@ -1,0 +1,13 @@
+name: project_environment
+channels:
+  - defaults
+dependencies:
+  - keras
+  - python=3.6.2
+  - pillow
+  - scipy
+  - numpy
+  - tensorflow-gpu==1.14.0
+  - shap
+prefix: C:\Users\v-jobui\.conda\envs\project_environment
+
