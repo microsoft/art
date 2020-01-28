@@ -18,8 +18,18 @@ from pyspark.sql import SparkSession
 from tqdm import tqdm
 from multiprocessing import Pool
 
-#from mmlspark.cognitive import AnalyzeImage
-#from mmlspark.stages import SelectColumns
+# downloading java dependencies
+print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName("TestConditionalBallTree") \
+    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
+    .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
+    .config("spark.executor.heartbeatInterval", "60s") \
+    .getOrCreate()
+
+from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
 
 # Initialize
 batch_size = 256
@@ -181,7 +191,7 @@ df.coalesce(3).writeToAzureSearch(
   indexName="merged-art-search-5",
   keyCol="id",
   batchSize="1000"
-  )
+)
 
 # create directory for downloading images, then download images simultaneously
 print("Downloading images...")
@@ -207,18 +217,6 @@ keras_model = ResNet50(
 
 features = keras_model.predict_generator(data_iterator, steps=len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
-
-# downloading java dependencies
-print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
-spark = SparkSession.builder \
-    .master("local[*]") \
-    .appName("TestConditionalBallTree") \
-    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
-    .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
-    .config("spark.executor.heartbeatInterval", "60s") \
-    .getOrCreate()
-
-from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
 
 # convert to list and then create the two balltrees for culture and classification(medium)
 ids = [row["id"] for row in successes]
