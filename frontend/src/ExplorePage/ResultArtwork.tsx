@@ -125,7 +125,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>
               <Stack style={{ "marginLeft": 10 }}>
-                <Text style={{ "fontWeight": "bold" }} variant="xLarge">{this.props.artwork.Title}</Text>
+                <Text block nowrap style={{ "fontWeight": "bold", "width": "20vw"}} variant="xLarge">{this.props.artwork.Title}</Text>
                 <Text variant="large">{this.props.artwork.Culture}</Text>
                 <Text variant="large">{this.props.artwork.Classification}</Text>
                 <Stack>

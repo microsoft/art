@@ -102,7 +102,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
               <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
-                <Text style={{ "textAlign": "right", "fontWeight": "bold" }} variant="xLarge">{this.props.artwork.Title}</Text>
+                <Text block nowrap style={{ "textAlign": "right", "fontWeight": "bold" , "width":"20vw"}} variant="xLarge">{this.props.artwork.Title}</Text>
                 <Text style={{ "textAlign": "right" }} variant="large">{this.props.artwork.Culture}</Text>
                 <Text style={{ "textAlign": "right" }} variant="large">{this.props.artwork.Classification}</Text>
                 <Stack horizontalAlign="end">

@@ -35,11 +35,11 @@ const halfStack = mergeStyles({
 
 
 
-const azureSearchUrl = 
-'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
+const azureSearchUrl =
+    'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
 const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
-const defaultArtObject:ArtObject = new ArtObject("Utagawa Kunimaro (I)", "prints", "japanese", "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0", "rijks", "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7", "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg", "Tiger", "UlAtUC0yMDE2LTY2LTc=");
+const defaultArtObject: ArtObject = new ArtObject("Utagawa Kunimaro (I)", "prints", "japanese", "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0", "rijks", "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7", "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg", "Tiger", "UlAtUC0yMDE2LTY2LTc=");
 
 export class ExplorePage extends React.Component<IProps, IState> {
 
@@ -163,14 +163,16 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let response = JSON.parse(Http.responseText);
                     console.log("response: " + Http.responseText);
                     response = response.results;
-                    const filteredResponse = response.filter((artwork:any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
+                    const filteredResponse = response.filter((artwork: any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
                     console.log("filtered: " + filteredResponse);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
-                    this.setState({ galleryItems: pieces,
-                                    resultArtwork: pieces[0],
-                                    bestResultArtwork: pieces[0] });
+                    this.setState({
+                        galleryItems: pieces,
+                        resultArtwork: pieces[0],
+                        bestResultArtwork: pieces[0]
+                    });
 
                 } catch (e) {
                     console.log('malformed request:' + Http.responseText);
@@ -182,41 +184,41 @@ export class ExplorePage extends React.Component<IProps, IState> {
     componentDidMount() {
         //Decode the url data
         if (this.props.match.params.data) {
-            const url = decodeURIComponent( this.props.match.params.data);
+            const url = decodeURIComponent(this.props.match.params.data);
             console.log(url);
 
             let realID = null;
             let realMuseum = null;
             if (url != null) {
-              realID = url.split("&")[0].slice(4);
-              realMuseum = url.split("&")[1];
-              console.log(realMuseum);
-              if (realMuseum) {
-                realMuseum = realMuseum.slice(7);
-              }
+                realID = url.split("&")[0].slice(4);
+                realMuseum = url.split("&")[1];
+                console.log(realMuseum);
+                if (realMuseum) {
+                    realMuseum = realMuseum.slice(7);
+                }
             }
 
-            let query="&search="+realID+"&filter="+realMuseum;
+            let query = "&search=" + realID + "&filter=" + realMuseum;
             console.log(query);
             let self = this;
             //Make query
-            fetch(azureSearchUrl + query, { headers: {"Content-Type": "application/json", 'api-key': apiKey,  } })
-            .then(function(response) {            
-              return response.json();
-            })
-            .then(function(responseJson) {
-                console.log(responseJson.value[0]);
-                let currImgObj = responseJson.value[0];
-                self.setState({originalArtwork: responseJson.value[0]});
+            fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (responseJson) {
+                    console.log(responseJson.value[0]);
+                    let currImgObj = responseJson.value[0];
+                    self.setState({ originalArtwork: responseJson.value[0] });
 
-                self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);              
-            });
+                    self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);
+                });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             let newOriginalArtwork = defaultArtwork[randIndex];
             this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
-            this.setState({ originalArtwork: newOriginalArtwork});
+            this.setState({ originalArtwork: newOriginalArtwork });
         }
 
     }
@@ -233,7 +235,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                     </Stack>
                 </HideAt>
@@ -243,7 +245,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                     </Stack>
                     <Stack horizontalAlign="center">
@@ -251,22 +253,22 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                 </ShowAt>
                 <Stack horizontal horizontalAlign="center">
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                            <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                                <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </FacebookShareButton>
-                        </div>
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                            <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                                <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </TwitterShareButton>
-                        </div>
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                            <LinkedinShareButton className="explore__share-button" url={window.location.href}>
-                                <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </LinkedinShareButton>
-                        </div>
-                    </Stack>
+                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                            <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </FacebookShareButton>
+                    </div>
+                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
+                        <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                            <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </TwitterShareButton>
+                    </div>
+                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                        <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                            <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                        </LinkedinShareButton>
+                    </div>
+                </Stack>
                 <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>
                 <Stack.Item>
                     <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
