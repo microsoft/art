@@ -45,7 +45,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--data-dir", type=str, dest="data_folder")
 data_folder = parser.parse_args().data_folder
 
-csv_path = "metadata_smol.csv"
+tsv_path = os.path.join(data_folder, "met_rijks_metadata.tsv")
 
 # create file paths for saving balltree later
 output_root = './outputs'
@@ -169,13 +169,14 @@ def assert_gpu():
     print('Found GPU at: {}'.format(device_name))
 
 
-metadata = pd.read_csv(csv_path)
+metadata = pd.read_csv(tsv_path, delimiter="\t")
+metadata.fillna('') # replace nan values with empty string
 
-ws = Workspace(
-    subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
-    resource_group="extern2020",
-    workspace_name="exten-amls"
-)
+# ws = Workspace(
+#     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
+#     resource_group="extern2020",
+#     workspace_name="exten-amls"
+# )
 
 keyvault = ws.get_default_keyvault()
 run = Run.get_context()
@@ -185,7 +186,8 @@ image_subscription_key = keyvault.get_secret(name="imageSubscriptionKey")
 from mmlspark.cognitive import AnalyzeImage
 from mmlspark.stages import SelectColumns
 
-df =  spark.read.option("header",True).format("csv").load(csv_path).withColumn("searchAction", lit("upload"))
+# def url_encode_id(idval):
+#     return base64.b64encode(bytes(idval, "UTF-8")).decode("utf-8")
 
 describeImage = (AnalyzeImage()
                  .setSubscriptionKey(image_subscription_key)
@@ -219,7 +221,7 @@ metadata = metadata[metadata["Success"]] # filters out unsuccessful rows
 batches = list(batch(metadata.iterrows(), batch_size))
 
 successes = []  # clear metadata, images are only here if they are loaded from disk
-data_iterator = (load_images(batch, successes) for batch in batches)
+data_iterator = (load_images(batch, successes) for batch in tqdm(batches, desc="Loading"))
 
 # featurize the images then normalize them
 keras_model = ResNet50(
@@ -231,7 +233,7 @@ keras_model = ResNet50(
 
 # assert_gpu() # raises exception if gpu is not available
 
-features = keras_model.predict_generator(data_iterator, steps=len(batches), verbose=1)
+features = keras_model.predict_generator(tqdm(data_iterator, desc="Featurizing"), steps=len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 
 # convert to list and then create the two balltrees for culture and classification(medium)
@@ -245,6 +247,3 @@ os.makedirs(output_root, exist_ok=True)
 cbt_culture.save(features_culture_fn)
 cbt_classification.save(features_classification_fn)
 pickle.dump(successes, open(metadata_fn, 'wb'))
-
-cbt_culture_2 = ConditionalBallTree.load(features_culture_fn)
-print(cbt_culture_2)
