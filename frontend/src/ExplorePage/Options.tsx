@@ -85,7 +85,7 @@ const museumOptions: IDropdownOption[] = [
   { key: 'museumRijks', text: 'Rijksmuseum' }
 ];
 
-const useStyles = makeStyles({
+const useSelectStyles = makeStyles({
   root: {
     width: "212px",
     height: "39px",
@@ -93,10 +93,12 @@ const useStyles = makeStyles({
     textTransform: "capitalize",
     fontSize: "1rem",
     paddingLeft: "10px",
-    outline: "none"
+    outline: "none",
+    fontWeight: "bold",
+    fontFamily: "'Segoe UI', 'SegoeUI', -apple-system, BlinkMacSystemFont, 'Roboto', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
   },
   select: {
-
+    outline: "none"
   }
 });
 
@@ -107,8 +109,7 @@ interface IProps {
 // class Options extends React.Component<IProps, IState> {
 
 export default function Options(props: IProps) {
-
-  const classes = useStyles();
+  const selectClasses = useSelectStyles();
 
   // Debugging purposes, unnecessary
   const handleChange = (event: React.FormEvent < HTMLDivElement >, option ?: IDropdownOption): void => {
@@ -117,15 +118,14 @@ export default function Options(props: IProps) {
 
   return (
     <FormControl>
-      {/* <InputLabel>Quality</InputLabel> */}
       <Select
         native
         defaultValue=""
         onChange={(event) => {props.changeConditional("culture", event.target.value)}}
         classes={{
-          root: classes.root
+          root: selectClasses.root
         }}>
-        <option value="" />
+        <option value="" disabled>Quality</option>
         <optgroup label="Culture">
           {cultureOptions.map(culture => (<option value={culture.text}>{culture.text}</option>))}
         </optgroup>
