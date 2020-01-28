@@ -3,6 +3,7 @@ import multiprocessing
 import os
 import pickle
 import urllib.request
+from azureml.core import Run
 
 import numpy as np
 import pandas as pd
@@ -153,6 +154,20 @@ def assert_gpu():
 
 
 metadata = pd.read_csv(csv_path)
+
+run = Run.get_context()
+subscription_key = run.get_secret(name="subscriptionKey")
+
+df = spark.createDataFrame(metadata)
+
+df.coalesce(3).writeToAzureSearch(
+  subscriptionKey=subscription_key,
+  actionCol="searchAction",
+  serviceName="extern-search",
+  indexName="merged-art-search-3",
+  keyCol="id",
+  batchSize="1000"
+)
 
 # create directory for downloading images, then download images simultaneously
 print("Downloading images...")
