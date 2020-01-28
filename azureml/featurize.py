@@ -163,7 +163,7 @@ subscription_key = run.get_secret(name="subscriptionKey")
 
 df = spark.createDataFrame(metadata)
 
-
+#Additional cool search things, will work on more if time allows
 
 #describeImage = (AnalyzeImage()
 #  .setSubscriptionKey("<secret_key>")
