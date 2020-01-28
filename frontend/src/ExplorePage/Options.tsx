@@ -85,18 +85,21 @@ const museumOptions: IDropdownOption[] = [
   { key: 'museumRijks', text: 'Rijksmuseum' }
 ];
 
-const useStyles = makeStyles({
+const useSelectStyles = makeStyles({
   root: {
     width: "212px",
+    margin: "auto",
     height: "39px",
     border: "2px solid black",
     textTransform: "capitalize",
     fontSize: "1rem",
     paddingLeft: "10px",
-    outline: "none"
+    outline: "none",
+    fontWeight: "bold",
+    fontFamily: "'Segoe UI', 'SegoeUI', -apple-system, BlinkMacSystemFont, 'Roboto', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
   },
   select: {
-
+    outline: "none"
   }
 });
 
@@ -107,8 +110,7 @@ interface IProps {
 // class Options extends React.Component<IProps, IState> {
 
 export default function Options(props: IProps) {
-
-  const classes = useStyles();
+  const selectClasses = useSelectStyles();
 
   // Debugging purposes, unnecessary
   const handleChange = (event: React.FormEvent < HTMLDivElement >, option ?: IDropdownOption): void => {
@@ -116,56 +118,24 @@ export default function Options(props: IProps) {
   }
 
   return (
-    <FormControl>
-      {/* <InputLabel>Quality</InputLabel> */}
-      <Select
-        native
-        defaultValue=""
-        onChange={(event) => {props.changeConditional("culture", event.target.value)}}
-        classes={{
-          root: classes.root
-        }}>
-        <option value="" />
-        <optgroup label="Culture">
-          {cultureOptions.map(culture => (<option value={culture.text}>{culture.text}</option>))}
-        </optgroup>
-        <optgroup label="Medium">
-          {mediumOptions.map(medium => (<option value={medium.text}>{medium.text}</option>))}
-        </optgroup>
-      </Select>
-    </FormControl>
+    <div style={{margin:"5px 0px"}}>
+      <FormControl>
+        <Select
+          native
+          defaultValue=""
+          onChange={(event) => {props.changeConditional("culture", event.target.value)}}
+          classes={{
+            root: selectClasses.root
+          }}>
+          <option value="" disabled>Quality</option>
+          <optgroup label="Culture">
+            {cultureOptions.map(culture => (<option value={culture.text}>{culture.text}</option>))}
+          </optgroup>
+          <optgroup label="Medium">
+            {mediumOptions.map(medium => (<option value={medium.text}>{medium.text}</option>))}
+          </optgroup>
+        </Select>
+      </FormControl>
+    </div>
   );
-  // return (
-  //   <Stack>
-  //     <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="xLarge">Artwork Qualities</Text>
-  //     <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
-  //       <Stack.Item className="explore__dropdown">
-  //         <Dropdown
-  //           placeholder={"Select Culture"}
-  //           label={"Culture"}
-  //           options={cultureOptions}
-  //           responsiveMode={ResponsiveMode.large}
-  //           onChange={(event: any, option: any) => this.props.callback("culture", option)}
-  //         />
-  //       </Stack.Item>
-  //       <Stack.Item className="explore__dropdown">
-  //         <Dropdown
-  //           placeholder={"Select Medium"}
-  //           label={"Medium"}
-  //           options={mediumOptions}
-  //           responsiveMode={ResponsiveMode.large}
-  //           onChange={(event: any, option: any) => this.props.callback("medium", option)}
-  //         />
-  //       </Stack.Item>
-  //       <Stack.Item className="explore__dropdown">
-  //         <Dropdown
-  //           placeholder={"Select Museum"}
-  //           label={"Museum"}
-  //           options={mediumOptions}
-  //           responsiveMode={ResponsiveMode.large}
-  //         />
-  //       </Stack.Item>
-  //     </Stack>
-  //   </Stack>
-  // );
 }

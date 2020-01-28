@@ -1,5 +1,5 @@
 import { Image, Stack, Text } from 'office-ui-fabric-react';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
@@ -116,7 +116,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 <div className="explore__artwork-frame">
                   <Image height={"40vh"} src={imgURL} className="explore__img" />
                   <div className="explore__museum-icon">
-                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
+                    <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                         {musImg}
                       </a>
@@ -160,7 +160,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                       </Stack>
                     </CSSTransition>
                     <div className="explore__museum-icon">
-                      <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
+                      <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                         <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                           {musImg}
                         </a>

@@ -1,5 +1,5 @@
 import { Image, Stack, Text } from 'office-ui-fabric-react';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
@@ -115,31 +115,13 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   }
                   
                   <Options changeConditional={this.props.changeConditional} />
-                  <Stack horizontal horizontalAlign="end">
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                      <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                        <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </FacebookShareButton>
-                    </div>
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Twitter" })}>
-
-                      <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                        <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </TwitterShareButton>
-                    </div>
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                      <LinkedinShareButton className="explore__share-button" url={window.location.href}>
-                        <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </LinkedinShareButton>
-                    </div>
-                  </Stack>
                 </Stack>
               </Stack>
               <Stack>
                 <div className="explore__artwork-frame">
                   <Image height={"40vh"} src={imgURL} className="explore__img" />
                   <div className="explore__museum-icon">
-                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source1" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
+                    <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                         {musImg}
                       </a>
@@ -164,7 +146,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                       </Stack>
                   </CSSTransition>
                   <div className="explore__museum-icon">
-                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="Click to View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
+                    <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                         {musImg}
                       </a>
