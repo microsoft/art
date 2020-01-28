@@ -6,7 +6,7 @@
   - [Training](#training)
   - [Service Deployment](#service-deployment)
 
-Mosaic allows users to find similar artworks by featurizing artwork images using a pretrained Keras model, normaling the resultant vector, and loading them into a ball tree to quickly query for other artwork with a similar featurization and filtered by either culture or classification (m).
+Mosaic allows users to find similar artworks by featurizing artwork images using a pretrained Keras model, normalizing the resultant vector, and loading them into a ball tree to quickly query for other artwork with similar featurizations filtered by either culture or classification (m).
 
 ## File Structure
 
@@ -22,9 +22,8 @@ This folder contains various scripts and configuration files that either are dep
 
 - `deploy_score_aks.py` runs an instance of `score.py` in an AKS cluster. It attempts to attach to a cluster and service if already running, otherwise it creates a service on an existing or new cluster. It then deploys the model and script onto the cluster. Runtime ranges from 10-20 minutes.
 
-- `ConditionalBallTree.py` is a Python class that instantiates a conditional ball tree from [MMLSpark](https://github.com/Azure/mmlspark).
-
-- `../GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. All references to `typingkoala/art-repository:latest` are the 
+- `./GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. 
+  <!---All references to `typingkoala/art-repository:latest` are the --->
 
 ## Environment
 
@@ -39,17 +38,17 @@ Dependencies for the environment:
 - azureml-defaults[services]
 - tqdm
 - Docker:
-  - start from tensorflow:1.13.2-gpu and set up a Docker image, more details in Dockerfile
+  - start from tensorflow:1.13.2-gpu and set up a Docker image, more details in `./GPU_Docker/Dockerfile`.
 
 
 ## Training
 
-The Ball Tree API originates from https://github.com/Azure/mmlspark. It allows for the initialization of a conditional ball tree with three methods: `findMaximumInnerProducts`, `save`, and `load`.
+The Ball Tree API originates from [MMLSpark](https://github.com/Azure/mmlspark). It allows for the initialization of a conditional ball tree with three methods: `findMaximumInnerProducts`, `save`, and `load`.
 The featurization of the images and the creation of the balltrees is done in `featurize.py`. The file reads a csv from a mounted storage blob and downloads the images from the provided urls. The images are featurized using the embeddings from ResNet50 and then used to create balltree objects.
 
-The training is run through `deploy_featurize.py` as an experiment on Azure Machine Learning (AML). It mounts the storage blob for `featurize.py`, submits the run, then saves the balltree objects and metadata in a model so they can be easily accessed later.
+The training is run through `deploy_featurize.py` as an experiment on Azure Machine Learning (AML). It mounts the storage blob for `featurize.py`, submits the run, then saves the balltree objects and metadata in a model to be referenced later.
 
-This can be run either through AML training clusters or locally to speed up the dev loop. Make sure the workspace settings are correct before running (https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py). The settings of the cluster can be altered in provisioning_config, such as vm size and number of nodes. We have min_nodes = 0 so that when the cluster is not in use it will scale to 0 nodes. To run locally, the contianer can be downloaded from Azure Container Registry, but only after you run it through AML. The repository URL can be found through Azure Container registry, and will resemble `extenamls.azurecr.io/azureml/azureml_0062a8f080ece0d27d:latest`.
+This can be run either through AML training clusters or locally to speed up the dev loop. Make sure the [workspace settings](https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py) are correct before running. The settings of the cluster can be altered in provisioning_config, such as vm size and number of nodes. Setting min_nodes = 0 will allow the cluster to scale to 0 nodes when not in use. To run locally, the container can be downloaded from Azure Container Registry, but only after you run it through AML. The repository URL can be found through Azure Container Registry, and will resemble `extenamls.azurecr.io/azureml/azureml_0062a8f080ece0d27d:latest`.
 
 ```bash
 docker run -d -it --name <name> --mount type=bind,source=<source_directory>,target=/app <repository_url>
@@ -63,8 +62,8 @@ docker exec -it <name> bash
 
 ## Service Deployment
 
-`score.py` is a web service that allows for clients to query our model. It handles GET requests, expecting the following parameters: `url`, `n`, `culture`|`classification.ation`. It loads the balltrees and metadata pickle created in `featurize.py`, then downloads the provided URL and featurizes it. The featurized image is put into either the culture or classifcation balltree along with the number of results desired, and it returns the closest matches. The metadata for the results is then sent as a serialized JSON object.
+`score.py` is a web service that allows for clients to query our model. It handles GET requests, expecting the following parameters: `url`, `n`, `culture`|`classification.ation`. It loads the balltrees and metadata pickle created in `featurize.py`, then downloads the provided URL and featurizes it. The featurized image is put into either the culture or classifcation balltree along with the number of results desired, returning the closest matches. The metadata for the results is then sent as a serialized JSON object.
 
 The web service is deployed through `deploy_score_aks.py` to an inference cluster on Azure Kupernetes Service. It tries to first update an existing service, but if that fails it will create either a new service or a new cluster and service.
 
-The service can be deployed to a cluster or locally. Make sure the workspace settings are correct before running (https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py). The settings for the inference cluster can be changed in gpu_aks_config. To deploy it locally, run `deploy_score_local.py`.
+The service can be deployed to a cluster or locally. Make sure the [workspace settings](https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py) are correct before running. The settings for the inference cluster can be changed in gpu_aks_config. To deploy it locally, run `deploy_score_local.py`.
