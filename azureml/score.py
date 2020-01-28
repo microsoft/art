@@ -13,8 +13,6 @@ from PIL import Image
 from pyspark.sql import SparkSession
 import tensorflow as tf
 
-from ConditionalBallTree import ConditionalBallTree
-
 def assert_gpu():
     """
     This function will raise an exception if a GPU is not available to tensorflow.
@@ -30,8 +28,8 @@ def init():
     global metadata
     global keras_model
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
-    assert_gpu()
+    #os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
+    #assert_gpu()
 
     # downloading java dependencies
     spark = SparkSession.builder \
@@ -41,6 +39,8 @@ def init():
         .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
         .config("spark.executor.heartbeatInterval", "60s") \
         .getOrCreate()
+
+    from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
 
     #initialize the model architecture and load in imagenet weights
     model_path = Model.get_model_path('features')

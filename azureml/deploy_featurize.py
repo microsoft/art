@@ -6,7 +6,7 @@ from azureml.core.environment import Environment
 from azureml.core import Datastore
 from azureml.core import ScriptRunConfig
 from azureml.train.estimator import Estimator
-import os 
+import os
 
 ws = Workspace(
     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
@@ -30,20 +30,20 @@ try:
 except:
     # Create a new cluster to train on
     provisioning_config = AmlComputeProvisioningConfiguration(
-        vm_size = "Standard_NC6",
-        min_nodes = 0,
-        max_nodes = 1
+        vm_size="Standard_NC6",
+        min_nodes=0,
+        max_nodes=1
     )
     compute_target = ComputeTarget.create(ws, cluster_name, provisioning_config)
 compute_target.wait_for_completion(show_output=True)
 
 # Create and run the experiment
-exp = Experiment(workspace=ws, name='featurize_artwork')
+exp = Experiment(workspace=ws, name='featurize_artwork_marhamil')
 
 estimator = Estimator(
-    source_directory = "azureml",
-    entry_script = "featurize.py",
-    script_params = {
+    source_directory=".",
+    entry_script="featurize.py",
+    script_params={
         "--data-dir": datastore.as_mount()
     },
     conda_dependencies_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"),
@@ -53,7 +53,7 @@ estimator = Estimator(
 )
 
 run = exp.submit(estimator)
-run.wait_for_completion(show_output = True)
+run.wait_for_completion(show_output=True)
 
 # Save the balltrees made in score.py and metadata
 run.register_model(
