@@ -22,6 +22,7 @@ type ArtworkProps = {
   artwork: ArtObject,
   bestArtwork: ArtObject,
   overlay: string,
+  enableRationale: boolean,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
@@ -113,7 +114,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
               <Stack>
                 <div className="explore__artwork-frame">
-                  <Image height={"40vh"} src={imgURL} className="explore__img" />
+                  <Image height={"35vh"} src={imgURL} className="explore__img" />
                   <div className="explore__museum-icon">
                     <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
@@ -135,7 +136,9 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.exploreArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
                   </a>
-                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
+                  {this.props.enableRationale &&
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>                  
+                  }
                 </Stack>
               </Stack>
             </Stack>
@@ -145,12 +148,13 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
               <Stack>
                 <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                   <div className="explore__artwork-frame">
-                    <Image height={"300px"} src={imgURL} />
+                    <Image height={"275px"} src={imgURL} />
                     <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                       <Stack horizontal className="explore__slide-buttons">
                         <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
-                        <div className="explore__slide-button-sep"></div>
-                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                        {this.props.enableRationale &&
+                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "ResultImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                        } 
                         <div className="explore__slide-button-sep"></div>
                         <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
                       </Stack>

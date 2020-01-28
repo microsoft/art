@@ -9,10 +9,10 @@ import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
 import { defaultArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
+import Options from './Options';
 import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
-import Options from './Options';
 
 interface IProps {
     match: any
@@ -32,7 +32,7 @@ const halfStack = mergeStyles({
     height: "100%"
 })
 
-
+const rationaleOn = true;
 
 
 const azureSearchUrl =
@@ -137,42 +137,43 @@ export class ExplorePage extends React.Component<IProps, IState> {
      */
     makeAPIquery(originalArtURL: string, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        // const apiURL = 'https://extern2020apim.azure-api.net/explore';
+        // const apiURL = 'https://extern2020apim.azure-api.net/score';
         const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
+        // const apiURL = "https://extern2020apim.azure-api.net/score";
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
 
         let fields = Object.keys(conditionals);
         fields.forEach((element: any) => {
             if (conditionals[element] !== "All") {
-                params = params + '&' + "query" + '=' + conditionals[element];
+                params = params + '&' + 'query' + '=' + encodeURIComponent(conditionals[element]);
             }
         });
 
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
 
-        console.log("Request: " + apiURL + encodeURIComponent(params));
+        console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
-        Http.open('GET', apiURL + encodeURIComponent(params));
+        Http.open('GET', apiURL + params);
 
         Http.send();
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
                 try {
-                    console.log();
                     let response = JSON.parse(Http.responseText);
-                    console.log("response: " + Http.responseText);
+                    //console.log("response: " + Http.responseText);
                     response = response.results;
-                    const filteredResponse = response.filter((artwork: any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
-                    console.log("filtered: " + filteredResponse);
+                    const filteredResponse = response.filter((artwork:any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
+                    //console.log("filtered: " + filteredResponse);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
-                    this.setState({
-                        galleryItems: pieces,
-                        resultArtwork: pieces[0],
-                        bestResultArtwork: pieces[0]
-                    });
+                    if (pieces.length > 0) {
+                        this.setState({ galleryItems: pieces,
+                            resultArtwork: pieces[0],
+                            bestResultArtwork: pieces[0] });
+                    } 
+
 
                 } catch (e) {
                     console.log('malformed request:' + Http.responseText);
@@ -216,6 +217,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
+            console.log("RANDINDEX: "+randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
             this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
             this.setState({ originalArtwork: newOriginalArtwork });
@@ -232,20 +234,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="center" wrap>
                         <Stack.Item grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontalAlign="center">
