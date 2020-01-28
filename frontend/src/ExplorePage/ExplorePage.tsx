@@ -72,8 +72,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param option the new filter option to use (French, Sculptures, etc)
      */
     changeConditional(category: any, option?: any): void {
+        console.log("Option: " + option);
         let clonedConditionals = { ...this.state.conditionals };
-        clonedConditionals[category] = option['text'];
+        clonedConditionals[category] = option;
         console.log(clonedConditionals);
         this.setState({ "conditionals": clonedConditionals });
         this.makeAPIquery(this.state.originalArtwork.Thumbnail_Url, clonedConditionals);
