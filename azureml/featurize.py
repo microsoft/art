@@ -16,6 +16,9 @@ from pyspark.sql import SparkSession
 from tqdm import tqdm
 from multiprocessing import Pool
 
+#from mmlspark.cognitive import AnalyzeImage
+#from mmlspark.stages import SelectColumns
+
 # Initialize
 batch_size = 256
 img_width = 225
@@ -159,6 +162,21 @@ run = Run.get_context()
 subscription_key = run.get_secret(name="subscriptionKey")
 
 df = spark.createDataFrame(metadata)
+
+
+#define pipeline
+#describeImage = (AnalyzeImage()
+#  .setSubscriptionKey("<secret_key>")
+#  .setLocation("eastus")
+#  .setImageUrlCol("Thumbnail_Url")
+#  .setOutputCol("RawImageDescription")
+#  .setErrorCol("Errors")
+#  .setVisualFeatures(["Categories", "Tags", "Description", "Faces", "ImageType", "Color", "Adult"])
+#  .setConcurrency(5))
+
+#df2 = describeImage.transform(df)\
+#  .select("*", "RawImageDescription.*").drop("Errors", "RawImageDescription").cache()
+
 
 df.coalesce(3).writeToAzureSearch(
   subscriptionKey=subscription_key,
