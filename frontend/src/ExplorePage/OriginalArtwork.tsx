@@ -147,14 +147,16 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="center" verticalAlign="center" className="explore__main-images">
               <Stack onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                 <Stack className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                  <Image height={"300px"} src={this.props.artwork.Thumbnail_Url} />
+                  <Image height={"300px"} src={imgURL} />
                   <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                     <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>
+                      <div className="explore__slide-button-sep"></div>
+                      <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
                     </Stack>
                   </CSSTransition>
                   <div className="explore__museum-icon">
-                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source1" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
+                    <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="Click to View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
                         {musImg}
                       </a>

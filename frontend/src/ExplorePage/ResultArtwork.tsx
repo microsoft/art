@@ -150,6 +150,8 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                       <Stack horizontal className="explore__slide-buttons">
                         <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
                         <div className="explore__slide-button-sep"></div>
+                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                        <div className="explore__slide-button-sep"></div>
                         <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
                       </Stack>
                     </CSSTransition>
