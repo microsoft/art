@@ -230,7 +230,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
                             <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
@@ -240,7 +240,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="center" wrap>
                         <Stack.Item grow={1}>
-                            <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
                             <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
@@ -265,9 +265,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                 </ShowAt>
                 <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>
-                <Stack.Item>
-                    <Options callback={this.changeConditional} />
-                </Stack.Item>
                 <Stack.Item>
                     <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                 </Stack.Item>

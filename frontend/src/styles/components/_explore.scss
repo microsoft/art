@@ -35,10 +35,7 @@
 
   &__options-container {
     margin: auto;
-
-    @media (max-width: $mq-s) {
-      width: 200px !important;
-    }
+    width: 200px;
   }
 
   &__main-images {

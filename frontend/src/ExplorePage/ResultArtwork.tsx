@@ -21,7 +21,7 @@ interface IState {
 type ArtworkProps = {
   artwork: ArtObject,
   bestArtwork: ArtObject,
-  overlay: any,
+  overlay: string,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
