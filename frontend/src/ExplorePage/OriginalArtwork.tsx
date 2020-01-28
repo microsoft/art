@@ -8,6 +8,7 @@ import { HideAt, ShowAt } from 'react-with-breakpoints';
 import ArtObject from '../ArtObject';
 import rijksImg from '../images/Rijks.jpg';
 import metImg from '../images/the_met_logo_crop.png';
+import Options from './Options';
 
 
 
@@ -20,8 +21,9 @@ interface IState {
 
 type ArtworkProps = {
   artwork: ArtObject,
-  overlay: any,
-  handleTrackEvent: (eventName: string, properties: Object) => void
+  overlay: string,
+  handleTrackEvent: (eventName: string, properties: Object) => void, 
+  changeConditional: any
 }
 
 class OriginalArtwork extends React.Component<ArtworkProps, IState> {
@@ -108,6 +110,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>
                   <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
+                  <Options changeConditional={this.props.changeConditional} />
                   <Stack horizontal horizontalAlign="end">
                     <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
                       <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>

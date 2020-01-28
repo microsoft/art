@@ -1,22 +1,22 @@
 import React from 'react';
 import { Text, Stack, Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react';
 import { mergeStyles } from '@uifabric/merge-styles';
+import Select from '@material-ui/core/Select';
+import { Input, FormControl, InputLabel, makeStyles } from '@material-ui/core';
 
 const dropdown = mergeStyles({
-    marginBottom : 10
+  marginBottom: 10
 });
 
-interface IState {};
+interface IState { };
 
 // Expected props
 interface IProps {
-  // Potentially pass in a object of the selector options from parent (culture, medium, etc)?
-  options? : Object,
   // Functions for updating state in parent when changing filters
-  callback : any
+  changeConditional : any
 }
 
-interface IState {};
+interface IState { };
 
 // const dropdownStyles: Partial<IDropdownStyles> = {
 //   dropdown: { width:300 }
@@ -53,133 +53,118 @@ const cultureOptions: IDropdownOption[] = [
   { key: 'culture27', text: 'southeast asian' },
   { key: 'culture28', text: 'spanish' },
   { key: 'culture29', text: 'swiss' },
-  { key: 'various', text: 'various' }
+  { key: 'culture30', text: 'various' }
 ];
 
 // Options for filtering the art medium
 const mediumOptions: IDropdownOption[] = [
-  { key: 'medium1', text: 'prints'},
-  { key: 'medium2', text: 'drawings'},
-  { key: 'medium3', text: 'ceramics'},
-  { key: 'medium4', text: 'textiles'},
-  { key: 'medium5', text: 'paintings'},
-  { key: 'medium6', text: 'accessories'},
-  { key: 'medium7', text: 'photographs'},
-  { key: 'medium8', text: 'glass'},
-  { key: 'medium9', text: 'metalwork'},
-  { key: 'medium10', text: 'sculptures'},
-  { key: 'medium11', text: 'weapons'},
-  { key: 'medium12', text: 'stone'},
-  { key: 'medium13', text: 'precious'},
-  { key: 'medium14', text: 'paper'},
-  { key: 'medium15', text: 'woodwork'},
-  { key: 'medium16', text: 'leatherwork'},
-  { key: 'medium17', text: 'musical instruments'},
-  { key: 'medium18', text: 'uncategorized'}
+  { key: 'medium1', text: 'prints' },
+  { key: 'medium2', text: 'drawings' },
+  { key: 'medium3', text: 'ceramics' },
+  { key: 'medium4', text: 'textiles' },
+  { key: 'medium5', text: 'paintings' },
+  { key: 'medium6', text: 'accessories' },
+  { key: 'medium7', text: 'photographs' },
+  { key: 'medium8', text: 'glass' },
+  { key: 'medium9', text: 'metalwork' },
+  { key: 'medium10', text: 'sculptures' },
+  { key: 'medium11', text: 'weapons' },
+  { key: 'medium12', text: 'stone' },
+  { key: 'medium13', text: 'precious' },
+  { key: 'medium14', text: 'paper' },
+  { key: 'medium15', text: 'woodwork' },
+  { key: 'medium16', text: 'leatherwork' },
+  { key: 'medium17', text: 'musical instruments' },
+  { key: 'medium18', text: 'uncategorized' }
 ];
-
-// Options for filtering the art culture
-// const cultureOptions: IDropdownOption[] = [
-//     { key: 'cultureChinese', text: 'chinese' },
-//     { key: 'cultureAmerican', text: 'american' },
-//     { key: 'cultureBritish', text: 'british' },
-//     { key: 'cultureKorean', text: 'korean' }
-// ];
-
-// Options for filtering the art medium
-// const mediumOptions: IDropdownOption[] = [
-//     { key: 'mediumPainting', text: 'Painting'},
-//     { key: 'mediumSculpture', text: 'Sculpture'},
-//     { key: 'mediumPottery', text: 'Pottery'},
-//     { key: 'mediumArmor', text: 'Armor'}
-// ];
 
 // Options for filtering the museum
 const museumOptions: IDropdownOption[] = [
-  { key: 'museumAll', text: 'All Museums'},
-  { key: 'museumMet', text: 'Metropolitan Museum of Art'},
-  { key: 'museumRijks', text: 'Rijksmuseum'}
+  { key: 'museumAll', text: 'All Museums' },
+  { key: 'museumMet', text: 'Metropolitan Museum of Art' },
+  { key: 'museumRijks', text: 'Rijksmuseum' }
 ];
 
-class Options extends React.Component<IProps, IState> {
+const useStyles = makeStyles({
+  root: {
+    width: "212px",
+    height: "39px",
+    border: "2px solid black",
+    textTransform: "capitalize",
+    fontSize: "1rem",
+    paddingLeft: "10px",
+    outline: "none"
+  },
+  select: {
+
+  }
+});
+
+interface IProps {
+  changeConditional : any
+}
+
+// class Options extends React.Component<IProps, IState> {
+
+export default function Options(props: IProps) {
+
+  const classes = useStyles();
 
   // Debugging purposes, unnecessary
-  private handleChange(event : React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void {
+  const handleChange = (event: React.FormEvent < HTMLDivElement >, option ?: IDropdownOption): void => {
     console.log(option)
   }
 
-  // TODO: Planned on building up a set of dropdowns inputs in case we need
-  // to easily add more options besides culture and medium
-  private createDropdowns(): JSX.Element[] {
-    let dropdowns: JSX.Element[] = [];
-
-    let selectors: Object = {
-      culture: {
-        callback: this.handleChange,
-        options: ['chinese', 'american', 'british', 'korean']
-      },
-      medium: {
-        callback: this.handleChange,
-        options: ['Painting', 'Sculpture', 'Pottery', 'Armor']
-      },
-      museum: {
-        callback: this.handleChange,
-        options: ['All', 'Metropolitan Museum of Art', 'Rijksmuseum']
-      }
-    };
-
-    for (let category in Object.keys(selectors)) {
-      if (Object.prototype.hasOwnProperty.call(selectors, category)) {
-        dropdowns.push(
-          <Dropdown
-              placeholder={"Select " + category}
-              label={category}
-              options={cultureOptions}
-              className={dropdown}
-              onChange={this.props.callback}
-            />
-        )
-      }
-    }
-
-    return dropdowns;
-  }
-
-  render() {
-    return(
-      <Stack>
-        <Text style={{"textAlign":"center", "fontWeight":"bold"}} variant="xLarge">Artwork Qualities</Text>
-        <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
-          <Stack.Item className="explore__dropdown">
-            <Dropdown
-              placeholder={"Select Culture"}
-              label={"Culture"}
-              options={cultureOptions}
-              responsiveMode={ResponsiveMode.large}
-              onChange={( event:any, option:any ) => this.props.callback("culture", option)}
-            />
-          </Stack.Item>
-          <Stack.Item className="explore__dropdown">
-            <Dropdown
-              placeholder={"Select Medium"}
-              label={"Medium"}
-              options={mediumOptions}
-              responsiveMode={ResponsiveMode.large}
-              onChange={( event:any, option:any ) => this.props.callback("medium", option)}
-            />
-          </Stack.Item>
-          <Stack.Item className="explore__dropdown">
-            <Dropdown
-              placeholder={"Select Museum"}
-              label={"Museum"}
-              options={mediumOptions}
-              responsiveMode={ResponsiveMode.large}
-            />
-          </Stack.Item>
-        </Stack>
-      </Stack>
-    );
-  }
+  return (
+    <FormControl>
+      {/* <InputLabel>Quality</InputLabel> */}
+      <Select
+        native
+        defaultValue=""
+        classes={{
+          root: classes.root
+        }}>
+        <option value="" />
+        <optgroup label="Culture">
+          {cultureOptions.map(culture => (<option value={culture.text}>{culture.text}</option>))}
+        </optgroup>
+        <optgroup label="Medium">
+          {mediumOptions.map(medium => (<option value={medium.text}>{medium.text}</option>))}
+        </optgroup>
+      </Select>
+    </FormControl>
+  );
+  // return (
+  //   <Stack>
+  //     <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="xLarge">Artwork Qualities</Text>
+  //     <Stack horizontal className="explore__options-container" horizontalAlign="center" wrap>
+  //       <Stack.Item className="explore__dropdown">
+  //         <Dropdown
+  //           placeholder={"Select Culture"}
+  //           label={"Culture"}
+  //           options={cultureOptions}
+  //           responsiveMode={ResponsiveMode.large}
+  //           onChange={(event: any, option: any) => this.props.callback("culture", option)}
+  //         />
+  //       </Stack.Item>
+  //       <Stack.Item className="explore__dropdown">
+  //         <Dropdown
+  //           placeholder={"Select Medium"}
+  //           label={"Medium"}
+  //           options={mediumOptions}
+  //           responsiveMode={ResponsiveMode.large}
+  //           onChange={(event: any, option: any) => this.props.callback("medium", option)}
+  //         />
+  //       </Stack.Item>
+  //       <Stack.Item className="explore__dropdown">
+  //         <Dropdown
+  //           placeholder={"Select Museum"}
+  //           label={"Museum"}
+  //           options={mediumOptions}
+  //           responsiveMode={ResponsiveMode.large}
+  //         />
+  //       </Stack.Item>
+  //     </Stack>
+  //   </Stack>
+  // );
 }
-
-export default Options

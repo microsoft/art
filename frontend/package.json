@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.8.3",
+    "@material-ui/core": "^4.9.0",
     "@microsoft/applicationinsights-react-js": "^2.3.1",
     "@microsoft/applicationinsights-web": "^2.3.1",
     "@reach/router": "^1.2.1",
