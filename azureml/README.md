@@ -62,7 +62,7 @@ docker exec -it <name> bash
 
 ## Service Deployment
 
-`score.py` is a web service that allows for clients to query our model. It handles GET requests, expecting the following parameters: `url`, `n`, `culture`|`classification.ation`. It loads the balltrees and metadata pickle created in `featurize.py`, then downloads the provided URL and featurizes it. The featurized image is put into either the culture or classifcation balltree along with the number of results desired, returning the closest matches. The metadata for the results is then sent as a serialized JSON object.
+`score.py` is a web service that allows for clients to query our model. It handles GET requests, expecting the following parameters: `url`, `n`, `culture` or `classification.ation`. It loads the balltrees and metadata pickle created in `featurize.py`, then downloads the provided URL and featurizes it. The featurized image is put into either the culture or classifcation balltree along with the number of results desired, returning the closest matches. The metadata for the results is then sent as a serialized JSON object.
 
 The web service is deployed through `deploy_score_aks.py` to an inference cluster on Azure Kupernetes Service. It tries to first update an existing service, but if that fails it will create either a new service or a new cluster and service.
 
