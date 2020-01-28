@@ -164,7 +164,7 @@ subscription_key = run.get_secret(name="subscriptionKey")
 df = spark.createDataFrame(metadata)
 
 
-#define pipeline
+
 #describeImage = (AnalyzeImage()
 #  .setSubscriptionKey("<secret_key>")
 #  .setLocation("eastus")
