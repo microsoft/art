@@ -1,4 +1,4 @@
-import { DefaultButton, Image, Stack, Text } from 'office-ui-fabric-react';
+import { Image, Stack, Text } from 'office-ui-fabric-react';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
@@ -14,11 +14,13 @@ import metImg from '../images/the_met_logo_crop.png';
 interface IState {
   objIDs: any,
   redirect: any,
-  hover: boolean
+  hover: boolean,
+  overlayOn: boolean
 }
 
 type ArtworkProps = {
   artwork: ArtObject,
+  overlay: any,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
@@ -30,12 +32,22 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
     this.state = {
       objIDs: [],
       redirect: false,
-      hover: false
+      hover: false,
+      overlayOn: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
+    this.toggleOverlay = this.toggleOverlay.bind(this);
   }
 
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
+
+  toggleOverlay() {
+    if (this.props.overlay) {
+      let newValue = !this.state.overlayOn;
+      this.setState({overlayOn: newValue});
+    }
+
+  }
 
   getSimilarArtID() {
     let imageURL = this.props.artwork.Thumbnail_Url;
@@ -76,6 +88,8 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
 
   render() {
     let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton1' src={rijksImg} /> : <Image height={"5vh"} id='musButton1' src={metImg} />;
+    let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
+    
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
       return <Redirect push to={link} />;
@@ -93,6 +107,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>
+                  <button className="explore__buttons_button" onClick={this.toggleOverlay}>Show Rationale </button>
                   <Stack horizontal horizontalAlign="end">
                     <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
                       <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
@@ -115,7 +130,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
               </Stack>
               <Stack>
                 <div className="explore__artwork-frame">
-                  <Image height={"40vh"} src={this.props.artwork.Thumbnail_Url} className="explore__img" />
+                  <Image height={"40vh"} src={imgURL} className="explore__img" />
                   <div className="explore__museum-icon">
                     <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source1" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">

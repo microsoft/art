@@ -7,9 +7,11 @@ import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, T
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
+import { defaultArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
 import OriginalArtwork from './OriginalArtwork';
+import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
 
 interface IProps {
@@ -29,6 +31,7 @@ const halfStack = mergeStyles({
     width: "50%",
     height: "100%"
 })
+
 
 
 
@@ -209,7 +212,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);              
             });
         } else {
-            let newOriginalArtwork = defaultArtObject;
+            let numDefaults = defaultArtwork.length;
+            let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
+            let newOriginalArtwork = defaultArtwork[randIndex];
             this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
             this.setState({ originalArtwork: newOriginalArtwork});
         }
@@ -225,7 +230,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <OriginalArtwork artwork={this.state.originalArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
                             <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
@@ -235,7 +240,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="center" wrap>
                         <Stack.Item grow={1}>
-                            <OriginalArtwork artwork={this.state.originalArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
                             <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
