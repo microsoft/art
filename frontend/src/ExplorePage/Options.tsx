@@ -121,7 +121,7 @@ export default function Options(props: IProps) {
       <Select
         native
         defaultValue=""
-        onChange={(event) => {console.log("Value: " + event.target.value); props.changeConditional("culture", event.target.value)}}
+        onChange={(event) => {props.changeConditional("culture", event.target.value)}}
         classes={{
           root: classes.root
         }}>
