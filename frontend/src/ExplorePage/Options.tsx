@@ -24,19 +24,75 @@ interface IState {};
 
 // Options for filtering the art culture
 const cultureOptions: IDropdownOption[] = [
-    { key: 'cultureChinese', text: 'chinese' },
-    { key: 'cultureAmerican', text: 'american' },
-    { key: 'cultureBritish', text: 'british' },
-    { key: 'cultureKorean', text: 'korean' }
+  { key: 'culture1', text: 'african (general)' },
+  { key: 'culture2', text: 'american' },
+  { key: 'culture3', text: 'ancient american' },
+  { key: 'culture4', text: 'ancient asian' },
+  { key: 'culture5', text: 'ancient european' },
+  { key: 'culture6', text: 'ancient middle-eastern' },
+  { key: 'culture7', text: 'asian (general)' },
+  { key: 'culture8', text: 'austrian' },
+  { key: 'culture9', text: 'belgian' },
+  { key: 'culture10', text: 'british' },
+  { key: 'culture11', text: 'chinese' },
+  { key: 'culture12', text: 'czech' },
+  { key: 'culture13', text: 'dutch' },
+  { key: 'culture14', text: 'egyptian' },
+  { key: 'culture15', text: 'european (general)' },
+  { key: 'culture16', text: 'french' },
+  { key: 'culture17', text: 'german' },
+  { key: 'culture18', text: 'greek' },
+  { key: 'culture19', text: 'iranian' },
+  { key: 'culture20', text: 'italian' },
+  { key: 'culture21', text: 'japanese' },
+  { key: 'culture22', text: 'latin american' },
+  { key: 'culture23', text: 'middle eastern' },
+  { key: 'culture24', text: 'roman' },
+  { key: 'culture25', text: 'russian' },
+  { key: 'culture26', text: 'south asian' },
+  { key: 'culture27', text: 'southeast asian' },
+  { key: 'culture28', text: 'spanish' },
+  { key: 'culture29', text: 'swiss' },
+  { key: 'various', text: 'various' }
 ];
 
 // Options for filtering the art medium
 const mediumOptions: IDropdownOption[] = [
-    { key: 'mediumPainting', text: 'Painting'},
-    { key: 'mediumSculpture', text: 'Sculpture'},
-    { key: 'mediumPottery', text: 'Pottery'},
-    { key: 'mediumArmor', text: 'Armor'}
+  { key: 'medium1', text: 'prints'},
+  { key: 'medium2', text: 'drawings'},
+  { key: 'medium3', text: 'ceramics'},
+  { key: 'medium4', text: 'textiles'},
+  { key: 'medium5', text: 'paintings'},
+  { key: 'medium6', text: 'accessories'},
+  { key: 'medium7', text: 'photographs'},
+  { key: 'medium8', text: 'glass'},
+  { key: 'medium9', text: 'metalwork'},
+  { key: 'medium10', text: 'sculptures'},
+  { key: 'medium11', text: 'weapons'},
+  { key: 'medium12', text: 'stone'},
+  { key: 'medium13', text: 'precious'},
+  { key: 'medium14', text: 'paper'},
+  { key: 'medium15', text: 'woodwork'},
+  { key: 'medium16', text: 'leatherwork'},
+  { key: 'medium17', text: 'musical instruments'},
+  { key: 'medium18', text: 'uncategorized'}
 ];
+
+// Options for filtering the art culture
+// const cultureOptions: IDropdownOption[] = [
+//     { key: 'cultureChinese', text: 'chinese' },
+//     { key: 'cultureAmerican', text: 'american' },
+//     { key: 'cultureBritish', text: 'british' },
+//     { key: 'cultureKorean', text: 'korean' }
+// ];
+
+// Options for filtering the art medium
+// const mediumOptions: IDropdownOption[] = [
+//     { key: 'mediumPainting', text: 'Painting'},
+//     { key: 'mediumSculpture', text: 'Sculpture'},
+//     { key: 'mediumPottery', text: 'Pottery'},
+//     { key: 'mediumArmor', text: 'Armor'}
+// ];
 
 // Options for filtering the museum
 const museumOptions: IDropdownOption[] = [
@@ -109,7 +165,7 @@ class Options extends React.Component<IProps, IState> {
               label={"Medium"}
               options={mediumOptions}
               responsiveMode={ResponsiveMode.large}
-              onChange={( event:any, option:any ) => this.props.callback("cedium", option)}
+              onChange={( event:any, option:any ) => this.props.callback("medium", option)}
             />
           </Stack.Item>
           <Stack.Item className="explore__dropdown">
