@@ -1,29 +1,19 @@
 import argparse
-import csv
-import glob
-import math
 import multiprocessing
 import os
 import pickle
-import random
-import sys
+import urllib.request
 
-import certifi
 import numpy as np
 import pandas as pd
-import requests
-from pyspark import SparkContext, SQLContext
-# Load into ball tree
-from pyspark.sql import SparkSession, SQLContext
-
-from ConditionalBallTree import ConditionalBallTree
-from PIL import Image, ImageFile
-from tqdm import tqdm
-
 import tensorflow as tf
-
-from keras.applications.resnet50 import preprocess_input
+from PIL import Image
 from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input
+# Load into ball tree
+from pyspark.sql import SparkSession
+from tqdm import tqdm
+from multiprocessing import Pool
 
 # Initialize
 batch_size = 256
@@ -38,56 +28,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--data-dir", type=str, dest="data_folder")
 data_folder = parser.parse_args().data_folder
 
-csv_path =  "metadata_smol.csv"
+csv_path = "metadata_smol.csv"
 
 # create file paths for saving balltree later
 output_root = './outputs'
-features_culture_fn = os.path.join(output_root,'features_culture.ball')
-features_classification_fn = os.path.join(output_root,'features_classification.ball') 
-metadata_fn = os.path.join(output_root, 'metadata.pkl') 
+features_culture_fn = os.path.join(output_root, 'features_culture.ball')
+features_classification_fn = os.path.join(output_root, 'features_classification.ball')
+metadata_fn = os.path.join(output_root, 'metadata.pkl')
 
 # Featurize
-def read_metadata_csv(csv_path):
-    """
-    Given a path to a csv file containing metadata for musueum images,
-    read the csv and return an array of tuples with the id and thumbnail url
-    of the image.
-
-    Assumes that the CSV passed in contains column names on row 1, and contains 
-    columns with name "id" and "Thumbnail_Url"
-    
-    Arguments:
-        csv_path {str} -- a path to a csv containing at least two columns with name
-        "id" and "Thumbnail_Url"
-    
-    Returns:
-        tuple[] -- an array of tuples containing the id and thumbnail url of each row
-    """
-    images = []
-    column_numbers = {}
-    with open(csv_path) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        for i, row in enumerate(csv_reader):
-            # create dict that maps column names to column number
-            if i == 0:
-                for j, column_name in enumerate(row):
-                    column_numbers[column_name] = j
-            else:
-                images.append(
-                    {
-                        "id": row[column_numbers["id"]],
-                        "museum": row[column_numbers["Museum"]],
-                        "url": row[column_numbers["Thumbnail_Url"]],
-                        "full_size": row[column_numbers["Image_Url"]],
-                        "culture": row[column_numbers["Culture"]],
-                        "classification": row[column_numbers["Classification"]],
-                        "museum_url": row[column_numbers["Museum_Page"]],
-                        "artist": row[column_numbers["Artist"]],
-                        "title": row[column_numbers["Title"]]
-                    }
-                )
-    return images
-
 def batch(iterable, n):
     """
     Splits iterable into nested array with inner size n
@@ -102,33 +51,49 @@ def batch(iterable, n):
     if current_batch:
         yield current_batch
 
-def download_image(image):
+
+def parallel_apply(df, func, n_cores=4):
+    df_split = np.array_split(df, n_cores)
+    pool = Pool(n_cores)
+    df = pd.concat(pool.map(func, df_split))
+    pool.close()
+    pool.join()
+    return df
+
+
+def retry(func, args, times):
+    if times == 0:
+        return False
+    else:
+        try:
+            func(args)
+            return True
+        except Exception as e:
+            print(e)
+            retry(func, times - 1)
+
+
+def download_image_inner(metadata_row):
     """
     Download an image from the given url and save it to disk as filename {museum}_{id}{extension}
     where the extension is inferred from content type. Returns None if download fails twice.
     """
-    for _ in range(2):
-        r = requests.get(image["url"], verify=certifi.where())
-        if r.status_code == 200:
-            extension = ""
-            if r.headers["Content-Type"] == "image/jpeg":
-                extension = ".jpg"
-            elif r.headers["Content-Type"] == "image/png":
-                extension = ".png"
-            filename = os.path.join(
-                "images/", 
-                "{}_{}{}".format(
-                    image["museum"],
-                    image["id"],
-                    extension
-            ))
-            with open(filename, 'wb') as f:
-                f.write(r.content)
-            image["filename"] = filename # append filename to image object
-            return image
-    return None
+    url = metadata_row["Thumbnail_Url"]
+    local_file = "images/" + url.split("/")[-1]
+    if not os.path.exists(local_file):
+        urllib.request.urlretrieve(url, local_file)
 
-def load_images(images, metadata):
+
+def download_image(metadata_row):
+    return retry(download_image_inner, metadata_row, 3)
+
+
+def download_image_df(df):
+    df["Success"] = df.apply(download_image, axis=1)
+    return df
+
+
+def load_images(rows, successes):
     """Given an array of images, return a numpy array of PIL image data
     after reading the image's filename from disk.
 
@@ -143,18 +108,16 @@ def load_images(images, metadata):
         Image[] -- an array of Pillow images
     """
     batch = []
-    for image in images:
-        if image.get("filename", None) is None:
-            print("Error: no filename")
-            continue # skip if no filename
-        filename = image["filename"]
+    for i, row in rows:
+        filename = "images/" + row["Thumbnail_Url"].split("/")[-1]
         try:
             batch.append(load_image(filename))
-            metadata.append(image)
+            successes.append(row)
         except Exception as e:
             print(e)
             print("Failed to load image: " + filename)
     return np.array(batch)
+
 
 def load_image(filename):
     """
@@ -177,6 +140,7 @@ def load_image(filename):
 
     return img
 
+
 def assert_gpu():
     """
     This function will raise an exception if a GPU is not available to tensorflow.
@@ -186,21 +150,20 @@ def assert_gpu():
         raise SystemError('GPU device not found')
     print('Found GPU at: {}'.format(device_name))
 
-metadata = read_metadata_csv(csv_path)
 
-# create directory for downloading images, then dowload images simultaneously
+metadata = pd.read_csv(csv_path)
+
+# create directory for downloading images, then download images simultaneously
 print("Downloading images...")
-if not os.path.exists("images"): os.makedirs("images")
-pool = multiprocessing.Pool(processes=10)
-downloaded_images = list(tqdm(pool.imap(download_image, metadata), total=len(metadata), desc="Downloading"))
+os.makedirs("images", exist_ok=True)
 
-# makes list of only the downlaods that succeded
-metadata = [image for image in downloaded_images if image is not None]
+metadata = parallel_apply(metadata, download_image_df)
+metadata = metadata[metadata["Success"]]
 
-batches = list(batch(metadata, batch_size))
-print("Loading images...")
-metadata = [] # clear metadata, images are only here if they are loaded from disk
-data_iterator = (load_images(batch, metadata) for batch in tqdm(batches, desc="Loading"))
+batches = list(batch(metadata.iterrows(), batch_size))
+
+successes = []  # clear metadata, images are only here if they are loaded from disk
+data_iterator = (load_images(batch, successes) for batch in batches)
 
 # featurize the images then normalize them
 keras_model = ResNet50(
@@ -212,7 +175,7 @@ keras_model = ResNet50(
 
 # assert_gpu() # raises exception if gpu is not available
 
-features = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
+features = keras_model.predict_generator(data_iterator, steps=len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 
 # downloading java dependencies
@@ -225,22 +188,22 @@ spark = SparkSession.builder \
     .config("spark.executor.heartbeatInterval", "60s") \
     .getOrCreate()
 
+from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
+
 # convert to list and then create the two balltrees for culture and classification(medium)
-ids =  [img["id"] for img in metadata]
+ids = list(metadata["id"])
 features = features.tolist()
-cbt_culture = ConditionalBallTree(features, ids, [img["culture"] for img in metadata], 50)
-cbt_classification = ConditionalBallTree(features, ids,  [img["classification"] for img in metadata], 50)
+cbt_culture = ConditionalBallTree(features, ids, list(metadata["Culture"]), 50)
+cbt_classification = ConditionalBallTree(features, ids, list(metadata["Classification"]), 50)
 
 # save the balltrees to output directory and pickle the museum and id metadata
-if not os.path.exists(output_root): os.makedirs(output_root)
-
-pickle.dump(features, open("./outputs/features.pkl", 'wb'))
-pickle.dump(ids, open("./outputs/ids.pkl", 'wb'))
-pickle.dump([img["culture"] for img in metadata], open("./outputs/culture.pkl", 'wb'))
-
+os.makedirs(output_root, exist_ok=True)
 cbt_culture.save(features_culture_fn)
 cbt_culture_load = ConditionalBallTree.load(features_culture_fn)
 print(cbt_culture_load)
 
 cbt_classification.save(features_classification_fn)
-pickle.dump(metadata, open(metadata_fn, 'wb'))
+pickle.dump(successes, open(metadata_fn, 'wb'))
+
+cbt_culture_2 = ConditionalBallTree.load(features_culture_fn)
+print(cbt_culture_2)

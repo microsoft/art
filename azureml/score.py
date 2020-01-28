@@ -14,9 +14,6 @@ from PIL import Image
 from pyspark.sql import SparkSession
 import tensorflow as tf
 
-from ConditionalBallTree import ConditionalBallTree
-
-RUN_ASSERT_GPU = True
 
 def assert_gpu():
     """
@@ -33,9 +30,8 @@ def init():
     global metadata
     global keras_model
 
-    if RUN_ASSERT_GPU:
-        os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
-        assert_gpu()
+    #os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
+    #assert_gpu()
 
     # downloading java dependencies
     print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
@@ -47,7 +43,9 @@ def init():
         .config("spark.executor.heartbeatInterval", "60s") \
         .getOrCreate()
 
-    # Initialize the model architecture and load in imagenet weights
+    from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
+
+    #initialize the model architecture and load in imagenet weights
     model_path = Model.get_model_path('mosaic_model')
 
     culture_model = ConditionalBallTree.load(
