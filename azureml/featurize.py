@@ -12,6 +12,7 @@ from PIL import Image
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input
 from pyspark.sql.functions import lit, udf, col, split
+from mmlspark.cognitive import *
 
 # Load into ball tree
 from pyspark.sql import SparkSession
@@ -179,19 +180,34 @@ ws = Workspace(
 keyvault = ws.get_default_keyvault()
 run = Run.get_context()
 subscription_key = keyvault.get_secret(name="subscriptionKey")
+image_subscription_key = keyvault.get_secret(name="imageSubscriptionKey")
+
+from mmlspark.cognitive import AnalyzeImage
+from mmlspark.stages import SelectColumns
 
 df =  spark.read.option("header",True).format("csv").load(csv_path).withColumn("searchAction", lit("upload"))
 
-from mmlspark.cognitive import *
+describeImage = (AnalyzeImage()
+                 .setSubscriptionKey(image_subscription_key)
+                 .setLocation("eastus")
+                 .setImageUrlCol("Thumbnail_Url")
+                 .setOutputCol("RawImageDescription")
+                 .setErrorCol("Errors")
+                 .setVisualFeatures(["Categories", "Tags", "Description", "Faces", "ImageType", "Color", "Adult"])
+                 .setConcurrency(5))
 
-df.coalesce(3).writeToAzureSearch(
+df2 = describeImage.transform(df)\
+    .select("*", "RawImageDescription.*").drop("Errors", "RawImageDescription").cache()
+
+df2.coalesce(3).writeToAzureSearch(
   subscriptionKey=subscription_key,
   actionCol="searchAction",
   serviceName="extern-search",
   indexName="merged-art-search-5",
   keyCol="id",
   batchSize="1000"
-)
+  )
+
 
 # create directory for downloading images, then download images simultaneously
 print("Downloading images...")
