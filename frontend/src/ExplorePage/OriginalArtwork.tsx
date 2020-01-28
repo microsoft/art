@@ -46,7 +46,6 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
       let newValue = !this.state.overlayOn;
       this.setState({overlayOn: newValue});
     }
-
   }
 
   getSimilarArtID() {
@@ -89,6 +88,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
   render() {
     let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton1' src={rijksImg} /> : <Image height={"5vh"} id='musButton1' src={metImg} />;
     let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
+    let rationaledisable = this.props.overlay ? false : true;
     
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -107,7 +107,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>
-                  <button className="explore__buttons_button" onClick={this.toggleOverlay}>Show Rationale </button>
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
                   <Stack horizontal horizontalAlign="end">
                     <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
                       <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>

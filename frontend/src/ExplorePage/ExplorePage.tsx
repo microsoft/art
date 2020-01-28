@@ -233,7 +233,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
@@ -243,7 +243,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontal horizontalAlign="center">

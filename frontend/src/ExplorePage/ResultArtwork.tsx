@@ -1,4 +1,4 @@
-import { DefaultButton, Image, Stack, Text } from 'office-ui-fabric-react';
+import { Image, Stack, Text } from 'office-ui-fabric-react';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
@@ -14,12 +14,14 @@ import metImg from '../images/the_met_logo_crop.png';
 interface IState {
   objIDs: any,
   redirect: any,
-  hover: boolean
+  hover: boolean,
+  overlayOn: boolean
 }
 
 type ArtworkProps = {
   artwork: ArtObject,
   bestArtwork: ArtObject,
+  overlay: any,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
@@ -31,12 +33,21 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     this.state = {
       objIDs: [],
       redirect: false,
-      hover: false
+      hover: false,
+      overlayOn: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
+    this.toggleOverlay = this.toggleOverlay.bind(this);
   }
 
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
+
+  toggleOverlay() {
+    if (this.props.overlay) {
+      let newValue = !this.state.overlayOn;
+      this.setState({overlayOn: newValue});
+    }
+  }
 
   getSimilarArtID() {
     let imageURL = this.props.artwork.Thumbnail_Url;
@@ -87,6 +98,9 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   render() {
 
     let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton2' src={rijksImg} /> : <Image height={"5vh"} id='musButton2' src={metImg} />;
+    let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
+    let rationaledisable = this.props.overlay ? false : true;
+    console.log("Disabled? " + rationaledisable);
 
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -99,7 +113,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
               <Stack>
                 <div className="explore__artwork-frame">
-                  <Image height={"40vh"} src={this.props.artwork.Thumbnail_Url} className="explore__img" />
+                  <Image height={"40vh"} src={imgURL} className="explore__img" />
                   <div className="explore__museum-icon">
                     <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="click to view source2" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
@@ -121,6 +135,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.exploreArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
                   </a>
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
                 </Stack>
               </Stack>
             </Stack>
@@ -130,7 +145,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
               <Stack>
                 <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                   <div className="explore__artwork-frame">
-                    <Image height={"300px"} src={this.props.artwork.Thumbnail_Url} />
+                    <Image height={"300px"} src={imgURL} />
                     <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                       <Stack horizontal className="explore__slide-buttons">
                         <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
