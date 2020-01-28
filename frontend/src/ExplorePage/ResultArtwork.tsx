@@ -22,6 +22,7 @@ type ArtworkProps = {
   artwork: ArtObject,
   bestArtwork: ArtObject,
   overlay: string,
+  enableRationale: boolean,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
 
@@ -135,7 +136,9 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.exploreArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
                   </a>
-                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
+                  {this.props.enableRationale &&
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>                  
+                  }
                 </Stack>
               </Stack>
             </Stack>
@@ -149,8 +152,9 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                     <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                       <Stack horizontal className="explore__slide-buttons">
                         <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
-                        <div className="explore__slide-button-sep"></div>
-                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                        {this.props.enableRationale &&
+                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "ResultImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                        } 
                         <div className="explore__slide-button-sep"></div>
                         <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
                       </Stack>

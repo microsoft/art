@@ -31,7 +31,7 @@ const halfStack = mergeStyles({
     height: "100%"
 })
 
-
+const rationaleOn = true;
 
 
 const azureSearchUrl = 
@@ -229,20 +229,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <HideAt breakpoint="mediumAndBelow">
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="center" wrap>
                         <Stack.Item grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
                     <Stack horizontal horizontalAlign="center">

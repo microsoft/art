@@ -22,6 +22,7 @@ interface IState {
 type ArtworkProps = {
   artwork: ArtObject,
   overlay: string,
+  enableRationale: boolean,
   handleTrackEvent: (eventName: string, properties: Object) => void, 
   changeConditional: any
 }
@@ -109,7 +110,10 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>
+                  {this.props.enableRationale &&
                   <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
+                  }
+                  
                   <Options changeConditional={this.props.changeConditional} />
                   <Stack horizontal horizontalAlign="end">
                     <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
@@ -154,9 +158,10 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                     <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>
-                      <div className="explore__slide-button-sep"></div>
-                      <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
-                    </Stack>
+                      {this.props.enableRationale &&
+                      <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>                      
+                      }
+                      </Stack>
                   </CSSTransition>
                   <div className="explore__museum-icon">
                     <TooltipHost closeDelay={300} directionalHint={DirectionalHint.bottomRightEdge} content="Click to View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
