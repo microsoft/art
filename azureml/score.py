@@ -14,13 +14,13 @@ from PIL import Image
 from pyspark.sql import SparkSession
 import tensorflow as tf
 
-CLASSIFICATIONS = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", \
-           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"]
+ALL_CLASSIFICATIONS = {'prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", \
+           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"}
 
-CULTURES = ['african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european', 'ancient middle-eastern', 'asian (general)', 
+ALL_CULTURES = {'african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european', 'ancient middle-eastern', 'asian (general)', 
             'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)', 'french', 'german', 'greek', 
             'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian', 'southeast asian', 
-            'spanish', 'swiss', 'various']
+            'spanish', 'swiss', 'various'}
 
 def assert_gpu():
     """
@@ -37,8 +37,8 @@ def init():
     global metadata
     global keras_model
 
-    #os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
-    #assert_gpu()
+    # os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
+    # assert_gpu()
 
     # downloading java dependencies
     print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
@@ -111,14 +111,13 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             n
         )
     else:
-        classification = CLASSIFICATIONS if not classification else classification
         result = classification_model.findMaximumInnerProducts(
             img_feature, 
-            {classification}, 
+            ALL_CLASSIFICATIONS, 
             n
         )
     # Find and return the metadata for the results
-    resultmetadata = [metadata[r[0]] if isinstance(metadata[r[0]], dict) else metadata[r[0]].to_dict() for r in result] # list of metadata: museum, id, url, culture, classification
+    resultmetadata = [metadata[r[0]] if isinstance(metadata[r[0]], dict) else metadata[r[0]].fillna('').to_dict() for r in result] # list of metadata: museum, id, url, culture, classification
     return resultmetadata
 
 def error_response(err_msg):
