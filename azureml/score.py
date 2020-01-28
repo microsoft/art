@@ -14,6 +14,13 @@ from PIL import Image
 from pyspark.sql import SparkSession
 import tensorflow as tf
 
+CLASSIFICATIONS = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", \
+           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"]
+
+CULTURES = ['african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european', 'ancient middle-eastern', 'asian (general)', 
+            'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)', 'french', 'german', 'greek', 
+            'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian', 'southeast asian', 
+            'spanish', 'swiss', 'various']
 
 def assert_gpu():
     """
@@ -66,7 +73,8 @@ def init():
 
 def get_similar_images(img, culture=None, classification=None, n=5):
     """Return an n-size array of image objects similar to the pillow image provided
-    using the culture or classification as a filter.
+    using the culture or classification as a filter. If no filter is given, it filters on
+    all known classifications.
     
     Arguments:
         img {Image} -- Pillow image to compare to
@@ -103,9 +111,7 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             n
         )
     else:
-        classification = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", \
-           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"] \
-            if not classification else classification
+        classification = CLASSIFICATIONS if not classification else classification
         result = classification_model.findMaximumInnerProducts(
             img_feature, 
             {classification}, 
@@ -155,10 +161,13 @@ def run(request):
             try:
                 response = requests.get(request.args.get('url')) #URL -> response
                 img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
+                query = request.args.get('query')
+                culture = query if query in CULTURES else None
+                classification = query if query in CLASSIFICATIONS else None
                 similar_images = get_similar_images(
                     img,
-                    culture=request.args.get('culture'),
-                    classification=request.args.get('classification'),
+                    culture=culture,
+                    classification=classification,
                     n=int(request.args.get('n'))
                 )
                 return success_response(similar_images)
