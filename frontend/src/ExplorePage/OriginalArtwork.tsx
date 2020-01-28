@@ -111,24 +111,6 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   </a>
                   <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
                   <Options changeConditional={this.props.changeConditional} />
-                  <Stack horizontal horizontalAlign="end">
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                      <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
-                        <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </FacebookShareButton>
-                    </div>
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Twitter" })}>
-
-                      <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
-                        <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </TwitterShareButton>
-                    </div>
-                    <div onClick={() => this.props.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                      <LinkedinShareButton className="explore__share-button" url={window.location.href}>
-                        <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                      </LinkedinShareButton>
-                    </div>
-                  </Stack>
                 </Stack>
               </Stack>
               <Stack>

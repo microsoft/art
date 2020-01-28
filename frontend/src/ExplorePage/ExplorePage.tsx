@@ -12,6 +12,7 @@ import ListCarousel from './ListCarousel';
 import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
+import Options from './Options';
 
 interface IProps {
     match: any
@@ -144,7 +145,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let fields = Object.keys(conditionals);
         fields.forEach((element: any) => {
             if (conditionals[element] !== "All") {
-                params = params + '&' + element.toLowerCase() + '=' + conditionals[element];
+                params = params + '&' + "query" + '=' + conditionals[element];
             }
         });
 
@@ -245,7 +246,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <ResultArtwork artwork={this.state.resultArtwork} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
                         </Stack.Item>
                     </Stack>
-                    <Stack horizontal horizontalAlign="center">
+                    <Stack horizontalAlign="center">
+                        <Options changeConditional={this.changeConditional} />
+                    </Stack>
+                </ShowAt>
+                <Stack horizontal horizontalAlign="center">
                         <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
                             <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
                                 <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
@@ -262,7 +267,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             </LinkedinShareButton>
                         </div>
                     </Stack>
-                </ShowAt>
                 <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>
                 <Stack.Item>
                     <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
