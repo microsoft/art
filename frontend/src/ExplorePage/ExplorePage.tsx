@@ -48,7 +48,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
             bestResultArtwork: defaultArtObject,
             imageDataURI: "",
             galleryItems: [defaultArtObject],
-            conditionals: { 'Culture': 'All', 'Medium': "All" }
+            conditionals: { 'culture': 'italian' }
         }
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
@@ -135,8 +135,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
      */
     makeAPIquery(originalArtURL: string, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        const apiURL = 'https://extern2020apim.azure-api.net/explore';
-        let params = '?url=' + originalArtURL + '&numResults=' + '9';
+        // const apiURL = 'https://extern2020apim.azure-api.net/explore';
+        const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
+        // let params = '?url=' + originalArtURL + '&numResults=' + '9';
+        let params = '?url=' + originalArtURL + '&n=' + '10';
 
         let fields = Object.keys(conditionals);
         fields.forEach((element: any) => {
@@ -147,6 +149,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
 
+        console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
         Http.open('GET', apiURL + params);
 
@@ -155,11 +158,17 @@ export class ExplorePage extends React.Component<IProps, IState> {
             if (Http.readyState === 4) {
                 try {
                     let response = JSON.parse(Http.responseText);
+                    console.log("response: " + Http.responseText);
+                    response = response.results;
+                    const filteredResponse = response.filter((artwork:any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
+                    console.log("filtered: " + filteredResponse);
+
                     //let ids = response.results.map((result:any) => result.ObjectID);
-                    let pieces = response;
+                    let pieces = filteredResponse;
                     this.setState({ galleryItems: pieces,
                                     resultArtwork: pieces[0],
                                     bestResultArtwork: pieces[0] });
+
                 } catch (e) {
                     console.log('malformed request:' + Http.responseText);
                 }

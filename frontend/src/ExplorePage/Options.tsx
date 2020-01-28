@@ -24,10 +24,10 @@ interface IState {};
 
 // Options for filtering the art culture
 const cultureOptions: IDropdownOption[] = [
-    { key: 'cultureChinese', text: 'Chinese' },
-    { key: 'cultureAmerican', text: 'American' },
-    { key: 'cultureBritish', text: 'British' },
-    { key: 'cultureKorean', text: 'Korean' }
+    { key: 'cultureChinese', text: 'chinese' },
+    { key: 'cultureAmerican', text: 'american' },
+    { key: 'cultureBritish', text: 'british' },
+    { key: 'cultureKorean', text: 'korean' }
 ];
 
 // Options for filtering the art medium
@@ -60,7 +60,7 @@ class Options extends React.Component<IProps, IState> {
     let selectors: Object = {
       culture: {
         callback: this.handleChange,
-        options: ['Chinese', 'American', 'British', 'Korean']
+        options: ['chinese', 'american', 'british', 'korean']
       },
       medium: {
         callback: this.handleChange,
@@ -100,7 +100,7 @@ class Options extends React.Component<IProps, IState> {
               label={"Culture"}
               options={cultureOptions}
               responsiveMode={ResponsiveMode.large}
-              onChange={( event:any, option:any ) => this.props.callback("Culture", option)}
+              onChange={( event:any, option:any ) => this.props.callback("culture", option)}
             />
           </Stack.Item>
           <Stack.Item className="explore__dropdown">
@@ -109,7 +109,7 @@ class Options extends React.Component<IProps, IState> {
               label={"Medium"}
               options={mediumOptions}
               responsiveMode={ResponsiveMode.large}
-              onChange={( event:any, option:any ) => this.props.callback("Medium", option)}
+              onChange={( event:any, option:any ) => this.props.callback("cedium", option)}
             />
           </Stack.Item>
           <Stack.Item className="explore__dropdown">
