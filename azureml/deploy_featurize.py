@@ -38,10 +38,10 @@ except:
 compute_target.wait_for_completion(show_output=True)
 
 # Create and run the experiment
-exp = Experiment(workspace=ws, name='featurize_artwork_marhamil')
+exp = Experiment(workspace=ws, name='featurize_artwork')
 
 estimator = Estimator(
-    source_directory=".",
+    source_directory="azureml",
     entry_script="featurize.py",
     script_params={
         "--data-dir": datastore.as_mount()

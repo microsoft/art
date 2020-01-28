@@ -8,6 +8,6 @@ dependencies:
   - scipy
   - numpy
   - tensorflow-gpu==1.14.0
-  - shap
+ # - shap
 prefix: C:\Users\v-jobui\.conda\envs\project_environment
 
