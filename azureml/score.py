@@ -129,7 +129,7 @@ def success_response(content):
     Returns:
         AMLResponse -- response object for the success
     """
-    resp = AMLResponse(json.dumps({ "results": content }), 400)
+    resp = AMLResponse(json.dumps({ "results": content }), 200)
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
@@ -146,12 +146,11 @@ def run(request):
             try:
                 response = requests.get(request.args.get('url')) #URL -> response
                 img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
-                print("N = {}".format(request.args.get('n')))
                 similar_images = get_similar_images(
                     img,
                     culture=request.args.get('culture', None),
                     classification=request.args.get('classification', None),
-                    n=int(request.args.get('n')) # AttributeError: 'numpy.float32' object has no attribute '_get_object_id'
+                    n=int(request.args.get('n'))
                 )
                 return success_response(similar_images)
             except Exception as err:

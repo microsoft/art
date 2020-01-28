@@ -70,7 +70,7 @@ def retry(func, args, times):
             return True
         except Exception as e:
             print(e)
-            retry(func, times - 1)
+            retry(func, args, times - 1)
 
 
 def download_image_inner(metadata_row):
@@ -79,7 +79,8 @@ def download_image_inner(metadata_row):
     where the extension is inferred from content type. Returns None if download fails twice.
     """
     url = metadata_row["Thumbnail_Url"]
-    local_file = "images/" + url.split("/")[-1]
+    museum = metadata_row["Museum"]
+    local_file = "images/" + museum + "_" + url.split("/")[-1]
     if not os.path.exists(local_file):
         urllib.request.urlretrieve(url, local_file)
 
@@ -109,7 +110,7 @@ def load_images(rows, successes):
     """
     batch = []
     for i, row in rows:
-        filename = "images/" + row["Thumbnail_Url"].split("/")[-1]
+        filename = "images/" + row["Museum"] + "_" + row["Thumbnail_Url"].split("/")[-1]
         try:
             batch.append(load_image(filename))
             successes.append(row)
@@ -158,7 +159,7 @@ print("Downloading images...")
 os.makedirs("images", exist_ok=True)
 
 metadata = parallel_apply(metadata, download_image_df)
-metadata = metadata[metadata["Success"]]
+metadata = metadata[metadata["Success"]] # filters out unsuccessful rows
 
 batches = list(batch(metadata.iterrows(), batch_size))
 
@@ -191,17 +192,14 @@ spark = SparkSession.builder \
 from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
 
 # convert to list and then create the two balltrees for culture and classification(medium)
-ids = list(metadata["id"])
+ids = [row["id"] for row in successes]
 features = features.tolist()
-cbt_culture = ConditionalBallTree(features, ids, list(metadata["Culture"]), 50)
-cbt_classification = ConditionalBallTree(features, ids, list(metadata["Classification"]), 50)
+cbt_culture = ConditionalBallTree(features, ids, [row["Culture"] for row in successes], 50)
+cbt_classification = ConditionalBallTree(features, ids, [row["Classification"] for row in successes], 50)
 
 # save the balltrees to output directory and pickle the museum and id metadata
 os.makedirs(output_root, exist_ok=True)
 cbt_culture.save(features_culture_fn)
-cbt_culture_load = ConditionalBallTree.load(features_culture_fn)
-print(cbt_culture_load)
-
 cbt_classification.save(features_classification_fn)
 pickle.dump(successes, open(metadata_fn, 'wb'))
 

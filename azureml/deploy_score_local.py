@@ -15,7 +15,7 @@ ws = Workspace(
 inference_config = InferenceConfig(
     entry_script="score.py",
     runtime="python",
-    source_directory=".",
+    source_directory="azureml",
     conda_file="myenv.yml",
     base_image="typingkoala/mosaic_base_image:1.0.0")
 
