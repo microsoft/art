@@ -6,9 +6,10 @@
   - [Training](#training)
   - [Service Deployment](#service-deployment)
 
-Mosaic allows users to find similar artworks by featurizing artwork images using a pretrained Keras model, normaling the resultant vector, and loading them into a ball tree to quickly query for other artwork with a similar featurization and filtered by either culture or classification (m)
+Mosaic allows users to find similar artworks by featurizing artwork images using a pretrained Keras model, normaling the resultant vector, and loading them into a ball tree to quickly query for other artwork with a similar featurization and filtered by either culture or classification (m).
 
 ## File Structure
+
 This folder contains various scripts and configuration files that either are deployed on Azure or automate the deployment process.
 
 - `featurize.py` is deployed to Azure Machine Learning as an experiment to read image metadata from a mounted Azure Storage blob, download the images, featurize the images, and save them into a ball tree in the file system.
@@ -44,7 +45,7 @@ Dependencies for the environment:
 ## Training
 
 The Ball Tree API originates from https://github.com/Azure/mmlspark. It allows for the initialization of a conditional ball tree with three methods: `findMaximumInnerProducts`, `save`, and `load`.
-e featurization of the images and the creation of the balltrees is done in `featurize.py`. The file reads a csv from a mounted storage blob and downloads the images from the provided urls. The images are featurized using the embeddings from ResNet50 and then used to create balltree objects.
+The featurization of the images and the creation of the balltrees is done in `featurize.py`. The file reads a csv from a mounted storage blob and downloads the images from the provided urls. The images are featurized using the embeddings from ResNet50 and then used to create balltree objects.
 
 The training is run through `deploy_featurize.py` as an experiment on Azure Machine Learning (AML). It mounts the storage blob for `featurize.py`, submits the run, then saves the balltree objects and metadata in a model so they can be easily accessed later.
 
@@ -66,4 +67,4 @@ docker exec -it <name> bash
 
 The web service is deployed through `deploy_score_aks.py` to an inference cluster on Azure Kupernetes Service. It tries to first update an existing service, but if that fails it will create either a new service or a new cluster and service.
 
-The service can be deployed to a cluster or locally. Make sure the workspace settings are correct before running (https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py). The settings for the inference cluster can be changed in gpu_aks_config. To deploy it locally, run `deploy_score_local.py`.The service can be deployed to a cluster or locally. Make sure the workspace settings are correct before running (https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py). The settings for the inference cluster can be changed in gpu_aks_config. To deploy it locally, run `deploy_score_local.py`.
+The service can be deployed to a cluster or locally. Make sure the workspace settings are correct before running (https://docs.microsoft.com/en-us/python/api/azureml-core/azureml.core.workspace.workspace?view=azure-ml-py). The settings for the inference cluster can be changed in gpu_aks_config. To deploy it locally, run `deploy_score_local.py`.
