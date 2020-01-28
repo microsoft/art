@@ -9,7 +9,6 @@ import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
 import { defaultArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
-import Options from './Options';
 import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
@@ -153,14 +152,15 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
 
-        console.log("Request: " + apiURL + params);
+        console.log("Request: " + apiURL + encodeURIComponent(params));
         const Http = new XMLHttpRequest();
-        Http.open('GET', apiURL + params);
+        Http.open('GET', apiURL + encodeURIComponent(params));
 
         Http.send();
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
                 try {
+                    console.log();
                     let response = JSON.parse(Http.responseText);
                     console.log("response: " + Http.responseText);
                     response = response.results;
