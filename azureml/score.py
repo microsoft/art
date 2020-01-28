@@ -112,7 +112,7 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             n
         )
     # Find and return the metadata for the results
-    resultmetadata = [metadata[r[0]] for r in result] # list of metadata: museum, id, url, culture, classification
+    resultmetadata = [metadata[r[0]].to_dict() for r in result] # list of metadata: museum, id, url, culture, classification
     return resultmetadata
 
 def error_response(err_msg):
