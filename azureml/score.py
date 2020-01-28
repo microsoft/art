@@ -126,6 +126,7 @@ def error_response(err_msg):
     """
     resp = AMLResponse(json.dumps({ "error": err_msg }), 400)
     resp.headers['Access-Control-Allow-Origin'] = "*"
+    resp.headers['Content-Type'] = "application/json"
     return resp
 
 def success_response(content):
@@ -140,6 +141,7 @@ def success_response(content):
     """
     resp = AMLResponse(json.dumps({ "results": content }), 200)
     resp.headers['Access-Control-Allow-Origin'] = "*"
+    resp.headers['Content-Type'] = "application/json"
     return resp
 
 @rawhttp
