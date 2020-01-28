@@ -3,7 +3,7 @@ import multiprocessing
 import os
 import pickle
 import urllib.request
-from azureml.core import Run
+from azureml.core import Run, Workspace
 
 import numpy as np
 import pandas as pd
@@ -11,6 +11,8 @@ import tensorflow as tf
 from PIL import Image
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input
+from pyspark.sql.functions import lit, udf, col, split
+
 # Load into ball tree
 from pyspark.sql import SparkSession
 from tqdm import tqdm
@@ -158,34 +160,28 @@ def assert_gpu():
 
 metadata = pd.read_csv(csv_path)
 
+ws = Workspace(
+    subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
+    resource_group="extern2020",
+    workspace_name="exten-amls"
+)
+
+keyvault = ws.get_default_keyvault()
 run = Run.get_context()
-subscription_key = run.get_secret(name="subscriptionKey")
+subscription_key = keyvault.get_secret(name="subscriptionKey")
 
-df = spark.createDataFrame(metadata)
+df =  spark.read.option("header",True).format("csv").load(csv_path).withColumn("searchAction", lit("upload"))
 
-#Additional cool search things, will work on more if time allows
-
-#describeImage = (AnalyzeImage()
-#  .setSubscriptionKey("<secret_key>")
-#  .setLocation("eastus")
-#  .setImageUrlCol("Thumbnail_Url")
-#  .setOutputCol("RawImageDescription")
-#  .setErrorCol("Errors")
-#  .setVisualFeatures(["Categories", "Tags", "Description", "Faces", "ImageType", "Color", "Adult"])
-#  .setConcurrency(5))
-
-#df2 = describeImage.transform(df)\
-#  .select("*", "RawImageDescription.*").drop("Errors", "RawImageDescription").cache()
-
+from mmlspark.cognitive import *
 
 df.coalesce(3).writeToAzureSearch(
   subscriptionKey=subscription_key,
   actionCol="searchAction",
   serviceName="extern-search",
-  indexName="merged-art-search-3",
+  indexName="merged-art-search-5",
   keyCol="id",
   batchSize="1000"
-)
+  )
 
 # create directory for downloading images, then download images simultaneously
 print("Downloading images...")
