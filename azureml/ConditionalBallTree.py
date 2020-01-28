@@ -37,10 +37,18 @@ class ConditionalBallTree(object):
                 for bm in self._jconditional_balltree.findMaximumInnerProducts(queryPoint, conditioner, k)]
 
     def save(self, filename):
+        """
+        Save self in a file called filename.
+        :param filename: name of the file to be saved
+        """
         self._jconditional_balltree.save(filename)
 
     @staticmethod
     def load(filename):
+        """
+        Load a pre-existing conditional ball tree from filename.
+        :param filename: name of the file to be loaded
+        """
         java_obj = SparkContext._active_spark_context._jvm \
             .com.microsoft.ml.spark.nn.ConditionalBallTree.load(filename)
         return ConditionalBallTree(None, None, None, None, java_obj=java_obj)

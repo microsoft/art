@@ -2,6 +2,7 @@ import json
 import os
 import pickle
 from io import BytesIO
+import traceback
 
 import numpy as np
 import requests
@@ -14,6 +15,8 @@ from pyspark.sql import SparkSession
 import tensorflow as tf
 
 from ConditionalBallTree import ConditionalBallTree
+
+RUN_ASSERT_GPU = True
 
 def assert_gpu():
     """
@@ -30,20 +33,22 @@ def init():
     global metadata
     global keras_model
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
-    assert_gpu()
+    if RUN_ASSERT_GPU:
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
+        assert_gpu()
 
     # downloading java dependencies
-    spark = SparkSession.builder \
+    print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
+    SparkSession.builder \
         .master("local[*]") \
         .appName("TestConditionalBallTree") \
-        .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-41-ccc4ceef-SNAPSHOT") \
+        .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
         .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
         .config("spark.executor.heartbeatInterval", "60s") \
         .getOrCreate()
 
-    #initialize the model architecture and load in imagenet weights
-    model_path = Model.get_model_path('features')
+    # Initialize the model architecture and load in imagenet weights
+    model_path = Model.get_model_path('mosaic_model')
 
     culture_model = ConditionalBallTree.load(
         os.path.join(model_path, "features_culture.ball")
@@ -53,7 +58,7 @@ def init():
     )
     metadata = pickle.load(open(os.path.join(model_path, "metadata.pkl"), 'rb'))
 
-    # model for featurizing
+    # Model for featurizing
     keras_model = ResNet50(
         input_shape=[225, 225, 3],
         weights='imagenet',
@@ -74,7 +79,7 @@ def get_similar_images(img, culture=None, classification=None, n=5):
     Returns:
         dict[] -- array of dictionaries representing artworks that are similar
     """
-    # non RGB images won't have the right number of channels
+    # Non RGB images won't have the right number of channels
     if img.mode != 'RGB':
         img = img.convert('RGB')
     img = np.array(img) #PIL -> numpy
@@ -84,7 +89,9 @@ def get_similar_images(img, culture=None, classification=None, n=5):
     features = keras_model.predict(img) # featurize
     features /= np.linalg.norm(features)
     img_feature = features[0]
+    img_feature = img_feature.tolist()
 
+    # Get results based upon the filter provided
     if culture is not None:
         result = culture_model.findMaximumInnerProducts(
             img_feature, 
@@ -97,7 +104,7 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             {classification}, 
             n
         )
-    # find actual info
+    # Find and return the metadata for the results
     resultmetadata = [metadata[r[0]] for r in result] # list of metadata: museum, id, url, culture, classification
     return resultmetadata
 
@@ -130,25 +137,28 @@ def success_response(content):
 
 @rawhttp
 def run(request):
+    print(request)
     if request.method == 'POST':
         # todo: support image uploads
         return error_response("invalid http request method")
     elif request.method == 'GET':
-        if request.args.get('url') and request.args.get('n') and (
+        if request.args.get('url') and request.args.get('n') and ( # checking for required parameters
             request.args.get('culture') or request.args.get('classification')
         ):
             try:
                 response = requests.get(request.args.get('url')) #URL -> response
                 img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
+                print("N = {}".format(request.args.get('n')))
                 similar_images = get_similar_images(
                     img,
                     culture=request.args.get('culture', None),
                     classification=request.args.get('classification', None),
-                    n=int(request.args.get('n'))
+                    n=int(request.args.get('n')) # AttributeError: 'numpy.float32' object has no attribute '_get_object_id'
                 )
                 return success_response(similar_images)
             except Exception as err:
-                return error_response(err)
+                traceback.print_exc()
+                return error_response(str(err))
         else: # parameters incorrect
             return error_response("url, n, and (culture or classification) are required query parameters")
     else: # unsupported http method

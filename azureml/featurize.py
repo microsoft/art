@@ -63,7 +63,6 @@ def read_metadata_csv(csv_path):
     Returns:
         tuple[] -- an array of tuples containing the id and thumbnail url of each row
     """
-    line_count = 0
     images = []
     column_numbers = {}
     with open(csv_path) as csv_file:
@@ -211,16 +210,17 @@ keras_model = ResNet50(
     pooling='avg'
 )
 
-assert_gpu() # raises exception if gpu is not available
+# assert_gpu() # raises exception if gpu is not available
 
 features = keras_model.predict_generator(data_iterator, steps = len(batches), verbose=1)
 features /= np.linalg.norm(features, axis=1).reshape(len(metadata), 1)
 
 # downloading java dependencies
+print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
 spark = SparkSession.builder \
     .master("local[*]") \
     .appName("TestConditionalBallTree") \
-    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-41-ccc4ceef-SNAPSHOT") \
+    .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .config("spark.executor.heartbeatInterval", "60s") \
     .getOrCreate()
@@ -233,6 +233,14 @@ cbt_classification = ConditionalBallTree(features, ids,  [img["classification"] 
 
 # save the balltrees to output directory and pickle the museum and id metadata
 if not os.path.exists(output_root): os.makedirs(output_root)
+
+pickle.dump(features, open("./outputs/features.pkl", 'wb'))
+pickle.dump(ids, open("./outputs/ids.pkl", 'wb'))
+pickle.dump([img["culture"] for img in metadata], open("./outputs/culture.pkl", 'wb'))
+
 cbt_culture.save(features_culture_fn)
+cbt_culture_load = ConditionalBallTree.load(features_culture_fn)
+print(cbt_culture_load)
+
 cbt_classification.save(features_classification_fn)
 pickle.dump(metadata, open(metadata_fn, 'wb'))

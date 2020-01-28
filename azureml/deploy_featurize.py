@@ -48,7 +48,7 @@ estimator = Estimator(
     },
     conda_dependencies_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),"myenv.yml"),
     use_docker=True,
-    custom_docker_image="typingkoala/art-repository:latest",
+    custom_docker_image="typingkoala/mosaic_base_image:1.0.0",
     compute_target=compute_target
 )
 
@@ -57,6 +57,6 @@ run.wait_for_completion(show_output = True)
 
 # Save the balltrees made in score.py and metadata
 run.register_model(
-    model_name="features",
+    model_name="mosaic_model",
     model_path="outputs/"
 )

@@ -1,13 +1,13 @@
 FROM tensorflow/tensorflow:1.13.2-gpu
 
 ARG SPARK_VERSION=2.4.3
-RUN apt-get -qq update && apt-get -qq -y install curl bzip2 \
+RUN apt-get -qq update && apt-get -qq -y install curl bzip2 gcc \
     && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -bfp /usr/local \
     && rm -rf /tmp/miniconda.sh \
     && conda install -y python=3 \
     && conda update conda \
-    && apt-get install default-jre -y \
+    && apt-get install openjdk-8-jre-headless -y \ 
 	&& conda install pyspark=${SPARK_VERSION} \
     && apt-get -qq -y remove curl bzip2 \
     && apt-get -qq -y autoremove \
@@ -16,4 +16,4 @@ RUN apt-get -qq update && apt-get -qq -y install curl bzip2 \
     && conda clean --all --yes
 
 ENV PATH /opt/conda/bin:$PATH
-ENV JAVA_HOME /usr/lib/jvm/java-1.11.0-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64

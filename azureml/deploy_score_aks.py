@@ -19,9 +19,9 @@ inference_config = InferenceConfig(
     runtime="python",
     source_directory="azureml",
     conda_file="myenv.yml",
-    base_image="typingkoala/art-repository:latest")
+    base_image="typingkoala/mosaic_base_image:1.0.0")
 
-model = Model(ws, name="features")
+model = Model(ws, name="mosaic_model")
 
 resource_group = 'extern2020'
 cluster_name = 'aks-gpu2'
