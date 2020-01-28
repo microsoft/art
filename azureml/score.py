@@ -96,14 +96,23 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             {culture}, 
             n
         )
+    elif classification is not None:
+        result = classification_model.findMaximumInnerProducts(
+            img_feature, 
+            {classification}, 
+            n
+        )
     else:
+        classification = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", \
+           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"] \
+            if not classification else classification
         result = classification_model.findMaximumInnerProducts(
             img_feature, 
             {classification}, 
             n
         )
     # Find and return the metadata for the results
-    resultmetadata = [metadata[r[0]] for r in result] # list of metadata: museum, id, url, culture, classification
+    resultmetadata = [metadata[r[0]].to_dict() for r in result] # list of metadata: museum, id, url, culture, classification
     return resultmetadata
 
 def error_response(err_msg):
@@ -140,16 +149,14 @@ def run(request):
         # todo: support image uploads
         return error_response("invalid http request method")
     elif request.method == 'GET':
-        if request.args.get('url') and request.args.get('n') and ( # checking for required parameters
-            request.args.get('culture') or request.args.get('classification')
-        ):
+        if request.args.get('url') and request.args.get('n'): # checking for required parameters
             try:
                 response = requests.get(request.args.get('url')) #URL -> response
                 img = Image.open(BytesIO(response.content)).resize((225, 225)) #response -> PIL 
                 similar_images = get_similar_images(
                     img,
-                    culture=request.args.get('culture', None),
-                    classification=request.args.get('classification', None),
+                    culture=request.args.get('culture'),
+                    classification=request.args.get('classification'),
                     n=int(request.args.get('n'))
                 )
                 return success_response(similar_images)
@@ -157,6 +164,6 @@ def run(request):
                 traceback.print_exc()
                 return error_response(str(err))
         else: # parameters incorrect
-            return error_response("url, n, and (culture or classification) are required query parameters")
+            return error_response("url and n are required parameters")
     else: # unsupported http method
         return error_response("invalid http request method")

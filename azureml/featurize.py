@@ -173,6 +173,21 @@ subscription_key = run.get_secret(name="subscriptionKey")
 
 df = spark.createDataFrame(metadata)
 
+#Additional cool search things, will work on more if time allows
+
+#describeImage = (AnalyzeImage()
+#  .setSubscriptionKey("<secret_key>")
+#  .setLocation("eastus")
+#  .setImageUrlCol("Thumbnail_Url")
+#  .setOutputCol("RawImageDescription")
+#  .setErrorCol("Errors")
+#  .setVisualFeatures(["Categories", "Tags", "Description", "Faces", "ImageType", "Color", "Adult"])
+#  .setConcurrency(5))
+
+#df2 = describeImage.transform(df)\
+#  .select("*", "RawImageDescription.*").drop("Errors", "RawImageDescription").cache()
+
+
 df.coalesce(3).writeToAzureSearch(
     subscriptionKey=subscription_key,
     actionCol="searchAction",
