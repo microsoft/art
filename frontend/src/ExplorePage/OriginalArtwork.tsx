@@ -102,16 +102,16 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
         <React.Fragment>
           <HideAt breakpoint="mediumAndBelow">
             <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
-              <Stack verticalAlign="end" style={{ "marginRight": 10 }}>
+              <Stack verticalAlign="end" style={{ "marginRight": 20 }}>
                 <Text block nowrap style={{ "textAlign": "right", "fontWeight": "bold" , "width":"20vw"}} variant="xLarge">{this.props.artwork.Title}</Text>
                 <Text style={{ "textAlign": "right" }} variant="large">{this.props.artwork.Culture}</Text>
-                <Text style={{ "textAlign": "right" }} variant="large">{this.props.artwork.Classification}</Text>
+                <Text style={{ "textAlign": "right", "marginBottom": 15 }} variant="large">{this.props.artwork.Classification}</Text>
                 <Stack horizontalAlign="end">
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>
                   {this.props.enableRationale &&
-                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale</button>
                   }
                   
                   <Options changeConditional={this.props.changeConditional} />

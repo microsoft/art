@@ -125,16 +125,16 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 </div>
                 <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>
-              <Stack style={{ "marginLeft": 10 }}>
+              <Stack style={{ "marginLeft": 20 }}>
                 <Text block nowrap style={{ "fontWeight": "bold", "width": "20vw"}} variant="xLarge">{this.props.artwork.Title}</Text>
                 <Text variant="large">{this.props.artwork.Culture}</Text>
-                <Text variant="large">{this.props.artwork.Classification}</Text>
+                <Text variant="large" style={{"marginBottom": 15}}>{this.props.artwork.Classification}</Text>
                 <Stack>
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }}>Search</button>
                   </a>
                   {this.props.enableRationale &&
-                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>                  
+                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale</button>                  
                   }
                   <a href={this.exploreArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>

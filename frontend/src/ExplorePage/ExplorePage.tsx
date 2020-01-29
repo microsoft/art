@@ -296,12 +296,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 </ShowAt>
                 <Stack horizontal horizontalAlign="center">
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={this.state.shareLink}>
+                        <FacebookShareButton className="explore__share-button" quote="Check out my Mosaic!" url={this.state.shareLink}>
                             <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </FacebookShareButton>
                     </div>
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                        <TwitterShareButton className="explore__share-button" title="Check out Mosaic!" url={window.location.href}>
+                        <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={window.location.href}>
                             <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </TwitterShareButton>
                     </div>
