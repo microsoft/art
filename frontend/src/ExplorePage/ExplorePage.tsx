@@ -138,7 +138,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                         let params = "?" + "image_url=" + result.img_url +
                                                            "&redirect_url=" + window.location.href +
                                                            "&title=" + "Mosaic" +
-                                                           "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title);
+                                                           "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
+                                                           "&width=" + Math.round(originalImageWidth + resultImageWidth) + 
+                                                           "&height=" + imageHeight;
                                         this.setState({shareLink: shareURL+params});
                                     })
                                     .catch(error => console.log('error', error));
