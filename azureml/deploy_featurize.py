@@ -22,7 +22,7 @@ datastore = Datastore.register_azure_blob_container(
               "b6G%2BW1JkxHYZ1dlm39mO2fMZlET4%3D",
     create_if_not_exists=True)
 
-cluster_name = "training"
+cluster_name = "training-4"
 try:
     # Connecting to pre-existing cluster
     compute_target = ComputeTarget(ws, cluster_name)
@@ -30,7 +30,7 @@ try:
 except:
     # Create a new cluster to train on
     provisioning_config = AmlComputeProvisioningConfiguration(
-        vm_size="Standard_NC6",
+        vm_size="Standard_D4_v2",
         min_nodes=0,
         max_nodes=1
     )
@@ -38,10 +38,10 @@ except:
 compute_target.wait_for_completion(show_output=True)
 
 # Create and run the experiment
-exp = Experiment(workspace=ws, name='featurize_artwork')
+exp = Experiment(workspace=ws, name='featurize_artwork_4')
 
 estimator = Estimator(
-    source_directory="azureml",
+    source_directory=".",
     entry_script="featurize.py",
     script_params={
         "--data-dir": datastore.as_mount()
@@ -57,6 +57,6 @@ run.wait_for_completion(show_output=True)
 
 # Save the balltrees made in score.py and metadata
 run.register_model(
-    model_name="mosaic_model",
+    model_name="mosaic_model_4",
     model_path="outputs/"
 )

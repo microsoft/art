@@ -43,9 +43,11 @@ spark = SparkSession.builder \
     .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .config("spark.executor.heartbeatInterval", "60s") \
+    .config("spark.driver.memory", "32g") \
     .getOrCreate()
 
 from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
+
 
 # Featurize
 def batch(iterable, n):
@@ -169,9 +171,9 @@ metadata.fillna('')  # replace nan values with empty string
 
 if write_to_index:
     ws = Workspace(
-     subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
-     resource_group="extern2020",
-     workspace_name="exten-amls"
+        subscription_id="ce1dee05-8cf6-4ad6-990a-9c80868800ba",
+        resource_group="extern2020",
+        workspace_name="exten-amls"
     )
     keyvault = ws.get_default_keyvault()
     run = Run.get_context()
@@ -181,8 +183,10 @@ if write_to_index:
     from mmlspark.stages import SelectColumns
     import base64
 
+
     def url_encode_id(idval):
-         return base64.b64encode(bytes(idval, "UTF-8")).decode("utf-8")
+        return base64.b64encode(bytes(idval, "UTF-8")).decode("utf-8")
+
 
     describeImage = (AnalyzeImage()
                      .setSubscriptionKey(image_subscription_key)
@@ -204,7 +208,6 @@ if write_to_index:
         keyCol="id",
         batchSize="1000"
     )
-
 
 if cached_features_url is not None:
     if not os.path.exists(cached_features_fn):
@@ -231,18 +234,27 @@ else:
         pooling='avg'
     )
 
-    assert_gpu() # raises exception if gpu is not available
+    assert_gpu()  # raises exception if gpu is not available
     features = keras_model.predict_generator(data_iterator, steps=len(batches), verbose=1)
     features /= np.linalg.norm(features, axis=1).reshape(len(successes), 1)
 
     with open(cached_features_fn, "wb+") as f:
         pickle.dump([features, successes], f)
 
+print(features.shape)
+
+features = features[0:1000]
+successes = successes[0:1000]
+
 # convert to list and then create the two balltrees for culture and classification(medium)
 ids = [row["id"] for row in successes]
 features = features.tolist()
+print("fitting culture ball tree")
 cbt_culture = ConditionalBallTree(features, ids, [row["Culture"] for row in successes], 50)
+print("fitting class ball tree")
+
 cbt_classification = ConditionalBallTree(features, ids, [row["Classification"] for row in successes], 50)
+print("fit culture ball tree")
 
 # save the balltrees to output directory and pickle the museum and id metadata
 os.makedirs(output_root, exist_ok=True)
