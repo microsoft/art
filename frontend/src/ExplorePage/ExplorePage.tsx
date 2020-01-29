@@ -22,9 +22,10 @@ interface IState {
     originalArtwork: ArtObject,
     resultArtwork: ArtObject,
     bestResultArtwork: ArtObject,
-    imageDataURI: string;
+    imageDataURI: string,
     galleryItems: ArtObject[],
-    conditionals: any
+    conditionals: any,
+    shareLink: string
 }
 
 const halfStack = mergeStyles({
@@ -51,7 +52,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             bestResultArtwork: defaultArtObject,
             imageDataURI: "",
             galleryItems: [defaultArtObject],
-            conditionals: { 'culture': 'italian' }
+            conditionals: { 'culture': 'italian' },
+            shareLink: ""
         }
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
@@ -112,7 +114,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
                             .getBase64Async(Jimp.MIME_PNG)
                             .then(uri => {
-                                console.log(encodeURI(uri))
                                 
                                 let myHeaders = new Headers();
                                 myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -128,11 +129,18 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 };
 
                                 let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
-                                console.log("https://art-backend.azurewebsites.net/upload?filename=" + encodeURIComponent(filename))
                                 fetch("https://art-backend.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
                                 requestOptions)
-                                    .then(response => response.text())
-                                    .then(result => console.log(result))
+                                    .then(response => response.json())
+                                    .then(result => {
+                                        // let sharLink = "https://art-backend.azurewebsites.net/share?image_url={a}&redirect_url={b}&title={c}&description={d}"
+                                        let shareURL = "https://art-backend.azurewebsites.net/share";
+                                        let params = "?" + "image_url=" + result.img_url +
+                                                           "&redirect_url=" + window.location.href +
+                                                           "&title=" + "Mosaic" +
+                                                           "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title);
+                                        this.setState({shareLink: shareURL+params});
+                                    })
                                     .catch(error => console.log('error', error));
                             })
                     })
@@ -279,7 +287,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 </ShowAt>
                 <Stack horizontal horizontalAlign="center">
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={window.location.href}>
+                        <FacebookShareButton className="explore__share-button" quote="Check out Mosaic!" url={this.state.shareLink}>
                             <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </FacebookShareButton>
                     </div>
