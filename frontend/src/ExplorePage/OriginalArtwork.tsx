@@ -79,7 +79,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   searchArtUrlSuffix() {
-    let urlBase = '/art/search/';
+    let urlBase = '/search/';
 
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;

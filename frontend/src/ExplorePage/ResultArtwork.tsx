@@ -79,7 +79,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   searchArtUrlSuffix() {
-    let urlBase = '/art/search/';
+    let urlBase = '/search/';
 
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;
@@ -88,7 +88,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   exploreArtUrlSuffix() {
-    let urlBase = '/art/';
+    let urlBase = '/';
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;
     let url = encodeURIComponent(idURL + museumURL);
@@ -104,7 +104,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     console.log("Disabled? " + rationaledisable);
 
     if (this.state.redirect) {
-      let link = `/art/search/${this.jsonToURI(this.state.objIDs)}`;
+      let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
       return <Redirect push to={link} />;
     } else {
 

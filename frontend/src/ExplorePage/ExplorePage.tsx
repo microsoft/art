@@ -52,7 +52,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
             bestResultArtwork: defaultArtObject,
             imageDataURI: "",
             galleryItems: [defaultArtObject],
-            conditionals: { 'culture': 'italian' },
+            conditionals: { 'culture': '' },
             shareLink: ""
         }
         this.setResultArtwork = this.setResultArtwork.bind(this);
@@ -77,7 +77,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let clonedConditionals = { ...this.state.conditionals };
         clonedConditionals[category] = option;
         this.setState({ "conditionals": clonedConditionals });
-        this.makeAPIquery(this.state.originalArtwork.Thumbnail_Url, clonedConditionals);
+        this.makeAPIquery(this.state.originalArtwork.Thumbnail_Url, option);
     }
 
     /**
@@ -164,7 +164,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param originalArtURL the image url of the original artwork
      * @param conditionals the conditional qualities to apply to the query
      */
-    makeAPIquery(originalArtURL: string, conditionals: any) {
+    //makeAPIquery(originalArtURL: string, conditionals: any) {
+    makeAPIquery(originalArtURL: string, option: string) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
         // const apiURL = 'https://extern2020apim.azure-api.net/score';
         // const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
@@ -173,12 +174,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
 
-        let fields = Object.keys(conditionals);
-        fields.forEach((element: any) => {
-            if (conditionals[element] !== "All") {
-                params = params + '&' + 'query' + '=' + encodeURIComponent(conditionals[element]);
-            }
-        });
+        // let fields = Object.keys(conditionals);
+        // fields.forEach((element: any) => {
+        //     if (conditionals[element] !== "All") {
+        //         params = params + '&' + 'query' + '=' + encodeURIComponent(conditionals[element]);
+        //     }
+        // });
 
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
 
@@ -193,11 +194,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
         //     classification: "all",
         //     n: 10
         // }
+        console.log("option: "+option);
 
-        let queryJson = {
-            url: originalArtURL,
-            n: 10
-        }
+        let queryJson = option === '' ? 
+                            { url: originalArtURL, n: 10} 
+                            : { url: originalArtURL, n: 10, query: option}; 
 
         //Http.send();
         Http.send(JSON.stringify(queryJson));
@@ -258,14 +259,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
-                    self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals);
+                    self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals["culture"]);
                 });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
-            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
+            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
         }
 
