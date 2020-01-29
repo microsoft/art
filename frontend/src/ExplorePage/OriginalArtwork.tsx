@@ -1,8 +1,7 @@
 import { Image, Stack, Text } from 'office-ui-fabric-react';
-import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
+import { DirectionalHint, TooltipDelay, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { CSSTransition } from 'react-transition-group';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import ArtObject from '../ArtObject';
@@ -80,7 +79,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   searchArtUrlSuffix() {
-    let urlBase = '/search/';
+    let urlBase = '/art/search/';
 
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;
