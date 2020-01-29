@@ -184,6 +184,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
         Http.open('GET', apiURL + params);
+        //http.open('POST',apiURL);
 
         let queryJson = {
             url: originalArtURL,
@@ -193,7 +194,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         }
 
         Http.send();
-        Http.send(JSON.stringify(queryJson));
+        //Http.send(JSON.stringify(queryJson));
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
                 try {
