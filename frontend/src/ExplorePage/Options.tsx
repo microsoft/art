@@ -129,10 +129,10 @@ export default function Options(props: IProps) {
           }}>
           <option value="" disabled>Quality</option>
           <optgroup label="Culture">
-            {cultureOptions.map(culture => (<option value={culture.text}>{culture.text}</option>))}
+            {cultureOptions.map((culture, index) => (<option key={index} value={culture.text}>{culture.text}</option>))}
           </optgroup>
           <optgroup label="Medium">
-            {mediumOptions.map(medium => (<option value={medium.text}>{medium.text}</option>))}
+            {mediumOptions.map((medium, index) => (<option key={index} value={medium.text}>{medium.text}</option>))}
           </optgroup>
         </Select>
       </FormControl>
