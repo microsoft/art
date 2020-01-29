@@ -11,7 +11,7 @@ def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 install("azure-storage-blob")
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, ContentSettings
 
 connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 blob_service_client = BlobServiceClient(
@@ -39,9 +39,11 @@ def upload():
         if request.args.get("filename") is None:
             return jsonify({ "error": "filename parameter must be specified" })
         filename = request.args.get("filename")
+        content_type = None
         try:
             img_b64 = request.form.get('image').split(',')
             image = base64.b64decode(img_b64[1])
+            content_type = img_b64[0].split(':')[1].split(';')[0] # gets content type from data:image/png;base64
         except:
             return jsonify({ "error": "unable to decode"})
 
@@ -50,6 +52,10 @@ def upload():
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=filename)
             try:
                 blob_client.upload_blob(image)
+                blob_client.set_http_headers(content_settings = ContentSettings(content_type=content_type))
+                print(content_type)
+            except Exception as err:
+                print(err)
             finally:
                 img_url = "https://mmlsparkdemo.blob.core.windows.net/mosaic-shares/mosaic-shares/" + filename
                 return jsonify({ "img_url": img_url })
@@ -63,13 +69,17 @@ def share():
     title = request.args.get('title')
     description = request.args.get('description')
     redirect_url = request.args.get('redirect_url')
+    width = request.args.get('width')
+    height = request.args.get('height')
     # input param 'url', we return a page that can be shared with facebook (with correct opengraph tags)
     return render_template(
         "share.html",
         image_url=image_url,
         title=title,
         description=description,
-        redirect_url=redirect_url
+        redirect_url=redirect_url,
+        width=width,
+        height=height
     )
 
 if __name__ == "__main__":

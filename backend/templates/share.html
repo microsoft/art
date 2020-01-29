@@ -3,6 +3,8 @@
         <meta property="og:image" content="{{ image_url }}" />
         <meta property="og:title" content="{{ title }}" />
         <meta property="og:description" content="{{ description }}" />
+        <meta property="og:image:width" content="{{ width }}" />
+        <meta property="og:image:height" content="{{ height }}" />
         <style>
             .center {
                 display: block;
@@ -10,10 +12,16 @@
                 margin-right: auto;
                 width: 50%;
             }
+                        /* Bottom right text */
+            .bottom-cent {
+            position: absolute;
+            bottom: 8px;
+            right: 50%;
+            }
         </style>
     </head>
     <body>
         <img src="{{ image_url }}" class="center" />
-        <p>Make your own Mosaic <a href="{{ redirect_url }}">here</a>.</p>
+        <p class='bottom-cent'>Make your own Mosaic <a href="{{ redirect_url }}">here</a>.</p>
     </body>
 </html>
