@@ -167,8 +167,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
     makeAPIquery(originalArtURL: string, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
         // const apiURL = 'https://extern2020apim.azure-api.net/score';
-        const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
+        // const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
         // const apiURL = "https://extern2020apim.azure-api.net/score";
+        const apiURL = "https://extern2020apim.azure-api.net/";
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
 
@@ -183,18 +184,23 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
         console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
-        Http.open('GET', apiURL + params);
-        //http.open('POST',apiURL);
+        //Http.open('GET', apiURL + params);
+        Http.open('POST',apiURL);
+
+        // let queryJson = {
+        //     url: originalArtURL,
+        //     culture: "italian",
+        //     classification: "all",
+        //     n: 10
+        // }
 
         let queryJson = {
             url: originalArtURL,
-            culture: "italian",
-            classification: "all",
             n: 10
         }
 
-        Http.send();
-        //Http.send(JSON.stringify(queryJson));
+        //Http.send();
+        Http.send(JSON.stringify(queryJson));
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
                 try {
