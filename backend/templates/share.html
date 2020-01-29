@@ -1,14 +1,19 @@
 <html>
     <head>
         <meta property="og:image" content="{{ image_url }}" />
-        <meta property="og:url" content="https://aka.ms/mosaic" />
         <meta property="og:title" content="{{ title }}" />
         <meta property="og:description" content="{{ description }}" />
+        <style>
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+            }
+        </style>
     </head>
-    <script>
-        window.location = "{{ redirect_url }}"
-    </script>
     <body>
-        You are being redirected to Mosaic. Click <a href="{{ redirect_url }}">here</a> to be redirected...
+        <img src="{{ image_url }}" class="center" />
+        <p>Make your own Mosaic <a href="{{ redirect_url }}">here</a>.</p>
     </body>
 </html>

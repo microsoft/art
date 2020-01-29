@@ -91,14 +91,15 @@ def download_image_inner(metadata_row):
     Download an image from the given url and save it to disk as filename {museum}_{id}{extension}
     where the extension is inferred from content type. Returns None if download fails twice.
     """
-    url = metadata_row["Thumbnail_Url"]
-    museum = metadata_row["Museum"]
+    url = str(metadata_row["Thumbnail_Url"])
+    museum = str(metadata_row["Museum"])
     local_file = "images/" + museum + "_" + url.split("/")[-1]
     if not os.path.exists(local_file):
         urllib.request.urlretrieve(url, local_file)
 
 
 def download_image(metadata_row):
+    download_progress.update(1)
     return retry(download_image_inner, metadata_row, 3)
 
 
@@ -161,12 +162,11 @@ def assert_gpu():
         raise SystemError('GPU device not found')
     print('Found GPU at: {}'.format(device_name))
 
-
 if not os.path.exists(tsv_path):
     urllib.request.urlretrieve("https://mmlsparkdemo.blob.core.windows.net/mosaic/met_rijks_metadata.tsv",
                                tsv_path)
 
-metadata = pd.read_csv(tsv_path, delimiter="\t")
+metadata = pd.read_csv(tsv_path, delimiter="\t", keep_default_na=False)
 metadata.fillna('')  # replace nan values with empty string
 
 if write_to_index:

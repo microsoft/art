@@ -14,18 +14,18 @@ from PIL import Image
 from pyspark.sql import SparkSession
 import tensorflow as tf
 
-CLASSIFICATIONS = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass",
+ALL_CLASSIFICATIONS = {'prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass",
                    "metalwork", \
                    "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork",
-                   "musical instruments", "uncategorized"]
+                   "musical instruments", "uncategorized"}
 
-CULTURES = ['african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european',
+ALL_CULTURES = {'african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european',
             'ancient middle-eastern', 'asian (general)',
             'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)', 'french',
             'german', 'greek',
             'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian',
             'southeast asian',
-            'spanish', 'swiss', 'various']
+            'spanish', 'swiss', 'various'}
 
 
 def assert_gpu():
@@ -119,14 +119,13 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             n
         )
     else:
-        classification = CLASSIFICATIONS if not classification else classification
         result = classification_model.findMaximumInnerProducts(
             img_feature,
-            {classification},
+            ALL_CLASSIFICATIONS,
             n
         )
     # Find and return the metadata for the results
-    resultmetadata = [metadata[r[0]] if isinstance(metadata[r[0]], dict) else metadata[r[0]].to_dict() for r in
+    resultmetadata = [metadata[r[0]] if isinstance(metadata[r[0]], dict) else metadata[r[0]].fillna('').to_dict() for r in
                       result]  # list of metadata: museum, id, url, culture, classification
     return resultmetadata
 
@@ -171,8 +170,8 @@ def run(request):
             response = requests.get(request_data['url'])  # URL -> response
             img = Image.open(BytesIO(response.content)).resize((225, 225))  # response -> PIL
             query = request_data.get('query', None)
-            culture = query if query in CULTURES else None
-            classification = query if query in CLASSIFICATIONS else None
+            culture = query if query in ALL_CULTURES else None
+            classification = query if query in ALL_CLASSIFICATIONS else None
             similar_images = get_similar_images(
                 img,
                 culture=culture,
