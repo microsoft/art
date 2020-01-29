@@ -40,7 +40,7 @@ const azureSearchUrl =
     'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
 const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
-const defaultArtObject: ArtObject = new ArtObject("Utagawa Kunimaro (I)", "prints", "japanese", "https://lh3.googleusercontent.com/234_CajwnCl4yeStsWfauXj62B-aCjq6LPpGMJggjZLUnWXvnMQtfsVRld4ywCkltXvv1yFb3JH2Jfy3Iv2Rm5uM-A=s0", "rijks", "https://www.rijksmuseum.nl/en/collection/RP-P-2016-66-7", "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-P-2016-66-7.jpg", "Tiger", "UlAtUC0yMDE2LTY2LTc=");
+const defaultArtObject: ArtObject = new ArtObject("", "", "", "", "", "", "", "", "");
 
 export class ExplorePage extends React.Component<IProps, IState> {
 
@@ -183,7 +183,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
         //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
 
-        console.log("Request: " + apiURL + params);
+        //console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
         //Http.open('GET', apiURL + params);
         Http.open('POST',apiURL);
@@ -197,8 +197,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
         console.log("option: "+option);
 
         let queryJson = option === '' ? 
-                            { url: originalArtURL, n: 10} 
-                            : { url: originalArtURL, n: 10, query: option}; 
+                            { url: originalArtURL, n: 3} 
+                            : { url: originalArtURL, n: 3, query: option}; 
 
         //Http.send();
         Http.send(JSON.stringify(queryJson));
@@ -206,10 +206,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             if (Http.readyState === 4) {
                 try {
                     let response = JSON.parse(Http.responseText);
-                    //console.log("response: " + Http.responseText);
                     response = response.results;
-                    const filteredResponse = response.filter((artwork: any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
-                    //console.log("filtered: " + filteredResponse);
+                    const filteredResponse = response.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
