@@ -1,5 +1,5 @@
 import { Image, Stack, Text } from 'office-ui-fabric-react';
-import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
+import { DirectionalHint, TooltipDelay, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
@@ -133,12 +133,12 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }}>Search</button>
                   </a>
-                  <a href={this.exploreArtUrlSuffix()}>
-                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
-                  </a>
                   {this.props.enableRationale &&
                   <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale </button>                  
                   }
+                  <a href={this.exploreArtUrlSuffix()}>
+                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
+                  </a>
                 </Stack>
               </Stack>
             </Stack>
@@ -152,11 +152,13 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                     <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                       <Stack horizontal className="explore__slide-buttons">
                         <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
+                        <div className="explore__slide-button-sep"></div>
                         {this.props.enableRationale &&
                         <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "ResultImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
                         } 
                         <div className="explore__slide-button-sep"></div>
                         <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
+
                       </Stack>
                     </CSSTransition>
                     <div className="explore__museum-icon">

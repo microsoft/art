@@ -13,6 +13,19 @@
   &__buttons {
     margin: 5px 0px !important;
     width: 250px;
+
+    &:disabled {
+      border-color: #D8D8D8;
+      color: #D8D8D8;
+    }
+
+    &:hover:disabled {
+      background-color: transparent;
+      border-color: #D8D8D8;
+      color: #D8D8D8;
+      cursor: pointer;
+    }
+
   }
 
   &__dropdown {
