@@ -96,7 +96,7 @@ export class SearchPage extends React.Component<IProps, IState> {
   makeAPIquery(originalArtURL: string, conditionals?: any) {
     // const apiURL = 'http://art-backend.azurewebsites.net/explore';
     // const apiURL = 'https://extern2020apim.azure-api.net/explore';
-    const apiURL = "https://13.92.189.130/api/v1/service/artgpuservice/score";
+    const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
     //const apiURL = "https://13.92.189.130/api/v1/service/artgpuservice/score";
     //const apiURL = "https://extern2020apim.azure-api.net/score";
     // let params = '?url=' + originalArtURL + '&numResults=' + '9';
