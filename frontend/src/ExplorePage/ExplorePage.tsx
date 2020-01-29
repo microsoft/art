@@ -110,14 +110,35 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         originalImage.resize(originalImageWidth, imageHeight)
                             .crop(0, 0, originalImageWidth + resultImageWidth, imageHeight)
                             .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
-                            .getBase64Async(originalImage.getMIME())
+                            .getBase64Async(Jimp.MIME_PNG)
                             .then(uri => {
-                                console.log(uri)
-                                this.setState({ imageDataURI: uri })
+                                console.log(encodeURI(uri))
+                                
+                                let myHeaders = new Headers();
+                                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+                                let urlencoded = new URLSearchParams();
+                                urlencoded.append("image", encodeURI(uri));
+                                
+                                let requestOptions:any = {
+                                    method: 'POST',
+                                    headers: myHeaders,
+                                    body: urlencoded,
+                                    redirect: 'follow'
+                                };
+
+                                let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
+                                console.log("https://art-backend.azurewebsites.net/upload?filename=" + encodeURIComponent(filename))
+                                fetch("https://art-backend.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
+                                requestOptions)
+                                    .then(response => response.text())
+                                    .then(result => console.log(result))
+                                    .catch(error => console.log('error', error));
                             })
                     })
             })
     }
+
 
     /**
      * Handles event tracking for interactions
@@ -171,16 +192,18 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let response = JSON.parse(Http.responseText);
                     //console.log("response: " + Http.responseText);
                     response = response.results;
-                    const filteredResponse = response.filter((artwork:any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
+                    const filteredResponse = response.filter((artwork: any) => artwork.url != this.state.originalArtwork.Thumbnail_Url)
                     //console.log("filtered: " + filteredResponse);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
                     if (pieces.length > 0) {
-                        this.setState({ galleryItems: pieces,
+                        this.setState({
+                            galleryItems: pieces,
                             resultArtwork: pieces[0],
-                            bestResultArtwork: pieces[0] });
-                    } 
+                            bestResultArtwork: pieces[0]
+                        });
+                    }
 
 
                 } catch (e) {
@@ -225,7 +248,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
-            console.log("RANDINDEX: "+randIndex);
+            console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
             this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals);
             this.setState({ originalArtwork: newOriginalArtwork });
@@ -245,7 +268,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                     </Stack>
                 </HideAt>
@@ -255,7 +278,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                         <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent}/>
+                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                     </Stack>
                     <Stack horizontalAlign="center">
