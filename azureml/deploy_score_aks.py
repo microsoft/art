@@ -1,9 +1,6 @@
-import azureml, os, time
-
 from azureml.core import Workspace
 from azureml.core.compute import AksCompute, ComputeTarget
 from azureml.core.compute_target import ComputeTargetException
-from azureml.core.environment import Environment, DEFAULT_GPU_IMAGE
 from azureml.core.model import InferenceConfig, Model
 from azureml.core.webservice import AksWebservice
 from azureml.exceptions import WebserviceException

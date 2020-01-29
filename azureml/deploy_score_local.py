@@ -1,8 +1,6 @@
-import os
 from azureml.core import Workspace
-from azureml.core.environment import Environment
 from azureml.core.model import InferenceConfig, Model
-from azureml.core.webservice import LocalWebservice, Webservice
+from azureml.core.webservice import LocalWebservice
 
 # Set your workspace
 ws = Workspace(
