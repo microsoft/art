@@ -138,7 +138,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     makeAPIquery(originalArtURL: string, conditionals: any) {
         // const apiURL = 'http://art-backend.azurewebsites.net/explore';
         // const apiURL = 'https://extern2020apim.azure-api.net/score';
-        const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
+        const apiURL = "https://13.92.189.130/api/v1/service/artgpuservice/score";
         // const apiURL = "https://extern2020apim.azure-api.net/score";
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
@@ -156,7 +156,15 @@ export class ExplorePage extends React.Component<IProps, IState> {
         const Http = new XMLHttpRequest();
         Http.open('GET', apiURL + params);
 
+        let queryJson = {
+            url: originalArtURL,
+            culture: "italian",
+            classification: "all",
+            n: 10
+        }
+
         Http.send();
+        Http.send(JSON.stringify(queryJson));
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
                 try {
