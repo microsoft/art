@@ -98,13 +98,17 @@ export class ExplorePage extends React.Component<IProps, IState> {
     /**
      * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
      */
-    updateImageDataURI() {
+    updateImageDataURI(originalURL? :string, resultURL? :any) {
         // Height of the composite image in pixels
         let imageHeight = 650;
 
-        Jimp.read(this.state.originalArtwork.Thumbnail_Url)
+        originalURL = originalURL ? originalURL : this.state.originalArtwork.Thumbnail_Url;
+        resultURL = resultURL ? resultURL : this.state.resultArtwork.Thumbnail_Url;
+
+
+        Jimp.read(originalURL)
             .then(originalImage => {
-                Jimp.read(this.state.resultArtwork.Thumbnail_Url)
+                Jimp.read(resultURL)
                     .then(resultImage => {
                         let originalImageWidth = originalImage.getWidth() * imageHeight / originalImage.getHeight();
                         let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
@@ -197,6 +201,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             resultArtwork: pieces[0],
                             bestResultArtwork: pieces[0]
                         });
+                        this.updateImageDataURI(originalArtURL, pieces[0].Thumbnail_Url);
                     }
 
 
@@ -289,12 +294,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         </FacebookShareButton>
                     </div>
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                        <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={window.location.href}>
+                        <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
                             <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </TwitterShareButton>
                     </div>
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                        <LinkedinShareButton className="explore__share-button" url={window.location.href}>
+                        <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
                             <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </LinkedinShareButton>
                     </div>
