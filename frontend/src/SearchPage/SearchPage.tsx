@@ -73,7 +73,6 @@ export class SearchPage extends React.Component<IProps, IState> {
           return response.json();
         })
         .then(function (responseJson) {
-          console.log(responseJson.value[0]);
           let currImgObj = responseJson.value[0];
 
           self.makeAPIquery(currImgObj.Thumbnail_Url);
@@ -94,49 +93,24 @@ export class SearchPage extends React.Component<IProps, IState> {
      * @param conditionals the conditional qualities to apply to the query
      */
   makeAPIquery(originalArtURL: string, conditionals?: any) {
-    // const apiURL = 'http://art-backend.azurewebsites.net/explore';
-    // const apiURL = 'https://extern2020apim.azure-api.net/explore';
-    //const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
-    //const apiURL = "https://13.92.189.130/api/v1/service/artgpuservice/score";
-    // const apiURL = "https://extern2020apim.azure-api.net/score";
     const apiURL = "https://extern2020apim.azure-api.net/cknn/";;
     // let params = '?url=' + originalArtURL + '&numResults=' + '9';
     let params = '?url=' + originalArtURL + '&n=' + '10';
 
-    // let fields = Object.keys(conditionals);
-    // fields.forEach((element: any) => {
-    //   if (conditionals[element] !== "All") {
-    //     params = params + '&' + element.toLowerCase() + '=' + conditionals[element];
-    //   }
-    // });
 
-    //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
-
-    console.log("Request: " + apiURL + params);
     const Http = new XMLHttpRequest();
-    //Http.open('GET', apiURL + encodeURIComponent(params));
     Http.open('POST', apiURL);
-
-    // let queryJson = {
-    //   url: originalArtURL,
-    //   culture: "italian",
-    //   classification: "all",
-    //   n: 10
-    // }
 
     let queryJson = {
       url: originalArtURL,
       n: 20
-  }
+    }
 
-
-    //Http.send();
     Http.send(JSON.stringify(queryJson));
     Http.onreadystatechange = e => {
       if (Http.readyState === 4) {
         try {
           let response = JSON.parse(Http.responseText);
-          console.log("response: " + Http.responseText);
           response = response.results;
           const mappedData = response.map((pair:any) => pair[0])
 
