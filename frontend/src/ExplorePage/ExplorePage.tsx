@@ -2,7 +2,6 @@
 import Jimp from 'jimp';
 import { mergeStyles, Stack, Image, ImageFit } from 'office-ui-fabric-react';
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
@@ -13,6 +12,8 @@ import Options from './Options';
 import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
+
+import bannerImage from "./banner.jpg";
 
 interface IProps {
     match: any
@@ -114,14 +115,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
                             .getBase64Async(Jimp.MIME_PNG)
                             .then(uri => {
-                                
+
                                 let myHeaders = new Headers();
                                 myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
                                 let urlencoded = new URLSearchParams();
                                 urlencoded.append("image", encodeURI(uri));
-                                
-                                let requestOptions:any = {
+
+                                let requestOptions: any = {
                                     method: 'POST',
                                     headers: myHeaders,
                                     body: urlencoded,
@@ -130,19 +131,19 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
                                 let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
                                 fetch("https://mosaicart.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
-                                requestOptions)
+                                    requestOptions)
                                     .then(response => response.json())
                                     .then(result => {
                                         // let sharLink = "https://art-backend.azurewebsites.net/share?image_url={a}&redirect_url={b}&title={c}&description={d}"
                                         let shareURL = "https://mosaicart.azurewebsites.net/share";
                                         let params = "?" + "image_url=" + result.img_url +
-                                                           "&redirect_url=" + window.location.href +
-                                                           "&title=" + "Mosaic" +
-                                                           "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
-                                                           "&width=" + Math.round(originalImageWidth + resultImageWidth) + 
-                                                           "&height=" + imageHeight;
-                                        console.log(shareURL+params)
-                                        this.setState({shareLink: shareURL+params});
+                                            "&redirect_url=" + window.location.href +
+                                            "&title=" + "Mosaic" +
+                                            "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
+                                            "&width=" + Math.round(originalImageWidth + resultImageWidth) +
+                                            "&height=" + imageHeight;
+                                        console.log(shareURL + params)
+                                        this.setState({ shareLink: shareURL + params });
                                     })
                                     .catch(error => console.log('error', error));
                             })
@@ -177,13 +178,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
-        Http.open('POST',apiURL);
+        Http.open('POST', apiURL);
 
-        console.log("option: "+option);
+        console.log("option: " + option);
 
-        let queryJson = option === '' ? 
-                            { url: originalArtURL, n: 10} 
-                            : { url: originalArtURL, n: 10, query: option}; 
+        let queryJson = option === '' ?
+            { url: originalArtURL, n: 10 }
+            : { url: originalArtURL, n: 10, query: option };
 
         //Http.send();
         Http.send(JSON.stringify(queryJson));
@@ -192,7 +193,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 try {
                     let response = JSON.parse(Http.responseText);
                     response = response.results;
-                    const mappedData = response.map((pair:any) => pair[0]);
+                    const mappedData = response.map((pair: any) => pair[0]);
                     const filteredResponse = mappedData.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
@@ -258,39 +259,43 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <div style={{position: "relative", top: "-74px"}}>
+            <div style={{ position: "relative", top: "-74px"}}>
                 <HideAt breakpoint="mediumAndBelow">
                     <div className="explore__background-banner">
-                        <img className="explore__parallax" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Boston_Twilight_Panorama_3.jpg/1920px-Boston_Twilight_Panorama_3.jpg"/>
+                        <img className="explore__parallax" src={bannerImage} />
+                        <div className="explore__banner-text">Find the building blocks of art that have transcended culture, medium, and time.</div>
                         <button className="explore__get-started button">GET STARTED</button>
                     </div>
-                    <div style={{backgroundColor: "white"}}>
-                    <Stack horizontal>
-                        <Stack.Item className={halfStack} grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
-                        </Stack.Item>
-                        <Stack.Item className={halfStack} grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
-                        </Stack.Item>
-                    </Stack>
+                    <div className="explore__compare-block explore__solid">
+                        <Stack horizontal>
+                            <Stack.Item className={halfStack} grow={1}>
+                                <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                            <Stack.Item className={halfStack} grow={1}>
+                                <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                        </Stack>
                     </div>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
-                    <Stack horizontal horizontalAlign="center" wrap>
-                        <Stack.Item grow={1}>
-                            <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
-                        </Stack.Item>
-                        <Stack.Item grow={1}>
-                            <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
-                        </Stack.Item>
-                    </Stack>
-                    <Stack horizontalAlign="center">
-                        <Options changeConditional={this.changeConditional} />
-                    </Stack>
+                    <div className="explore__compare-block explore__solid">
+                        <Stack horizontal horizontalAlign="center" wrap>
+                            <Stack.Item grow={1}>
+                                <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                            <Stack.Item grow={1}>
+                                <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                        </Stack>
+                        <Stack horizontalAlign="center">
+                            <Options changeConditional={this.changeConditional} />
+                        </Stack>
+                    </div>
                 </ShowAt>
-                <Stack horizontal horizontalAlign="center">
+                <div className="explore__solid">
+                <Stack horizontal horizontalAlign="center" className="">
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                        <FacebookShareButton className="explore__share-button"  url={this.state.shareLink}>
+                        <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
                             <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </FacebookShareButton>
                     </div>
@@ -305,10 +310,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         </LinkedinShareButton>
                     </div>
                 </Stack>
-                <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "15px 0px" }}></div>
-                <Stack.Item>
+                <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px"}}></div>
+                <Stack.Item className="">
                     <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                 </Stack.Item>
+                </div>
             </div>
         )
     }

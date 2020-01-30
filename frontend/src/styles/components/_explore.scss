@@ -228,6 +228,19 @@
     overflow: hidden;
   }
 
+  &__banner-text {
+    position: absolute;
+    width: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    bottom: 150px;
+    color: white;
+    text-align: center;
+    font-family: $font-family-base;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
   &__get-started {
     position: absolute;
     left: 50%;
@@ -239,6 +252,26 @@
 
   &__parallax {
     position: fixed;
+    object-fit: cover;
+    width: 100%;
+    left: 50%;
+    transform: translate(-50%, 0%);
     z-index: -1;
+    filter: brightness(2)
+  }
+
+  &__compare-block {
+    height: calc(50vh - 95px);
+    // background-color: white;
+    padding: 15px 0px;
+
+    @media (max-width: 1128px) {
+      height: auto;
+      margin-top: 75px;
+    }
+  }
+
+  &__solid {
+    background-color: white;
   }
 }
