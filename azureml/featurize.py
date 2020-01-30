@@ -11,6 +11,8 @@ from PIL import Image
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input
 from pyspark.sql import SparkSession
+from pyspark import SparkContext, SQLContext
+
 
 # Initialize
 batch_size = 512
@@ -31,8 +33,12 @@ features_culture_fn = os.path.join(output_root, 'features_culture.ball')
 features_classification_fn = os.path.join(output_root, 'features_classification.ball')
 metadata_fn = os.path.join(output_root, 'metadata.pkl')
 
-cached_features_url = "https://mmlsparkdemo.blob.core.windows.net/mosaic/features_and_successes.pkl"
-cached_features_fn = 'features_and_successes.pkl'
+#cached_features_url = "https://mmlsparkdemo.blob.core.windows.net/mosaic/features_and_successes.pkl"
+#cached_features_fn = 'features_and_successes.pkl'
+cached_features_url = "https://mmlsparkdemo.blob.core.windows.net/mosaic/met_and_rijks_art_with_features.parquet.zip"
+cached_features_fn = "met_and_rijks_art_with_features.parquet.zip"
+parquet_fn = "met_and_rijks_art_with_features.parquet"
+
 write_to_index = False
 
 # downloading java dependencies
@@ -44,6 +50,7 @@ spark = SparkSession.builder \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .config("spark.executor.heartbeatInterval", "60s") \
     .config("spark.driver.memory", "32g") \
+    .config("spark.driver.maxResultSize", "8g") \
     .getOrCreate()
 
 from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
@@ -99,7 +106,6 @@ def download_image_inner(metadata_row):
 
 
 def download_image(metadata_row):
-    download_progress.update(1)
     return retry(download_image_inner, metadata_row, 3)
 
 
@@ -209,13 +215,20 @@ if write_to_index:
         batchSize="1000"
     )
 
+
 if cached_features_url is not None:
     if not os.path.exists(cached_features_fn):
         urllib.request.urlretrieve(cached_features_url, cached_features_fn)
+    if not os.path.exists(parquet_fn):
+        print("extracting")
+        from zipfile import ZipFile
+        with ZipFile(cached_features_fn, 'r') as zipObj:
+            zipObj.extractall()
+        print("done extracting")
 
-    with open(cached_features_fn, "rb") as f:
-        [features, successes] = pickle.load(f)
-    print("Loaded cached features")
+    #with open(cached_features_fn, "rb") as f:
+    #    [features, successes] = pickle.load(f)
+    #print("Loaded cached features")
 else:
     # create directory for downloading images, then download images simultaneously
     print("Downloading images...")
@@ -241,23 +254,63 @@ else:
     with open(cached_features_fn, "wb+") as f:
         pickle.dump([features, successes], f)
 
-print(features.shape)
+# print(features.shape)
+#
+# from py4j.java_collections import ListConverter
+#
+# # convert to list and then create the two balltrees for culture and classification(medium)
+# ids = [row["id"] for row in successes]
+# features = features.tolist()
+# print("fitting culture ball tree")
+#
+# converter = ListConverter()
+# gc = SparkContext._active_spark_context._jvm._gateway_client
+# from pyspark.ml.linalg import Vectors, VectorUDT
+#
+# java_features = converter.convert(features,gc)
+# java_cultures = converter.convert([row["Culture"] for row in successes], gc)
+# java_classifications = converter.convert([row["Classification"] for row in successes], gc)
+# java_values = converter.convert(ids, gc)
+#
+# cbt_culture = ConditionalBallTree(java_features, java_values, java_cultures, 50)
+# print("fitting class ball tree")
+#
+# cbt_classification = ConditionalBallTree(java_features, java_values, java_classifications, 50)
+# print("fit culture ball tree")
+#
+# # save the balltrees to output directory and pickle the museum and id metadata
+# os.makedirs(output_root, exist_ok=True)
+# cbt_culture.save(features_culture_fn)
+# cbt_classification.save(features_classification_fn)
+# pickle.dump(successes, open(metadata_fn, 'wb+'))
 
-features = features[0:1000]
-successes = successes[0:1000]
+from mmlspark.nn import *
 
-# convert to list and then create the two balltrees for culture and classification(medium)
-ids = [row["id"] for row in successes]
-features = features.tolist()
-print("fitting culture ball tree")
-cbt_culture = ConditionalBallTree(features, ids, [row["Culture"] for row in successes], 50)
-print("fitting class ball tree")
+df = spark.read.parquet(parquet_fn)
 
-cbt_classification = ConditionalBallTree(features, ids, [row["Classification"] for row in successes], 50)
-print("fit culture ball tree")
+cols_to_group = df.columns
+cols_to_group.remove("Norm_Features")
 
-# save the balltrees to output directory and pickle the museum and id metadata
+from pyspark.sql.functions import struct
+df2 = df.withColumn("Meta", struct(*cols_to_group))
+
+cknn_classification = (ConditionalKNN()
+  .setOutputCol("Matches")
+  .setFeaturesCol("Norm_Features")
+  .setValuesCol("Meta")
+  .setLabelCol("Classification")
+  .fit(df2))
+cbt_classification = ConditionalBallTree(None, None, None, None, cknn_classification._java_obj.getBallTree())
+
+cknn_culture = (ConditionalKNN()
+  .setOutputCol("Matches")
+  .setFeaturesCol("Norm_Features")
+  .setValuesCol("Meta")
+  .setLabelCol("Culture")
+  .fit(df2))
+cbt_culture = ConditionalBallTree(None, None, None, None, cknn_culture._java_obj.getBallTree())
+
 os.makedirs(output_root, exist_ok=True)
 cbt_culture.save(features_culture_fn)
 cbt_classification.save(features_classification_fn)
-pickle.dump(successes, open(metadata_fn, 'wb+'))
+

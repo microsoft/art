@@ -1,31 +1,32 @@
+import os
+from io import BytesIO
 import json
 import os
-import pickle
-from io import BytesIO
 import traceback
+from io import BytesIO
 
 import numpy as np
 import requests
-from azureml.contrib.services.aml_request import AMLRequest, rawhttp
+import tensorflow as tf
+from PIL import Image
+from azureml.contrib.services.aml_request import rawhttp
 from azureml.contrib.services.aml_response import AMLResponse
 from azureml.core.model import Model
 from keras.applications.resnet50 import ResNet50, preprocess_input
-from PIL import Image
 from pyspark.sql import SparkSession
-import tensorflow as tf
 
 ALL_CLASSIFICATIONS = {'prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass",
-                   "metalwork", \
-                   "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork",
-                   "musical instruments", "uncategorized"}
+                       "metalwork", "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork",
+                       "musical instruments", "uncategorized"}
 
 ALL_CULTURES = {'african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european',
-            'ancient middle-eastern', 'asian (general)',
-            'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)', 'french',
-            'german', 'greek',
-            'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian',
-            'southeast asian',
-            'spanish', 'swiss', 'various'}
+                'ancient middle-eastern', 'asian (general)',
+                'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)',
+                'french',
+                'german', 'greek',
+                'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian',
+                'southeast asian',
+                'spanish', 'swiss', 'various'}
 
 
 def assert_gpu():
@@ -46,6 +47,7 @@ def init():
 
     os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
     assert_gpu()
+    print("Initializing Spark")
 
     # downloading java dependencies
     print(os.environ.get("JAVA_HOME", "WARN: No Java home found"))
@@ -54,21 +56,33 @@ def init():
         .appName("TestConditionalBallTree") \
         .config("spark.jars.packages", "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1-38-a6970b95-SNAPSHOT") \
         .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
+        .config("spark.driver.memory", "32g") \
         .config("spark.executor.heartbeatInterval", "60s") \
         .getOrCreate()
 
+    print("Spark Initialized")
+
+
     from mmlspark.nn.ConditionalBallTree import ConditionalBallTree
 
-    # initialize the model architecture and load in imagenet weights
     model_path = Model.get_model_path('mosaic_model')
 
-    culture_model = ConditionalBallTree.load(
-        os.path.join(model_path, "features_culture.ball")
-    )
-    classification_model = ConditionalBallTree.load(
-        os.path.join(model_path, "features_classification.ball")
-    )
-    metadata = pickle.load(open(os.path.join(model_path, "metadata.pkl"), 'rb'))
+    print("Downloading Models")
+
+    if not os.path.exists("medium.ball"):
+        print("Downloading medium")
+        os.system('wget https://mmlsparkdemo.blob.core.windows.net/mosaic/medium.ball')
+        print("downloaded medium")
+
+    if not os.path.exists('culture.ball'):
+        print("Downloading culture")
+        os.system('wget https://mmlsparkdemo.blob.core.windows.net/mosaic/culture.ball')
+        print("downloaded culture")
+
+    # initialize the model architecture and load in imagenet weights
+
+    culture_model = ConditionalBallTree.load('culture.ball')
+    classification_model = ConditionalBallTree.load('medium.ball')
 
     # Model for featurizing
     keras_model = ResNet50(
@@ -112,22 +126,28 @@ def get_similar_images(img, culture=None, classification=None, n=5):
             {culture},
             n
         )
+        selected_model = culture_model
     elif classification is not None:
         result = classification_model.findMaximumInnerProducts(
             img_feature,
             {classification},
             n
         )
+        selected_model = classification_model
     else:
         result = classification_model.findMaximumInnerProducts(
             img_feature,
             ALL_CLASSIFICATIONS,
             n
         )
-    # Find and return the metadata for the results
-    resultmetadata = [metadata[r[0]] if isinstance(metadata[r[0]], dict) else metadata[r[0]].fillna('').to_dict() for r in
-                      result]  # list of metadata: museum, id, url, culture, classification
-    return resultmetadata
+        selected_model = classification_model
+
+    results_with_data = []
+    for r in result:
+        row = selected_model._jconditional_balltree.values().apply(r[0])
+        dist = r[1]
+        results_with_data.append([json.loads(row), dist])
+    return results_with_data
 
 
 def error_response(err_msg):
