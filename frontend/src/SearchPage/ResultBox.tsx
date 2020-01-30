@@ -42,28 +42,23 @@ export default class ResultBox extends Component<IProps, IState> {
   }
 
   render() {
-    let museumName = this.props.data.Museum === "met" ? "The Met" : "Rijksmuseum";
-    let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:'5vh'}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
+    let museumName = this.props.data.Museum === "met" ? "The Met" : "The Rijks";
+    let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:30}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
 
     return (
 
       <Card className="grid-card" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
         <Card.Item className="grid-card__link">
-          <a href={this.props.data.Museum_Page} target="_blank" rel="noopener noreferrer">
+          <a href={this.exploreArtUrlSuffix()}>
               <LazyLoad
               throttle={250}
               height={200}
               offset={1000}
               placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
             >
-              <Image className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
-              <div className="explore__museum-icon">
-                    <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#${this.props.data.id}` }}>
-                      <a href={this.props.data.Museum_Page} target="_blank" rel="noopener noreferrer">
-                        {musImg}
-                      </a>
-                    </TooltipHost>
-              </div>
+              <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="Find Matches" calloutProps={{ gapSpace: 0, target: `#${this.props.data.id}` }}>
+                <Image className="grid-card__img" alt="thumbnail" id={this.props.data.id} src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
+              </TooltipHost>
             </LazyLoad>
           </a>
         </Card.Item>
@@ -78,7 +73,8 @@ export default class ResultBox extends Component<IProps, IState> {
         <Card.Item>
           <CSSTransition in={this.state.hover} timeout={0} classNames="grid-card__slide">
             <Stack horizontal className="grid-card__buttons">
-              <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", {"Location":"SearchPage", "ArtLink":this.props.data.Link_Resource})} className="grid-card__button_link">Matches</a>
+              <a href={this.props.data.Museum_Page} onClick={() => this.props.handleTrackEvent("Source", {"Location":"SearchPage", "ArtLink":this.props.data.Link_Resource})} className="grid-card__button_link" target="_blank" rel="noopener noreferrer">View Source at {museumName}</a>
+              <div className="grid-card__button_sep"></div>
             </Stack>
           </CSSTransition>
         </Card.Item>
