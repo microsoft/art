@@ -185,7 +185,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param option the new filter option to use (French, Sculptures, etc)
      */
     //makeAPIquery(originalArtURL: string, conditionals: any) {
-    makeAPIquery(originalArtURL: string, category: string, option: string) {
+    makeAPIquery(originalArtURL: string, category: "all" | "culture" | "medium", option: string) {
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
@@ -217,8 +217,16 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 bestResultArtwork: pieces[0]
                             });
                         }
+                        else if (category === "medium") {
+                            this.setState({
+                                mediumItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
                         else {
                             this.setState({
+                                cultureItems: pieces,
                                 mediumItems: pieces,
                                 resultArtwork: pieces[0],
                                 bestResultArtwork: pieces[0]
@@ -265,16 +273,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
-                    self.makeAPIquery(currImgObj.Thumbnail_Url, "culture", self.state.conditionals["culture"]);
-                    self.makeAPIquery(currImgObj.Thumbnail_Url, "medium", self.state.conditionals["medium"]);
+                    self.makeAPIquery(currImgObj.Thumbnail_Url, "all", self.state.conditionals["culture"]);
                 });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
-            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, "culture", this.state.conditionals["culture"]);
-            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, "medium", this.state.conditionals["medium"]);
+            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, "all", this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
         }
 
