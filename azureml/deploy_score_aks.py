@@ -21,7 +21,7 @@ inference_config = InferenceConfig(
 model = Model(ws, name="mosaic_model")
 
 resource_group = 'extern2020'
-cluster_name = 'aks-gpu2'
+cluster_name = 'aks-gpu'
 service_name = 'artgpuservice'
 
 """
@@ -44,7 +44,7 @@ except WebserviceException: # If cluster but no service
         autoscale_enabled=False,
         num_replicas=1,
         cpu_cores=2,
-        memory_gb=8,
+        memory_gb=16,
         auth_enabled=False)
     service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
@@ -65,12 +65,14 @@ except ComputeTargetException: # If cluster doesn't exist
     print("Deploying new service: {}".format(service_name))
     gpu_aks_config = AksWebservice.deploy_configuration(
         autoscale_enabled=False,
-        num_replicas=3,
+        num_replicas=1,
         cpu_cores=2,
-        memory_gb=4,
+        memory_gb=16,
         auth_enabled=False)
     service = Model.deploy(ws, service_name, [model], inference_config, gpu_aks_config, aks_target, overwrite=True)
     service.wait_for_deployment(show_output = True)
 
+
 print("State: " + service.state)
 print("Scoring URI: " + service.scoring_uri)
+
