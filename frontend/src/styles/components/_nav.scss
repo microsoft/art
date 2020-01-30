@@ -3,11 +3,9 @@
 // -------------------------------------------------------------
 .nav {
   align-items: center;
-  border-bottom: 1px solid $color-shade-dark;
   display: flex;
   height: $nav-unit;
   justify-content: space-between;
-  margin-bottom: $space-s;
   padding: 5px 15px;
 
   @media (max-width: $mq-s) {

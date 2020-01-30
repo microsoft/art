@@ -10,10 +10,6 @@ import SearchPage from "./SearchPage/SearchPage";
 
 initializeIcons();
 
-const btmMargin = mergeStyles({
-    marginBottom: 15,
-});
-
 interface IProps {};
 
 interface IState {};
@@ -23,9 +19,7 @@ class App extends React.Component {
         return (
             <Router basename={process.env.PUBLIC_URL}>
                 <Stack className="main" role="main">
-                    <Stack className={btmMargin}>
-                        <NavBarNew />
-                    </Stack>
+                    <NavBarNew />
                     <Switch>
                         <Route path="/search/:id" component={SearchPage} />
                         <Route exact path="/search" component={SearchPage} />

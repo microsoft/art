@@ -1,6 +1,6 @@
 // import '../main.scss';
 import Jimp from 'jimp';
-import { mergeStyles, Stack } from 'office-ui-fabric-react';
+import { mergeStyles, Stack, Image, ImageFit } from 'office-ui-fabric-react';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
@@ -129,12 +129,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 };
 
                                 let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
-                                fetch("https://art-backend.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
+                                fetch("https://mosaicart.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
                                 requestOptions)
                                     .then(response => response.json())
                                     .then(result => {
                                         // let sharLink = "https://art-backend.azurewebsites.net/share?image_url={a}&redirect_url={b}&title={c}&description={d}"
-                                        let shareURL = "https://art-backend.azurewebsites.net/share";
+                                        let shareURL = "https://mosaicart.azurewebsites.net/share";
                                         let params = "?" + "image_url=" + result.img_url +
                                                            "&redirect_url=" + window.location.href +
                                                            "&title=" + "Mosaic" +
@@ -275,10 +275,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         return (
             <Stack>
-                <Helmet>
-                    <meta property="og:image" content={this.state.imageDataURI} />
-                </Helmet>
                 <HideAt breakpoint="mediumAndBelow">
+                    <div className="explore__background-banner">
+                        <Image height={"50vh"} imageFit={ImageFit.centerCover} src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Boston_Twilight_Panorama_3.jpg/1920px-Boston_Twilight_Panorama_3.jpg"/>
+                        <
+                    </div>
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
                             <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />

@@ -220,4 +220,10 @@
   &__artwork-frame {
     position: relative;
   }
+
+  &__background-banner {
+    width: 100%;
+    height: 50vh;
+    background-color: gray;
+  }
 }
