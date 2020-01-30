@@ -88,7 +88,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
   }
 
   render() {
-    let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton1' src={rijksImg} /> : <Image height={"5vh"} id='musButton1' src={metImg} />;
+    let musImg = (this.props.artwork.Museum === 'rijks') ? <img style={{height:'5vh'}} id='musButton1' src={rijksImg} /> : <img style={{height:'5vh'}} id='musButton1' src={metImg} />;
     let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
     let rationaledisable = this.props.overlay ? false : true;
     

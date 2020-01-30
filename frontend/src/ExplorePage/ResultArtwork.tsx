@@ -1,4 +1,5 @@
 import { Image, Stack, Text } from 'office-ui-fabric-react';
+import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { DirectionalHint, TooltipDelay, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
@@ -25,6 +26,9 @@ type ArtworkProps = {
   enableRationale: boolean,
   handleTrackEvent: (eventName: string, properties: Object) => void
 }
+
+
+const shimType :any = {type: ShimmerElementType.line, height: 400, width: "20vw"};
 
 class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
@@ -96,12 +100,14 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     return urlBase + url;
   }
 
+  
+
   render() {
 
-    let musImg = (this.props.artwork.Museum === 'rijks') ? <Image height={"5vh"} id='musButton2' src={rijksImg} /> : <Image height={"5vh"} id='musButton2' src={metImg} />;
+    let musImg = (this.props.artwork.Museum === 'rijks') ? <img style={{height:'5vh'}}id='musButton2' src={rijksImg} /> : <img style={{height:'5vh'}} id='musButton2' src={metImg} />;
     let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
     let rationaledisable = this.props.overlay ? false : true;
-    console.log("Disabled? " + rationaledisable);
+    let dataLoaded = this.props.artwork.Title === "" ? false : true;
 
     if (this.state.redirect) {
       let link = `/search/${this.jsonToURI(this.state.objIDs)}`;
@@ -113,16 +119,18 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
               <Stack>
-                <div className="explore__artwork-frame">
-                  <Image height={"35vh"} src={imgURL} className="explore__img" />
-                  <div className="explore__museum-icon">
-                    <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
-                      <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
-                        {musImg}
-                      </a>
-                    </TooltipHost>
+                <Shimmer isDataLoaded={dataLoaded} shimmerElements={[{type: ShimmerElementType.line, height: 340, width: 300}]}  ariaLabel="loading content">
+                  <div className="explore__artwork-frame">
+                    <Image height={"35vh"} src={imgURL} className="explore__img" />
+                    <div className="explore__museum-icon">
+                      <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
+                        <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
+                          {musImg}
+                        </a>
+                      </TooltipHost>
+                    </div>
                   </div>
-                </div>
+                </Shimmer>
                 <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>
               <Stack style={{ "marginLeft": 20 }}>
@@ -147,28 +155,30 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="center" verticalAlign="center" className="explore__main-images">
               <Stack>
                 <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                  <div className="explore__artwork-frame">
-                    <Image height={"275px"} src={imgURL} />
-                    <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
-                      <Stack horizontal className="explore__slide-buttons">
-                        <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
-                        <div className="explore__slide-button-sep"></div>
-                        {this.props.enableRationale &&
-                        <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "ResultImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
-                        } 
-                        <div className="explore__slide-button-sep"></div>
-                        <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
+                  <Shimmer isDataLoaded={dataLoaded} shimmerElements={[{type: ShimmerElementType.line, height: 280, width: 230}]}  ariaLabel="loading content">
+                    <div className="explore__artwork-frame">
+                      <Image height={"275px"} src={imgURL} />
+                      <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                        <Stack horizontal className="explore__slide-buttons">
+                          <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
+                          <div className="explore__slide-button-sep"></div>
+                          {this.props.enableRationale &&
+                          <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "ResultImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>
+                          } 
+                          <div className="explore__slide-button-sep"></div>
+                          <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
 
-                      </Stack>
-                    </CSSTransition>
-                    <div className="explore__museum-icon">
-                      <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
-                        <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
-                          {musImg}
-                        </a>
-                      </TooltipHost>
+                        </Stack>
+                      </CSSTransition>
+                      <div className="explore__museum-icon">
+                        <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
+                          <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
+                            {musImg}
+                          </a>
+                        </TooltipHost>
+                      </div>
                     </div>
-                  </div>
+                  </Shimmer>
                 </div>
                 <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>

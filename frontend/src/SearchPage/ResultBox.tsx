@@ -43,7 +43,7 @@ export default class ResultBox extends Component<IProps, IState> {
 
   render() {
     let museumName = this.props.data.Museum === "met" ? "The Met" : "Rijksmuseum";
-    let musImg = (this.props.data.Museum === 'rijks') ? <Image height={"5vh"} id={this.props.data.id} src={rijksImg} /> : <Image height={"5vh"} id={this.props.data.id} src={metImg} />;
+    let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:'5vh'}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
 
     return (
 

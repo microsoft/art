@@ -1,8 +1,7 @@
 // import '../main.scss';
 import Jimp from 'jimp';
-import { mergeStyles, Stack, Image, ImageFit } from 'office-ui-fabric-react';
+import { mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
@@ -169,12 +168,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
      */
     //makeAPIquery(originalArtURL: string, conditionals: any) {
     makeAPIquery(originalArtURL: string, option: string) {
-        // const apiURL = 'http://art-backend.azurewebsites.net/explore';
-        // const apiURL = 'https://extern2020apim.azure-api.net/score';
-        // const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
-        // const apiURL = "https://extern2020apim.azure-api.net/score";
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
-        // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
         Http.open('POST',apiURL);
