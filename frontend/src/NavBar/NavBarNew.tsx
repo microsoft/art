@@ -21,11 +21,6 @@ class NavBarNew extends Component<IProps, IState> {
             <a className="nav__link" href="/">
               <img src={logo} alt=""/>
             </a>
-            <a className="nav__link" href="/about">
-              <div className="nav__text">
-                About
-              </div>
-            </a>
           </nav>   
         )
     };
