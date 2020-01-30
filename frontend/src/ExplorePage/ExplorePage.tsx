@@ -141,6 +141,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                                            "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
                                                            "&width=" + Math.round(originalImageWidth + resultImageWidth) + 
                                                            "&height=" + imageHeight;
+                                        console.log(shareURL+params)
                                         this.setState({shareLink: shareURL+params});
                                     })
                                     .catch(error => console.log('error', error));
@@ -259,10 +260,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         return (
             <Stack>
                 <HideAt breakpoint="mediumAndBelow">
-                    <div className="explore__background-banner">
-                        <Image height={"50vh"} imageFit={ImageFit.centerCover} src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Boston_Twilight_Panorama_3.jpg/1920px-Boston_Twilight_Panorama_3.jpg"/>
-                        <
-                    </div>
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
                             <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
