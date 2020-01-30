@@ -59,6 +59,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
+        this.scrollToReference = this.scrollToReference.bind(this);
+    }
+
+    // Reference for scrolling to the start of the compare block
+    startRef = React.createRef<HTMLDivElement>();
+    scrollToReference(reference: any): void {
+        window.scrollTo({top:reference.current.offsetTop, left: 0, behavior: "smooth"});
     }
 
     /**
@@ -264,9 +271,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <div className="explore__background-banner">
                         <img className="explore__parallax" src={bannerImage} />
                         <div className="explore__banner-text">Find the building blocks of art that have transcended culture, medium, and time.</div>
-                        <button className="explore__get-started button">GET STARTED</button>
+                        <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
                     </div>
-                    <div className="explore__compare-block explore__solid">
+                    <div ref={this.startRef} className="explore__compare-block explore__solid">
                         <Stack horizontal>
                             <Stack.Item className={halfStack} grow={1}>
                                 <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
