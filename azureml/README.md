@@ -23,7 +23,7 @@ This folder contains various scripts and configuration files that either are dep
 - `deploy_score_aks.py` runs an instance of `score.py` in an AKS cluster. It attempts to attach to a cluster and service if already running, otherwise it creates a service on an existing or new cluster. It then deploys the model and script onto the cluster. Runtime ranges from 10-20 minutes.
 
 - `./GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. 
-  <!---All references to `typingkoala/art-repository:latest` are the --->d
+  <!---All references to `typingkoala/art-repository:latest` are the --->
 
 - `call_service.py` is a script that makes a post request to our web service, printing the response.
 
