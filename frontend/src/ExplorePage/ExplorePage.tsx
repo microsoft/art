@@ -172,35 +172,17 @@ export class ExplorePage extends React.Component<IProps, IState> {
         // const apiURL = 'https://extern2020apim.azure-api.net/score';
         // const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
         // const apiURL = "https://extern2020apim.azure-api.net/score";
-        const apiURL = "https://extern2020apim.azure-api.net/";
+        const apiURL = "https://extern2020apim.azure-api.net/cknn/";
         // let params = '?url=' + originalArtURL + '&numResults=' + '9';
         let params = '?url=' + originalArtURL + '&n=' + '10';
-
-        // let fields = Object.keys(conditionals);
-        // fields.forEach((element: any) => {
-        //     if (conditionals[element] !== "All") {
-        //         params = params + '&' + 'query' + '=' + encodeURIComponent(conditionals[element]);
-        //     }
-        // });
-
-        //let params = '?id=2738' + '&museum=' + 'rijks' + '&numResults=' + '10'
-
-        //console.log("Request: " + apiURL + params);
         const Http = new XMLHttpRequest();
-        //Http.open('GET', apiURL + params);
         Http.open('POST',apiURL);
 
-        // let queryJson = {
-        //     url: originalArtURL,
-        //     culture: "italian",
-        //     classification: "all",
-        //     n: 10
-        // }
         console.log("option: "+option);
 
         let queryJson = option === '' ? 
-                            { url: originalArtURL, n: 3} 
-                            : { url: originalArtURL, n: 3, query: option}; 
+                            { url: originalArtURL, n: 10} 
+                            : { url: originalArtURL, n: 10, query: option}; 
 
         //Http.send();
         Http.send(JSON.stringify(queryJson));
@@ -209,7 +191,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 try {
                     let response = JSON.parse(Http.responseText);
                     response = response.results;
-                    const filteredResponse = response.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
+                    const mappedData = response.map((pair:any) => pair[0]);
+                    const filteredResponse = mappedData.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
 
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;

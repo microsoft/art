@@ -99,7 +99,7 @@ export class SearchPage extends React.Component<IProps, IState> {
     //const apiURL = "http://13.92.189.130/api/v1/service/artgpuservice/score";
     //const apiURL = "https://13.92.189.130/api/v1/service/artgpuservice/score";
     // const apiURL = "https://extern2020apim.azure-api.net/score";
-    const apiURL = "https://extern2020apim.azure-api.net/";
+    const apiURL = "https://extern2020apim.azure-api.net/cknn/";;
     // let params = '?url=' + originalArtURL + '&numResults=' + '9';
     let params = '?url=' + originalArtURL + '&n=' + '10';
 
@@ -126,7 +126,7 @@ export class SearchPage extends React.Component<IProps, IState> {
 
     let queryJson = {
       url: originalArtURL,
-      n: 10
+      n: 20
   }
 
 
@@ -138,9 +138,10 @@ export class SearchPage extends React.Component<IProps, IState> {
           let response = JSON.parse(Http.responseText);
           console.log("response: " + Http.responseText);
           response = response.results;
+          const mappedData = response.map((pair:any) => pair[0])
 
           this.setState({
-            results: response
+            results: mappedData
           });
 
         } catch (e) {
