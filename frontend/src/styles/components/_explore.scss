@@ -83,13 +83,13 @@
   }
 
   &__card-img-container {
-    height: calc(max(25vh, 200px));
+    height: calc(max(20vh, 200px));
     max-width: 100vw;
     outline: none;
   }
 
   &__grid-list-container {
-    width: 100%;
+    width: 80%;
   }
 
   &__grid_old {

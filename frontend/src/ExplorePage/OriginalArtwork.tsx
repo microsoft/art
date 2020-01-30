@@ -113,7 +113,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale</button>
                   }
                   
-                  <Options changeConditional={this.props.changeConditional} />
+                  {/* <Options changeConditional={this.props.changeConditional} /> */}
                 </Stack>
               </Stack>
               <Stack>

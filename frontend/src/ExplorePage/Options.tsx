@@ -8,16 +8,6 @@ const dropdown = mergeStyles({
   marginBottom: 10
 });
 
-interface IState { };
-
-// Expected props
-interface IProps {
-  // Functions for updating state in parent when changing filters
-  changeConditional : any
-}
-
-interface IState { };
-
 // const dropdownStyles: Partial<IDropdownStyles> = {
 //   dropdown: { width:300 }
 // }
@@ -104,7 +94,8 @@ const useSelectStyles = makeStyles({
 });
 
 interface IProps {
-  changeConditional : any
+  changeConditional: any,
+  category: "medium" | "culture"  // The factor to apply the search for ("medium" OR "culture ")
 }
 
 // class Options extends React.Component<IProps, IState> {
@@ -112,28 +103,20 @@ interface IProps {
 export default function Options(props: IProps) {
   const selectClasses = useSelectStyles();
 
-  // Debugging purposes, unnecessary
-  const handleChange = (event: React.FormEvent < HTMLDivElement >, option ?: IDropdownOption): void => {
-    console.log(option)
-  }
-
   return (
-    <div style={{margin:"5px 0px"}}>
+    <div style={{ margin: "5px 0px" }}>
       <FormControl>
         <Select
           native
           defaultValue=""
-          onChange={(event) => {props.changeConditional("culture", event.target.value)}}
+          onChange={(event) => { props.changeConditional(props.category, event.target.value) }}
           classes={{
             root: selectClasses.root
           }}>
-          <option value="" disabled>Quality</option>
-          <optgroup label="Culture">
-            {cultureOptions.map((culture, index) => (<option key={index} value={culture.text}>{culture.text}</option>))}
-          </optgroup>
-          <optgroup label="Medium">
-            {mediumOptions.map((medium, index) => (<option key={index} value={medium.text}>{medium.text}</option>))}
-          </optgroup>
+          <option value="" disabled>{props.category === "culture" ? "Select Culture" : "Select Medium"}</option>
+          {props.category === "culture" ?
+            cultureOptions.map((culture, index) => (<option key={index} value={culture.text}>{culture.text}</option>)) :
+            mediumOptions.map((medium, index) => (<option key={index} value={medium.text}>{medium.text}</option>))}
         </Select>
       </FormControl>
     </div>
