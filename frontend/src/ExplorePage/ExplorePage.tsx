@@ -101,7 +101,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
      */
     updateImageDataURI() {
         // Height of the composite image in pixels
-        let imageHeight = 200;
+        let imageHeight = 650;
 
         Jimp.read(this.state.originalArtwork.Thumbnail_Url)
             .then(originalImage => {
@@ -258,8 +258,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <Stack>
+            <div style={{position: "relative", top: "-74px"}}>
                 <HideAt breakpoint="mediumAndBelow">
+                    <div className="explore__background-banner">
+                        <img className="explore__parallax" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Boston_Twilight_Panorama_3.jpg/1920px-Boston_Twilight_Panorama_3.jpg"/>
+                        <button className="explore__get-started button">GET STARTED</button>
+                    </div>
+                    <div style={{backgroundColor: "white"}}>
                     <Stack horizontal>
                         <Stack.Item className={halfStack} grow={1}>
                             <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
@@ -268,6 +273,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                         </Stack.Item>
                     </Stack>
+                    </div>
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <Stack horizontal horizontalAlign="center" wrap>
@@ -284,7 +290,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 </ShowAt>
                 <Stack horizontal horizontalAlign="center">
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                        <FacebookShareButton className="explore__share-button" quote="Check out my Mosaic!" url={this.state.shareLink}>
+                        <FacebookShareButton className="explore__share-button"  url={this.state.shareLink}>
                             <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
                         </FacebookShareButton>
                     </div>
@@ -303,7 +309,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 <Stack.Item>
                     <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                 </Stack.Item>
-            </Stack>
+            </div>
         )
     }
 }
