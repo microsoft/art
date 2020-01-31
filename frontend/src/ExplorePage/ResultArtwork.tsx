@@ -39,7 +39,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
 
   exploreArtUrlSuffix() {
-    let urlBase = '/';
+    let urlBase = '/art/';
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;
     let url = encodeURIComponent(idURL + museumURL);

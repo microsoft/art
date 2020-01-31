@@ -20,7 +20,7 @@ class NavBar extends Component<IProps, IState> {
     render() {
         return (
           <nav className="nav">
-            <a className="nav__link" href="/">
+            <a className="nav__link" href="/art/">
               <img src={logo} alt=""/>
             </a>
           </nav>   

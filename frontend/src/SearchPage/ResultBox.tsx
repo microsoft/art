@@ -33,7 +33,7 @@ export default class ResultBox extends Component<IProps, IState> {
    * Generates the URL for this ArtObject to get to the Explore Page
    */
   exploreArtUrlSuffix() {
-    let urlBase = '/';
+    let urlBase = '/art/';
     let idURL = '?id=' + this.props.data.id;
     let museumURL = '&museum=' + this.props.data.Museum;
     let url = encodeURIComponent(idURL + museumURL);
