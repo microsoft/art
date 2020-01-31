@@ -283,14 +283,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
         //Decode the url data
         if (this.props.match.params.data) {
             const url = decodeURIComponent(this.props.match.params.data);
-            console.log(url);
 
             let realID = null;
             let realMuseum = null;
             if (url != null) {
                 realID = url.split("&")[0].slice(4);
                 realMuseum = url.split("&")[1];
-                console.log(realMuseum);
                 if (realMuseum) {
                     realMuseum = realMuseum.slice(7);
                 }

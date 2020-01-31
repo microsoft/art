@@ -2,7 +2,6 @@
 import { initializeIcons, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AboutPage from "./AboutPage/AboutPage";
 import withAppInsights from './AppInsights';
 import ExplorePage from './ExplorePage/ExplorePage';
 import NavBarNew from './NavBar/NavBarNew';
@@ -23,7 +22,6 @@ class App extends React.Component {
                     <Switch>
                         <Route path="/search/:id" component={SearchPage} />
                         <Route exact path="/search" component={SearchPage} />
-                        <Route exact path="/about" component={AboutPage} />
                         <Route path="/:data" component={ExplorePage} /> 
                         <Route exact path="/" component={ ExplorePage } />
                     </Switch>
