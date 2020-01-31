@@ -6,6 +6,7 @@ import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, T
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
+import bannerImage from "./banner.jpg";
 import { defaultArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
@@ -13,7 +14,6 @@ import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
 
-import bannerImage from "./banner.jpg";
 
 interface IProps {
     match: any
@@ -26,16 +26,15 @@ interface IState {
     imageDataURI: string,
     galleryItems: ArtObject[],
     conditionals: any,
-    shareLink: string
+    shareLink: string,
+    canRationale: boolean,
+    rationaleOn: boolean
 }
 
 const halfStack = mergeStyles({
     width: "50%",
     height: "100%"
 })
-
-const rationaleOn = true;
-
 
 const azureSearchUrl =
     'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
@@ -54,12 +53,15 @@ export class ExplorePage extends React.Component<IProps, IState> {
             imageDataURI: "",
             galleryItems: [defaultArtObject],
             conditionals: { 'culture': '' },
-            shareLink: ""
+            shareLink: "",
+            canRationale: false,
+            rationaleOn: false,
         }
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
         this.scrollToReference = this.scrollToReference.bind(this);
+        this.toggleRationale = this.toggleRationale.bind(this);
     }
 
     // Reference for scrolling to the start of the compare block
@@ -85,15 +87,31 @@ export class ExplorePage extends React.Component<IProps, IState> {
         let clonedConditionals = { ...this.state.conditionals };
         clonedConditionals[category] = option;
         this.setState({ "conditionals": clonedConditionals });
-        this.makeAPIquery(this.state.originalArtwork.Thumbnail_Url, option);
+        this.makeAPIquery(this.state.originalArtwork, option);
+    }
+
+    toggleRationale() {
+        let newState = !this.state.rationaleOn;
+        this.setState({rationaleOn: newState});
     }
 
     /**
      * Updates the result artwork
      * @param newResultArtwork the artwork to set as the new result
      */
-    setResultArtwork(newResultArtwork: ArtObject): void {
+    setResultArtwork(newResultArtwork: ArtObject, originalArtwork?: ArtObject): void {
         this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
+        originalArtwork = originalArtwork ? originalArtwork : this.state.originalArtwork;
+        console.log("result: "+newResultArtwork);
+        console.log("original: "+originalArtwork);
+        
+        if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]){
+            console.log("TURNING ON RATIONALE");
+            this.setState({canRationale:true});
+        } else {
+            console.log("TURNING OFF RATIONALE");
+            this.setState({canRationale: false});
+        }
     }
 
     /**
@@ -107,12 +125,12 @@ export class ExplorePage extends React.Component<IProps, IState> {
     /**
      * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
      */
-    updateImageDataURI(originalURL? :string, resultURL? :any) {
+    updateImageDataURI(originalArtwork? :ArtObject, resultArtwork? :ArtObject) {
         // Height of the composite image in pixels
         let imageHeight = 650;
 
-        originalURL = originalURL ? originalURL : this.state.originalArtwork.Thumbnail_Url;
-        resultURL = resultURL ? resultURL : this.state.resultArtwork.Thumbnail_Url;
+        let originalURL = originalArtwork ? originalArtwork.Thumbnail_Url : this.state.originalArtwork.Thumbnail_Url;
+        let resultURL = resultArtwork ? resultArtwork.Thumbnail_Url : this.state.resultArtwork.Thumbnail_Url;
 
 
         Jimp.read(originalURL)
@@ -180,7 +198,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param conditionals the conditional qualities to apply to the query
      */
     //makeAPIquery(originalArtURL: string, conditionals: any) {
-    makeAPIquery(originalArtURL: string, option: string) {
+    makeAPIquery(originalArtwork: ArtObject, option: string) {
+        let originalArtURL = originalArtwork.Thumbnail_Url;
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
@@ -210,7 +229,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             resultArtwork: pieces[0],
                             bestResultArtwork: pieces[0]
                         });
-                        this.updateImageDataURI(originalArtURL, pieces[0].Thumbnail_Url);
+                        this.updateImageDataURI(originalArtwork, pieces[0]);
+                        this.setResultArtwork(pieces[0], originalArtwork);
                     }
 
 
@@ -251,20 +271,21 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
-                    self.makeAPIquery(currImgObj.Thumbnail_Url, self.state.conditionals["culture"]);
+                    self.makeAPIquery(currImgObj, self.state.conditionals["culture"]);
                 });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
-            this.makeAPIquery(newOriginalArtwork.Thumbnail_Url, this.state.conditionals["culture"]);
+            this.makeAPIquery(newOriginalArtwork, this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
         }
 
     }
 
     render() {
+        let rationaleButtonText = this.state.rationaleOn ? "Hide Rationale" : "Show Rationale";
         return (
             <div style={{ position: "relative", top: "-74px"}}>
                 <HideAt breakpoint="mediumAndBelow">
@@ -276,10 +297,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <div ref={this.startRef} className="explore__compare-block explore__solid">
                         <Stack horizontal>
                             <Stack.Item className={halfStack} grow={1}>
-                                <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                                <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
                             <Stack.Item className={halfStack} grow={1}>
-                                <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                                <ResultArtwork artwork={this.state.resultArtwork} overlayOn={this.state.rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
                         </Stack>
                     </div>
@@ -288,10 +309,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     <div className="explore__compare-block explore__solid">
                         <Stack horizontal horizontalAlign="center" wrap>
                             <Stack.Item grow={1}>
-                                <OriginalArtwork changeConditional={this.changeConditional} enableRationale={rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                                <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
                             <Stack.Item grow={1}>
-                                <ResultArtwork artwork={this.state.resultArtwork} enableRationale={rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                                <ResultArtwork artwork={this.state.resultArtwork} overlayOn={this.state.rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
                         </Stack>
                         <Stack horizontalAlign="center">
@@ -300,6 +321,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </div>
                 </ShowAt>
                 <div className="explore__solid">
+
+                <button className="explore__buttons button" disabled={!this.state.canRationale}  onClick={this.toggleRationale}>{rationaleButtonText}</button>                  
+
                 <Stack horizontal horizontalAlign="center" className="">
                     <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
                         <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>

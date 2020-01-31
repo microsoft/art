@@ -14,14 +14,13 @@ import Options from './Options';
 interface IState {
   objIDs: any,
   redirect: any,
-  hover: boolean,
-  overlayOn: boolean
+  hover: boolean
 }
 
 type ArtworkProps = {
   artwork: ArtObject,
   overlay: string,
-  enableRationale: boolean,
+  overlayOn: boolean,
   handleTrackEvent: (eventName: string, properties: Object) => void, 
   changeConditional: any
 }
@@ -34,21 +33,12 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
     this.state = {
       objIDs: [],
       redirect: false,
-      hover: false,
-      overlayOn: false
+      hover: false
     };
     this.getSimilarArtID = this.getSimilarArtID.bind(this);
-    this.toggleOverlay = this.toggleOverlay.bind(this);
   }
 
   jsonToURI(json: any) { return encodeURIComponent(JSON.stringify(json)); }
-
-  toggleOverlay() {
-    if (this.props.overlay) {
-      let newValue = !this.state.overlayOn;
-      this.setState({overlayOn: newValue});
-    }
-  }
 
   getSimilarArtID() {
     let imageURL = this.props.artwork.Thumbnail_Url;
@@ -89,7 +79,13 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
 
   render() {
     let musImg = (this.props.artwork.Museum === 'rijks') ? <img style={{height:'5vh'}} id='musButton1' src={rijksImg} /> : <img style={{height:'5vh'}} id='musButton1' src={metImg} />;
-    let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
+    //let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
+    let imgURL = this.props.artwork.Thumbnail_Url;
+    console.log("overlayOn: "+this.props.overlayOn);
+    console.log("Overlay: "+this.props.overlay);
+    if (this.props.overlayOn && this.props.overlay) {
+      imgURL = this.props.overlay
+    }
     let rationaledisable = this.props.overlay ? false : true;
     
     if (this.state.redirect) {
@@ -108,11 +104,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                 <Stack horizontalAlign="end">
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
-                  </a>
-                  {this.props.enableRationale &&
-                  <button className="explore__buttons button" disabled={rationaledisable}  onClick={this.toggleOverlay}>Show Rationale</button>
-                  }
-                  
+                  </a>                  
                   <Options changeConditional={this.props.changeConditional} />
                 </Stack>
               </Stack>
@@ -139,9 +131,6 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                     <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>
-                      {this.props.enableRationale &&
-                      <a onClick={() => { this.props.handleTrackEvent("Rationale", { "Location": "OriginalImage" }); this.toggleOverlay(); }} className="explore__slide-button-link">Rationale</a>                      
-                      }
                       </Stack>
                   </CSSTransition>
                   <div className="explore__museum-icon">
