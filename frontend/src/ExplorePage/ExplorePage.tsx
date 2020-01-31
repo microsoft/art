@@ -331,6 +331,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                 </HideAt>
                 <ShowAt breakpoint="mediumAndBelow">
                     <div className="explore__compare-block explore__solid">
+                        <SubmitControl/>
                         <Stack horizontal horizontalAlign="center" wrap>
                             <Stack.Item grow={1}>
                                 <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
