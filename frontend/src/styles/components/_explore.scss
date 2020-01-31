@@ -89,7 +89,11 @@
   }
 
   &__grid-list-container {
-    width: 80%;
+    width: 100%;
+
+    @media (max-width:1128px) {
+      width: 100%;
+    }
   }
 
   &__grid_old {
@@ -145,7 +149,7 @@
   }
 
   &__img {
-    padding-bottom: 10px;
+    // margin-bottom: 10px;
   }
 
   &__img-container {
@@ -219,6 +223,7 @@
 
   &__artwork-frame {
     position: relative;
+    overflow: hidden;
   }
 
   &__background-banner {
@@ -262,7 +267,6 @@
 
   &__compare-block {
     height: calc(50vh - 95px);
-    // background-color: white;
     padding: 20px 0px 10px 0px;
 
     @media (max-width: 1128px) {
@@ -273,5 +277,13 @@
 
   &__solid {
     background-color: white;
+  }
+
+  &__options-box {
+    margin: 5px 0px 5px 30px !important;
+
+    @media (max-width: 1128px) {
+      margin: 5px auto !important;
+    }
   }
 }

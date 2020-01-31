@@ -1,6 +1,6 @@
 // import '../main.scss';
 import Jimp from 'jimp';
-import { mergeStyles, Stack } from 'office-ui-fabric-react';
+import { mergeStyles, Stack, Separator } from 'office-ui-fabric-react';
 import React from 'react';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
@@ -98,7 +98,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     toggleRationale() {
         let newState = !this.state.rationaleOn;
-        this.setState({rationaleOn: newState});
+        this.setState({ rationaleOn: newState });
     }
 
     /**
@@ -108,15 +108,15 @@ export class ExplorePage extends React.Component<IProps, IState> {
     setResultArtwork(newResultArtwork: ArtObject, originalArtwork?: ArtObject): void {
         this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
         originalArtwork = originalArtwork ? originalArtwork : this.state.originalArtwork;
-        console.log("result: "+newResultArtwork);
-        console.log("original: "+originalArtwork);
-        
-        if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]){
+        console.log("result: " + newResultArtwork);
+        console.log("original: " + originalArtwork);
+
+        if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]) {
             console.log("TURNING ON RATIONALE");
-            this.setState({canRationale:true});
+            this.setState({ canRationale: true });
         } else {
             console.log("TURNING OFF RATIONALE");
-            this.setState({canRationale: false});
+            this.setState({ canRationale: false });
         }
     }
 
@@ -131,7 +131,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     /**
      * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
      */
-    updateImageDataURI(originalArtwork? :ArtObject, resultArtwork? :ArtObject) {
+    updateImageDataURI(originalArtwork?: ArtObject, resultArtwork?: ArtObject) {
         // Height of the composite image in pixels
         let imageHeight = 400;
 
@@ -343,31 +343,35 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </div>
                 </ShowAt>
                 <div className="explore__solid">
-                    <button className="explore__buttons button" disabled={!this.state.canRationale}  onClick={this.toggleRationale}>{rationaleButtonText}</button>                  
-
-                    <Stack horizontal horizontalAlign="center">
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                            <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
-                                <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </FacebookShareButton>
-                        </div>
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                            <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
-                                <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </TwitterShareButton>
-                        </div>
-                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                            <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
-                                <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                            </LinkedinShareButton>
-                        </div>
+                    <Stack horizontalAlign="center">
+                        <button className="explore__buttons button" disabled={!this.state.canRationale} onClick={this.toggleRationale}>{rationaleButtonText}</button>
+                        <Stack horizontal horizontalAlign="center">
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                                <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
+                                    <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </FacebookShareButton>
+                            </div>
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
+                                <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
+                                    <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </TwitterShareButton>
+                            </div>
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                                <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
+                                    <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </LinkedinShareButton>
+                            </div>
+                        </Stack>
                     </Stack>
-                    <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div>
-                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
+                    <Separator/>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="culture" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
-                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
+                    <Separator/>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="medium" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>

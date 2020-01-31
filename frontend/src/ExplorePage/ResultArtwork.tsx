@@ -114,8 +114,15 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="start" verticalAlign="center" className="explore__main-images">
               <Stack>
                 <Shimmer isDataLoaded={dataLoaded} shimmerElements={[{type: ShimmerElementType.line, height: 340, width: 300}]}  ariaLabel="loading content">
-                  <div className="explore__artwork-frame">
+                  <div className="explore__artwork-frame" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                     <Image height={"35vh"} src={imgURL} className="explore__img" />
+                    <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                        <Stack horizontal className="explore__slide-buttons">
+                          <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
+                          <div className="explore__slide-button-sep"></div>
+                          <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
+                        </Stack>
+                      </CSSTransition>
                     <div className="explore__museum-icon">
                       <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton2` }}>
                         <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
@@ -125,20 +132,12 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                     </div>
                   </div>
                 </Shimmer>
-                <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+                <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>
               <Stack style={{ "marginLeft": 20 }}>
                 <Text block nowrap style={{ "fontWeight": "bold", "width": "20vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
-                <Text variant="large">{this.props.artwork.Culture}</Text>
-                <Text variant="large" style={{"marginBottom": 15}}>{this.props.artwork.Classification}</Text>
-                <Stack>
-                  <a href={this.searchArtUrlSuffix()}>
-                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }}>Search</button>
-                  </a>
-                  <a href={this.exploreArtUrlSuffix()}>
-                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Matches", { "Location": "ResultImage" }) }}>Match</button>
-                  </a>
-                </Stack>
+                <Text style={{"textTransform":"capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
+                <Text variant="large" style={{"marginBottom": 15, "textTransform": "capitalize"}}>{this.props.artwork.Classification}</Text>
               </Stack>
             </Stack>
           </HideAt>
@@ -154,7 +153,6 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                           <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
                           <div className="explore__slide-button-sep"></div>
                           <a href={this.exploreArtUrlSuffix()} onClick={() => this.props.handleTrackEvent("Matches", { "Location": "ResultImage" })} className="explore__slide-button-link">Matches</a>
-
                         </Stack>
                       </CSSTransition>
                       <div className="explore__museum-icon">

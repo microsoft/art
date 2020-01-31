@@ -79,7 +79,7 @@ const useSelectStyles = makeStyles({
   root: {
     width: "212px",
     margin: "auto",
-    height: "39px",
+    height: "25px",
     border: "2px solid black",
     textTransform: "capitalize",
     fontSize: "1rem",
@@ -104,7 +104,7 @@ export default function Options(props: IProps) {
   const selectClasses = useSelectStyles();
 
   return (
-    <div style={{ margin: "5px 0px" }}>
+    <div className="explore__options-box">
       <FormControl>
         <Select
           native
