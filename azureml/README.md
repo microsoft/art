@@ -25,6 +25,8 @@ This folder contains various scripts and configuration files that either are dep
 - `./GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. 
   <!---All references to `typingkoala/art-repository:latest` are the --->
 
+- `call_service.py` is a script that makes a post request to our web service, printing the response.
+
 ## Environment
 
 Dependencies for the environment:
