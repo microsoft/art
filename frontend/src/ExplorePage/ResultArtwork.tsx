@@ -129,8 +129,8 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
               </Stack>
               <Stack style={{ "marginLeft": 20 }}>
                 <Text block nowrap style={{ "fontWeight": "bold", "width": "20vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
-                <Text variant="large">{this.props.artwork.Culture}</Text>
-                <Text variant="large" style={{"marginBottom": 15}}>{this.props.artwork.Classification}</Text>
+                <Text style={{"textTransform":"capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
+                <Text variant="large" style={{"marginBottom": 15, "textTransform": "capitalize"}}>{this.props.artwork.Classification}</Text>
                 <Stack>
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }}>Search</button>
