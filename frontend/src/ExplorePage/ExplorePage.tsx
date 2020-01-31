@@ -1,6 +1,6 @@
 // import '../main.scss';
 import Jimp from 'jimp';
-import { mergeStyles, Stack, Separator } from 'office-ui-fabric-react';
+import { mergeStyles, Separator, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
@@ -67,7 +67,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
         this.scrollToReference = this.scrollToReference.bind(this);
         this.toggleRationale = this.toggleRationale.bind(this);
-        this.sendSearch = this.sendSearch.bind(this);
     }
 
     // Reference for scrolling to the start of the compare block
