@@ -100,15 +100,15 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                 <Text block nowrap style={{ "textAlign": "right", "fontWeight": "bold" , "width":"20vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
                 <Text style={{ "textAlign": "right", "textTransform": "capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
                 <Text style={{ "textAlign": "right", "marginBottom": 15 , "textTransform": "capitalize"}} variant="large">{this.props.artwork.Classification}</Text>
-                <Stack horizontalAlign="end">
-                  <a href={this.searchArtUrlSuffix()}>
-                    <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
-                  </a>                  
-                </Stack>
               </Stack>
               <Stack>
-                <div className="explore__artwork-frame">
+                <div className="explore__artwork-frame" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                   <Image height={"35vh"} src={imgURL} className="explore__img" />
+                  <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
+                    <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
+                      <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>
+                      </Stack>
+                  </CSSTransition>
                   <div className="explore__museum-icon">
                     <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="View Source" calloutProps={{ gapSpace: 0, target: `#musButton1` }}>
                       <a href={this.props.artwork.Museum_Page} target="_blank" rel="noopener noreferrer">
@@ -117,7 +117,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                     </TooltipHost>
                   </div>
                 </div>
-                <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
+                <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">Original</Text>
               </Stack>
             </Stack>
           </HideAt>

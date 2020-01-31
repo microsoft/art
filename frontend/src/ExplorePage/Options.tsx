@@ -104,7 +104,7 @@ export default function Options(props: IProps) {
   const selectClasses = useSelectStyles();
 
   return (
-    <div style={{ margin: "5px 0px" }}>
+    <div className="explore__options-box">
       <FormControl>
         <Select
           native

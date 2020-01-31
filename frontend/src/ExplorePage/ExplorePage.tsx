@@ -362,13 +362,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                     {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
-                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="culture" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
                     {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
-                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="medium" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
