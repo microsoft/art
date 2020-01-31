@@ -46,7 +46,7 @@ export default class SubmitControl extends Component<IProps, IState> {
     } else {
       return(
         <form onSubmit={this.onSubmit}>
-          <input className="search__input" type="search" value={value} placeholder="Search" onChange={this.onChange} />;
+          <input className="search__input" style={{backgroundColor:"#f0f0f0", marginBottom:"10px", width: "60%", height: "60px", position: "relative", left: "50%", transform: "translate(-50%, 0%)"}} type="search" value={value} placeholder="Search" onChange={this.onChange} />
           <input type="submit" style={{display:"none"}} />
         </form>
 
