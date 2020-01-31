@@ -97,13 +97,13 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
           <HideAt breakpoint="mediumAndBelow">
             <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
               <Stack verticalAlign="end" style={{ "marginRight": 20 }}>
-                <Text block nowrap style={{ "textAlign": "right", "fontWeight": "bold" , "width":"20vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
+                <Text block style={{ "textAlign": "right", "fontWeight": "bold" , "width":"15vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
                 <Text style={{ "textAlign": "right", "textTransform": "capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
                 <Text style={{ "textAlign": "right", "marginBottom": 15 , "textTransform": "capitalize"}} variant="large">{this.props.artwork.Classification}</Text>
               </Stack>
               <Stack>
                 <div className="explore__artwork-frame" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                  <Image height={"35vh"} src={imgURL} className="explore__img" />
+                  <Image height={"35vh"} style={{"maxWidth":"30vw", "objectFit":"cover"}} src={imgURL} className="explore__img" />
                   <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                     <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>
@@ -125,7 +125,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
             <Stack horizontal horizontalAlign="center" verticalAlign="center" className="explore__main-images">
               <Stack onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                 <Stack className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                  <Image height={"275px"} src={imgURL} />
+                  <Image height={"275px"} style={{"maxWidth":"100%", "objectFit": "cover"}} src={imgURL} />
                   <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                     <Stack horizontal horizontalAlign="center" className="explore__slide-buttons">
                       <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }} className="explore__slide-button-link">Search</a>

@@ -266,7 +266,7 @@
   }
 
   &__compare-block {
-    height: calc(50vh - 35px);
+    height: calc(35vh + 32px + 20px + 70px);
     padding: 20px 0px 10px 0px;
 
     @media (max-width: 1128px) {
@@ -285,5 +285,15 @@
     @media (max-width: 1128px) {
       margin: 5px auto !important;
     }
+  }
+
+  &__search {
+    background-color: #f0f0f0 ;
+    margin-bottom: 10px;
+    width: 60%;
+    height: 60px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
   }
 }
