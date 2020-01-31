@@ -8,6 +8,7 @@
   height: $nav-unit;
   justify-content: space-between;
   padding: 5px 15px;
+  z-index: 1;
 
   @media (max-width: 1128px) {
     border-bottom: 1px solid gainsboro;
