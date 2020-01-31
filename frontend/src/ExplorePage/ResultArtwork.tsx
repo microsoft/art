@@ -115,7 +115,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
               <Stack>
                 <Shimmer isDataLoaded={dataLoaded} shimmerElements={[{type: ShimmerElementType.line, height: 340, width: 300}]}  ariaLabel="loading content">
                   <div className="explore__artwork-frame" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
-                    <Image height={"35vh"} src={imgURL} className="explore__img" />
+                    <Image height={"35vh"} style={{"maxWidth":"30vw", "objectFit": "cover"}} src={imgURL} className="explore__img" />
                     <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                         <Stack horizontal className="explore__slide-buttons">
                           <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
@@ -135,7 +135,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
               </Stack>
               <Stack style={{ "marginLeft": 20 }}>
-                <Text block nowrap style={{ "fontWeight": "bold", "width": "20vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
+                <Text block style={{ "fontWeight": "bold", "width": "15vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
                 <Text style={{"textTransform":"capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
                 <Text variant="large" style={{"marginBottom": 15, "textTransform": "capitalize"}}>{this.props.artwork.Classification}</Text>
               </Stack>
@@ -147,7 +147,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                 <div className="explore__img-container" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
                   <Shimmer isDataLoaded={dataLoaded} shimmerElements={[{type: ShimmerElementType.line, height: 280, width: 230}]}  ariaLabel="loading content">
                     <div className="explore__artwork-frame">
-                      <Image height={"275px"} src={imgURL} />
+                      <Image height={"275px"} style={{"maxWidth":"100%", "objectFit": "cover"}} src={imgURL} />
                       <CSSTransition in={this.state.hover} timeout={0} classNames="explore__slide">
                         <Stack horizontal className="explore__slide-buttons">
                           <a href={this.searchArtUrlSuffix()} onClick={() => { this.props.handleTrackEvent("Search", { "Location": "ResultImage" }) }} className="explore__slide-button-link">Search</a>
