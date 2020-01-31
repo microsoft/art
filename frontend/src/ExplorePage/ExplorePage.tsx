@@ -62,6 +62,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             canRationale: false,
             rationaleOn: false,
         }
+
+        // Bind everything for children
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
@@ -71,6 +73,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     // Reference for scrolling to the start of the compare block
     startRef = React.createRef<HTMLDivElement>();
+
+    /**
+     * Executes a smooth scroll effect to a specified reference
+     * @param reference the reference object to scroll to
+     */
     scrollToReference(reference: any): void {
         window.scrollTo({ top: reference.current.offsetTop, left: 0, behavior: "smooth" });
     }
@@ -95,26 +102,26 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.makeAPIquery(this.state.originalArtwork, category, option);
     }
 
+    /**
+     * Toggles state for the visibility of rationale overlay
+     */
     toggleRationale() {
         let newState = !this.state.rationaleOn;
         this.setState({ rationaleOn: newState });
     }
 
     /**
-     * Updates the result artwork
+     * Updates the result artwork; enables the rationale button if either artwork have rationale overlays
      * @param newResultArtwork the artwork to set as the new result
+     * @param originalArtwork the original artwork
      */
     setResultArtwork(newResultArtwork: ArtObject, originalArtwork?: ArtObject): void {
         this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
         originalArtwork = originalArtwork ? originalArtwork : this.state.originalArtwork;
-        console.log("result: " + newResultArtwork);
-        console.log("original: " + originalArtwork);
 
         if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]) {
-            console.log("TURNING ON RATIONALE");
             this.setState({ canRationale: true });
         } else {
-            console.log("TURNING OFF RATIONALE");
             this.setState({ canRationale: false });
         }
     }
@@ -134,16 +141,20 @@ export class ExplorePage extends React.Component<IProps, IState> {
         // Height of the composite image in pixels
         let imageHeight = 400;
 
+        // Use the image url in component state if no ArtObject is given
         let originalURL = originalArtwork ? originalArtwork.Thumbnail_Url : this.state.originalArtwork.Thumbnail_Url;
         let resultURL = resultArtwork ? resultArtwork.Thumbnail_Url : this.state.resultArtwork.Thumbnail_Url;
 
-
-        Jimp.read(originalURL)
+        Jimp.read(originalURL)  // Read original image (left)
             .then(originalImage => {
-                Jimp.read(resultURL)
+                Jimp.read(resultURL)    // Read the result image (right)
                     .then(resultImage => {
+                        
+                        // Define the target width of the two images
                         let originalImageWidth = originalImage.getWidth() * imageHeight / originalImage.getHeight();
                         let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
+
+                        // Combine the two images
                         originalImage.resize(originalImageWidth, imageHeight)
                             .crop(0, 0, originalImageWidth + resultImageWidth, imageHeight)
                             .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
@@ -164,11 +175,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 };
 
                                 let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
+                                // Upload the composite image to hosting service
                                 fetch("https://mosaicart.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
                                     requestOptions)
                                     .then(response => response.json())
                                     .then(result => {
-                                        // let sharLink = "https://art-backend.azurewebsites.net/share?image_url={a}&redirect_url={b}&title={c}&description={d}"
                                         let shareURL = "https://mosaicart.azurewebsites.net/share";
                                         let params = "?" + "image_url=" + result.img_url +
                                             "&redirect_url=" + window.location.href +
@@ -176,7 +187,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                             "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
                                             "&width=" + Math.round(originalImageWidth + resultImageWidth) +
                                             "&height=" + imageHeight;
-                                        console.log(shareURL + params)
+
+                                        // Save the resulting sharing link to component state for use with social media sharing
                                         this.setState({ shareLink: shareURL + params });
                                     })
                                     .catch(error => console.log('error', error));
@@ -192,7 +204,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param properties Custom properties to include in the event data
      */
     async handleTrackEvent(eventName: string, properties: Object) {
-        console.log("Tracked " + eventName);
         appInsights.trackEvent({ name: eventName, properties: properties });
     }
 
@@ -207,17 +218,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
     makeAPIquery(originalArtwork: ArtObject, category: "all" | "culture" | "medium", option: string) {
         let originalArtURL = originalArtwork.Thumbnail_Url;
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
+
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
         Http.open('POST', apiURL);
-
-        console.log("option: " + option + category);
-
         let queryJson = option === '' ?
             { url: originalArtURL, n: 10 }
             : { url: originalArtURL, n: 10, query: option };
 
-        //Http.send();
         Http.send(JSON.stringify(queryJson));
         Http.onreadystatechange = e => {
             if (Http.readyState === 4) {
@@ -225,9 +233,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let response = JSON.parse(Http.responseText);
                     response = response.results;
                     const mappedData = response.map((pair: any) => pair[0]);
+
+                    // Filter the results to exclude the original queried iamge
                     const filteredResponse = mappedData.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
 
-                    //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
                     if (pieces.length > 0) {
                         if (category === "culture") {
@@ -252,7 +261,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 bestResultArtwork: pieces[0]
                             });
                         }
+
+                        // Create and upload a composite image for sharing on social media
                         this.updateImageDataURI(originalArtwork, pieces[0]);
+                        // Display the top result on the right
                         this.setResultArtwork(pieces[0], originalArtwork);
                     }
 
@@ -264,6 +276,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
         }
     }
 
+    /**
+     * Intialization code for the explore webpage
+     */
     componentDidMount() {
         //Decode the url data
         if (this.props.match.params.data) {
@@ -290,7 +305,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     return response.json();
                 })
                 .then(function (responseJson) {
-                    console.log(responseJson.value[0]);
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
@@ -299,7 +313,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
-            console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
             this.makeAPIquery(newOriginalArtwork, "all", this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
@@ -363,13 +376,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             </div>
                         </Stack>
                     </Stack>
-                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
                     <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="culture" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
-                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
                     <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                         <Options category="medium" changeConditional={this.changeConditional} />
@@ -381,4 +392,4 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 }
 
-export default ExplorePage
+export default ExplorePage;
