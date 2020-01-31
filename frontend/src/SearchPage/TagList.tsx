@@ -1,5 +1,5 @@
-import React, { Component, ChangeEvent } from 'react';
-import { DefaultButton} from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react';
+import React, { ChangeEvent, Component } from 'react';
 
 interface IProps {
     activeFilters:any,
@@ -51,7 +51,6 @@ export default class TagList extends Component<IProps> {
                   className="search__checkbox"
                   type="checkbox" id={facetInfo.value}
                   checked={this.isChecked(this.props.activeFilters, nameFacetEntries[0], facetInfo.value)}
-                  // onChange={e => this.onChange(e, nameFacetEntries[0], facetInfo.value)} />
                   onChange={e => this.onCheckboxChange(e, nameFacetEntries[0], facetInfo.value)} />
                 <label className="search__label" htmlFor={facetInfo.value}>{facetInfo.value + ` (${facetInfo.count})`}</label>
               </div>

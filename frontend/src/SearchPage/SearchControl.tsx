@@ -7,12 +7,15 @@ interface IProps{
 interface IState {
     value: any
 }
-
+/**
+ * Search Text input box across the top of the search page
+ * updatesTerms prop: Callback to send up the search bar text
+ */
 export default class SearchControl extends Component<IProps, IState> {
   constructor(props:any) {
     super(props);
     this.state = {
-      value: '',
+      value: '', //The text value in the search bar
     };
   }
 

@@ -19,10 +19,6 @@ interface IState {
 
 const facetNames = ["Culture"];
 
-// const azureSearchUrl =
-//   'https://met-search.search.windows.net/indexes/met-index/docs?api-version=2019-05-06&';
-// const apiKey = 'E05256A72E0904582D2B7671DD7E2E3E';
-
 const azureSearchUrl =
   'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
 const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
@@ -47,49 +43,13 @@ export class SearchPage extends React.Component<IProps, IState> {
     //AppInsights.trackPageView("Search Page");
   }
 
-  /**
-   * Execute a search with no terms on startup
-   */
-  // componentDidMount() {
-  //   const id = this.props.match.params.id; // The ID and museum of the given artwork
-
-  //   if (id) {
-  //     let realID = null;
-  //     let realMuseum = null;
-  //     if (id != null) {
-  //       realID = id.split("&")[0].slice(3);
-  //       realMuseum = id.split("&")[1];
-  //       if (realMuseum) {
-  //         realMuseum = realMuseum.slice(7);
-  //       }
-  //     }
-
-  //     let query = "&search=" + realID + "&filter=" + realMuseum;
-  //     console.log(query);
-  //     let self = this;
-  //     //Make query
-  //     fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
-  //       .then(function (response) {
-  //         return response.json();
-  //       })
-  //       .then(function (responseJson) {
-  //         let currImgObj = responseJson.value[0];
-
-  //         self.makeAPIquery(currImgObj.Thumbnail_Url);
-  //       });
-        
-  //   } else {
-  //     this.setState({ terms: ["*"] }, () => this.executeSearch(true))
-  //   }
-  // }
-
   componentDidMount() {
-    const id = this.props.match.params.id; // The ID and museum of the given artwork
+    const searchTerm = this.props.match.params.id; // The Search term from the Explore Page
 
-    if (id) {
-      let decodedId = decodeURIComponent(id);
+    if (searchTerm) {
+      let decodedSearchTerm = decodeURIComponent(searchTerm);
 
-      let queryString = decodedId.split("&")[0].slice(7);
+      let queryString = decodedSearchTerm.split("&")[0].slice(7);
       this.setState({terms:[queryString]},() => this.executeSearch(true));  
     } else {
       this.setState({ terms: ["*"] }, () => this.executeSearch(true))
@@ -97,48 +57,8 @@ export class SearchPage extends React.Component<IProps, IState> {
   }
 
 
-
-
   filterTerm(col: any, values: any) {
     return `search.in(${col},  '${[...values].join("|")}', '|')`
-  }
-
-  /**
-     * Queries API with the original artwork with conditional qualities
-     * @param originalArtURL the image url of the original artwork
-     * @param conditionals the conditional qualities to apply to the query
-     */
-  makeAPIquery(originalArtURL: string, conditionals?: any) {
-    const apiURL = "https://extern2020apim.azure-api.net/cknn/";;
-    // let params = '?url=' + originalArtURL + '&numResults=' + '9';
-    let params = '?url=' + originalArtURL + '&n=' + '10';
-
-
-    const Http = new XMLHttpRequest();
-    Http.open('POST', apiURL);
-
-    let queryJson = {
-      url: originalArtURL,
-      n: 20
-    }
-
-    Http.send(JSON.stringify(queryJson));
-    Http.onreadystatechange = e => {
-      if (Http.readyState === 4) {
-        try {
-          let response = JSON.parse(Http.responseText);
-          response = response.results;
-          const mappedData = response.map((pair:any) => pair[0])
-
-          this.setState({
-            results: mappedData
-          });
-
-        } catch (e) {
-          console.log('malformed request:' + Http.responseText);
-        }
-      }
-    }
   }
 
   /**
@@ -147,7 +67,6 @@ export class SearchPage extends React.Component<IProps, IState> {
    */
   executeSearch(updateFacets: boolean): void {
     let query = "&search=" + this.state.terms.join('|')
-    //let query="&search=";
 
     if (this.state.searchFields != null) {
       query = query + "&searchFields=" + this.state.searchFields.join(",")
@@ -165,7 +84,6 @@ export class SearchPage extends React.Component<IProps, IState> {
       ).join(" or ")
     }
 
-    console.log(query)
     let self = this
     fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
       .then(function (response) {
@@ -232,30 +150,6 @@ export class SearchPage extends React.Component<IProps, IState> {
     console.log("Tracked " + eventName);
     appInsights.trackEvent({ name: eventName, properties: properties });
   }
-
-  // render() {
-  //     return (
-  //         <Stack className={topStackClass}>
-  //             <SearchControl updateTerms={this.updateTerms} />
-  //             <Separator />
-  //             <Stack horizontal>
-  //                 <Stack grow={1}>
-  //                     <TagList
-  //                     activeFilters={this.state.activeFilters}
-  //                     facets={this.state.facets}
-  //                     selectAndApplyFilters={this.selectAndApplyFilters}
-  //                     clearActiveFilters={this.clearActiveFilters}
-  //                     />
-  //                 </Stack>
-  //                 <Separator vertical />
-  //                 <Stack horizontal wrap grow={2}>
-  //                     <SearchGrid results={this.state.results} />
-  //                 </Stack>
-  //             </Stack>
-
-  //         </Stack>
-  //     )
-  // }
 
   render() {
     return (

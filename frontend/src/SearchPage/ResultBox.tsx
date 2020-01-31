@@ -19,8 +19,7 @@ interface IState {
 }
 
 /**
- * One box in the Result Grid
- * 'data' prop: json object from azure search index {@search.score, ObjectID, Department, Title, Culture, Medium, Classification, LinkResource, PrimaryImageUrl, Neighbors}
+ * One box in the Search Grid
  */
 export default class ResultBox extends Component<IProps, IState> {
   constructor(props: any) {
@@ -30,6 +29,9 @@ export default class ResultBox extends Component<IProps, IState> {
     };
   }
 
+  /**
+   * Generates the URL for this ArtObject to get to the Explore Page
+   */
   exploreArtUrlSuffix() {
     let urlBase = '/';
     let idURL = '?id=' + this.props.data.id;
@@ -40,7 +42,6 @@ export default class ResultBox extends Component<IProps, IState> {
 
   render() {
     let museumName = this.props.data.Museum === "met" ? "The Met" : "The Rijks";
-    //let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:30}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
 
     return (
 
