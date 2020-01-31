@@ -13,6 +13,7 @@ import Options from './Options';
 import OriginalArtwork from './OriginalArtwork';
 import OverlayMap from './OverlayMap';
 import ResultArtwork from './ResultArtwork';
+import SubmitControl from './SubmitControl';
 
 
 interface IProps {
@@ -66,6 +67,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.handleTrackEvent = this.handleTrackEvent.bind(this);
         this.scrollToReference = this.scrollToReference.bind(this);
         this.toggleRationale = this.toggleRationale.bind(this);
+        this.sendSearch = this.sendSearch.bind(this);
     }
 
     // Reference for scrolling to the start of the compare block
@@ -317,6 +319,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
                     </div>
                     <div ref={this.startRef} className="explore__compare-block explore__solid">
+                        <SubmitControl/>
                         <Stack horizontal>
                             <Stack.Item className={halfStack} grow={1}>
                                 <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />

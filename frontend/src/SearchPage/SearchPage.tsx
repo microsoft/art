@@ -50,38 +50,54 @@ export class SearchPage extends React.Component<IProps, IState> {
   /**
    * Execute a search with no terms on startup
    */
+  // componentDidMount() {
+  //   const id = this.props.match.params.id; // The ID and museum of the given artwork
+
+  //   if (id) {
+  //     let realID = null;
+  //     let realMuseum = null;
+  //     if (id != null) {
+  //       realID = id.split("&")[0].slice(3);
+  //       realMuseum = id.split("&")[1];
+  //       if (realMuseum) {
+  //         realMuseum = realMuseum.slice(7);
+  //       }
+  //     }
+
+  //     let query = "&search=" + realID + "&filter=" + realMuseum;
+  //     console.log(query);
+  //     let self = this;
+  //     //Make query
+  //     fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
+  //       .then(function (response) {
+  //         return response.json();
+  //       })
+  //       .then(function (responseJson) {
+  //         let currImgObj = responseJson.value[0];
+
+  //         self.makeAPIquery(currImgObj.Thumbnail_Url);
+  //       });
+        
+  //   } else {
+  //     this.setState({ terms: ["*"] }, () => this.executeSearch(true))
+  //   }
+  // }
+
   componentDidMount() {
     const id = this.props.match.params.id; // The ID and museum of the given artwork
 
     if (id) {
-      let realID = null;
-      let realMuseum = null;
-      if (id != null) {
-        realID = id.split("&")[0].slice(3);
-        realMuseum = id.split("&")[1];
-        if (realMuseum) {
-          realMuseum = realMuseum.slice(7);
-        }
-      }
+      let decodedId = decodeURIComponent(id);
 
-      let query = "&search=" + realID + "&filter=" + realMuseum;
-      console.log(query);
-      let self = this;
-      //Make query
-      fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (responseJson) {
-          let currImgObj = responseJson.value[0];
-
-          self.makeAPIquery(currImgObj.Thumbnail_Url);
-        });
-        
+      let queryString = decodedId.split("&")[0].slice(7);
+      this.setState({terms:[queryString]},() => this.executeSearch(true));  
     } else {
       this.setState({ terms: ["*"] }, () => this.executeSearch(true))
     }
   }
+
+
+
 
   filterTerm(col: any, values: any) {
     return `search.in(${col},  '${[...values].join("|")}', '|')`
