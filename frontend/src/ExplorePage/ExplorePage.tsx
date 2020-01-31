@@ -25,6 +25,8 @@ interface IState {
     bestResultArtwork: ArtObject,
     imageDataURI: string,
     galleryItems: ArtObject[],
+    cultureItems: ArtObject[],
+    mediumItems: ArtObject[],
     conditionals: any,
     shareLink: string,
     canRationale: boolean,
@@ -52,7 +54,9 @@ export class ExplorePage extends React.Component<IProps, IState> {
             bestResultArtwork: defaultArtObject,
             imageDataURI: "",
             galleryItems: [defaultArtObject],
-            conditionals: { 'culture': '' },
+            cultureItems: [defaultArtObject],
+            mediumItems: [defaultArtObject],
+            conditionals: { 'culture': '', 'medium': '' },
             shareLink: "",
             canRationale: false,
             rationaleOn: false,
@@ -67,7 +71,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     // Reference for scrolling to the start of the compare block
     startRef = React.createRef<HTMLDivElement>();
     scrollToReference(reference: any): void {
-        window.scrollTo({top:reference.current.offsetTop, left: 0, behavior: "smooth"});
+        window.scrollTo({ top: reference.current.offsetTop, left: 0, behavior: "smooth" });
     }
 
     /**
@@ -80,14 +84,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     /**
      * Updates the conditional qualities to apply to the exploration
-     * @param category the category/axis to filter on (Culture, Medium, etc)
+     * @param category the category/axis to filter on (Culture, Medium, etc); currently does not matter for the API (only option is used)
      * @param option the new filter option to use (French, Sculptures, etc)
      */
-    changeConditional(category: any, option?: any): void {
+    changeConditional(category: any, option: any): void {
         let clonedConditionals = { ...this.state.conditionals };
         clonedConditionals[category] = option;
         this.setState({ "conditionals": clonedConditionals });
-        this.makeAPIquery(this.state.originalArtwork, option);
+        this.makeAPIquery(this.state.originalArtwork, category, option);
     }
 
     toggleRationale() {
@@ -127,7 +131,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
      */
     updateImageDataURI(originalArtwork? :ArtObject, resultArtwork? :ArtObject) {
         // Height of the composite image in pixels
-        let imageHeight = 650;
+        let imageHeight = 400;
 
         let originalURL = originalArtwork ? originalArtwork.Thumbnail_Url : this.state.originalArtwork.Thumbnail_Url;
         let resultURL = resultArtwork ? resultArtwork.Thumbnail_Url : this.state.resultArtwork.Thumbnail_Url;
@@ -195,17 +199,18 @@ export class ExplorePage extends React.Component<IProps, IState> {
     /**
      * Queries API with the original artwork with conditional qualities
      * @param originalArtURL the image url of the original artwork
-     * @param conditionals the conditional qualities to apply to the query
+     * @param category the category/axis to filter on (Culture, Medium, etc)
+     * @param option the new filter option to use (French, Sculptures, etc)
      */
     //makeAPIquery(originalArtURL: string, conditionals: any) {
-    makeAPIquery(originalArtwork: ArtObject, option: string) {
+    makeAPIquery(originalArtwork: ArtObject, category: "all" | "culture" | "medium", option: string) {
         let originalArtURL = originalArtwork.Thumbnail_Url;
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
         let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
         Http.open('POST', apiURL);
 
-        console.log("option: " + option);
+        console.log("option: " + option + category);
 
         let queryJson = option === '' ?
             { url: originalArtURL, n: 10 }
@@ -224,18 +229,35 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     //let ids = response.results.map((result:any) => result.ObjectID);
                     let pieces = filteredResponse;
                     if (pieces.length > 0) {
-                        this.setState({
-                            galleryItems: pieces,
-                            resultArtwork: pieces[0],
-                            bestResultArtwork: pieces[0]
-                        });
+                        if (category === "culture") {
+                            this.setState({
+                                cultureItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
+                        else if (category === "medium") {
+                            this.setState({
+                                mediumItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
+                        else {
+                            this.setState({
+                                cultureItems: pieces,
+                                mediumItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
                         this.updateImageDataURI(originalArtwork, pieces[0]);
                         this.setResultArtwork(pieces[0], originalArtwork);
                     }
 
 
                 } catch (e) {
-                    console.log('malformed request:' + Http.responseText);
+                    console.log('malformed request:' + Http.responseText + category);
                 }
             }
         }
@@ -271,14 +293,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
-                    self.makeAPIquery(currImgObj, self.state.conditionals["culture"]);
+                    self.makeAPIquery(currImgObj, "all", self.state.conditionals["culture"]);
                 });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
-            this.makeAPIquery(newOriginalArtwork, this.state.conditionals["culture"]);
+            this.makeAPIquery(newOriginalArtwork, "all", this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
         }
 
@@ -287,7 +309,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         let rationaleButtonText = this.state.rationaleOn ? "Hide Rationale" : "Show Rationale";
         return (
-            <div style={{ position: "relative", top: "-74px"}}>
+            <div style={{ position: "relative", top: "-74px" }}>
                 <HideAt breakpoint="mediumAndBelow">
                     <div className="explore__background-banner">
                         <img className="explore__parallax" src={bannerImage} />
@@ -315,36 +337,37 @@ export class ExplorePage extends React.Component<IProps, IState> {
                                 <ResultArtwork artwork={this.state.resultArtwork} overlayOn={this.state.rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
                         </Stack>
-                        <Stack horizontalAlign="center">
-                            <Options changeConditional={this.changeConditional} />
-                        </Stack>
                     </div>
                 </ShowAt>
                 <div className="explore__solid">
+                    <button className="explore__buttons button" disabled={!this.state.canRationale}  onClick={this.toggleRationale}>{rationaleButtonText}</button>                  
 
-                <button className="explore__buttons button" disabled={!this.state.canRationale}  onClick={this.toggleRationale}>{rationaleButtonText}</button>                  
-
-                <Stack horizontal horizontalAlign="center" className="">
-                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                        <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
-                            <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </FacebookShareButton>
-                    </div>
-                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                        <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
-                            <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </TwitterShareButton>
-                    </div>
-                    <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                        <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
-                            <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                        </LinkedinShareButton>
-                    </div>
-                </Stack>
-                <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px"}}></div>
-                <Stack.Item className="">
-                    <ListCarousel items={this.state.galleryItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
-                </Stack.Item>
+                    <Stack horizontal horizontalAlign="center">
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                            <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
+                                <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </FacebookShareButton>
+                        </div>
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
+                            <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
+                                <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </TwitterShareButton>
+                        </div>
+                        <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                            <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
+                                <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                            </LinkedinShareButton>
+                        </div>
+                    </Stack>
+                    <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div>
+                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                        <Options category="culture" changeConditional={this.changeConditional} />
+                        <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
+                    </Stack>
+                    <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
+                        <Options category="medium" changeConditional={this.changeConditional} />
+                        <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
+                    </Stack>
                 </div>
             </div>
         )

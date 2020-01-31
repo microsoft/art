@@ -7,7 +7,6 @@ import { HideAt, ShowAt } from 'react-with-breakpoints';
 import ArtObject from '../ArtObject';
 import rijksImg from '../images/Rijks.jpg';
 import metImg from '../images/the_met_logo_crop.png';
-import Options from './Options';
 
 
 
@@ -105,7 +104,6 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   <a href={this.searchArtUrlSuffix()}>
                     <button className="explore__buttons button" onClick={() => { this.props.handleTrackEvent("Search", { "Location": "OriginalImage" }) }}>Search</button>
                   </a>                  
-                  <Options changeConditional={this.props.changeConditional} />
                 </Stack>
               </Stack>
               <Stack>
