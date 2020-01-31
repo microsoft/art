@@ -31,7 +31,9 @@ interface IState {
     conditionals: any,
     shareLink: string,
     canRationale: boolean,
-    rationaleOn: boolean
+    rationaleOn: boolean,
+    defaultCulture: any,
+    defaultMedium: any
 }
 
 const halfStack = mergeStyles({
@@ -42,6 +44,13 @@ const halfStack = mergeStyles({
 const azureSearchUrl =
     'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
 const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
+
+const mediums = ['prints', 'drawings', 'ceramics', 'textiles', 'paintings', 'accessories', 'photographs', "glass", "metalwork", 
+           "sculptures", "weapons", "stone", "precious", "paper", "woodwork", "leatherwork", "musical instruments", "uncategorized"];
+const cultures = ['african (general)', 'american', 'ancient american', 'ancient asian', 'ancient european', 'ancient middle-eastern', 'asian (general)', 
+            'austrian', 'belgian', 'british', 'chinese', 'czech', 'dutch', 'egyptian', 'european (general)', 'french', 'german', 'greek', 
+            'iranian', 'italian', 'japanese', 'latin american', 'middle eastern', 'roman', 'russian', 'south asian', 'southeast asian', 
+            'spanish', 'swiss', 'various'];
 
 const defaultArtObject: ArtObject = new ArtObject("", "", "", "", "", "", "", "", "");
 
@@ -61,6 +70,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             shareLink: "",
             canRationale: false,
             rationaleOn: false,
+            defaultCulture: '',
+            defaultMedium: ''
         }
         this.setResultArtwork = this.setResultArtwork.bind(this);
         this.changeConditional = this.changeConditional.bind(this);
@@ -294,15 +305,31 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     let currImgObj = responseJson.value[0];
                     self.setState({ originalArtwork: responseJson.value[0] });
 
-                    self.makeAPIquery(currImgObj, "all", self.state.conditionals["culture"]);
+                    //self.makeAPIquery(currImgObj, "all", self.state.conditionals["culture"]);
+                    let numCultures = cultures.length;
+                    let cultureIndex = Math.floor(Math.random() * Math.floor(numCultures)); 
+                    self.makeAPIquery(currImgObj, "culture",cultures[cultureIndex]);
+                    let numMediums = mediums.length;
+                    let mediumIndex = Math.floor(Math.random() * Math.floor(numMediums)); 
+                    self.makeAPIquery(currImgObj, "medium", mediums[mediumIndex]);
+
+                    self.setState({defaultCulture: cultures[cultureIndex], defaultMedium: mediums[mediumIndex]});
                 });
         } else {
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             console.log("RANDINDEX: " + randIndex);
             let newOriginalArtwork = defaultArtwork[randIndex];
-            this.makeAPIquery(newOriginalArtwork, "all", this.state.conditionals["culture"]);
+            //this.makeAPIquery(newOriginalArtwork, "all", this.state.conditionals["culture"]);
             this.setState({ originalArtwork: newOriginalArtwork });
+
+            let numCultures = cultures.length;
+            let cultureIndex = Math.floor(Math.random() * Math.floor(numCultures)); 
+            this.makeAPIquery(newOriginalArtwork, "culture",cultures[cultureIndex]);
+            let numMediums = mediums.length;
+            let mediumIndex = Math.floor(Math.random() * Math.floor(numMediums)); 
+            this.makeAPIquery(newOriginalArtwork, "medium", mediums[mediumIndex]);
+            this.setState({defaultCulture: cultures[cultureIndex], defaultMedium: mediums[mediumIndex]});
         }
 
     }
@@ -366,13 +393,13 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
                     <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
-                        <Options category="culture" changeConditional={this.changeConditional} />
+                        <Options category="culture" changeConditional={this.changeConditional} randomDefault={this.state.defaultCulture} />
                         <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
                     {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
                     <Separator/>
                     <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
-                        <Options category="medium" changeConditional={this.changeConditional} />
+                        <Options category="medium" changeConditional={this.changeConditional} randomDefault={this.state.defaultMedium} />
                         <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
                 </div>
