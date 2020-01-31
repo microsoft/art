@@ -2,7 +2,9 @@
 
 - [Model Training and Inference](#model-training-and-inference)
   - [File Structure](#file-structure)
-  - [Environment](#environment)
+  - [Getting Started](#getting-started)
+    - [Install the Python Dependencies](#install-the-python-dependencies)
+    - [Deploying Featurization Script](#deploying-featurization-script)
   - [Training](#training)
   - [Service Deployment](#service-deployment)
 
@@ -22,25 +24,33 @@ This folder contains various scripts and configuration files that either are dep
 
 - `deploy_score_aks.py` runs an instance of `score.py` in an AKS cluster. It attempts to attach to a cluster and service if already running, otherwise it creates a service on an existing or new cluster. It then deploys the model and script onto the cluster. Runtime ranges from 10-20 minutes.
 
-- `./GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. 
-  <!---All references to `typingkoala/art-repository:latest` are the --->
+- `./GPU_Docker/Dockerfile` is a Dockerfile that specifies how to build the base image for training and scoring. It includes `tensorflow-gpu` for GPU drivers, `Java` for `pyspark`, and an installation of `Anaconda`. This Dockerfile has been built and hosted on [DockerHub](https://hub.docker.com/repository/docker/typingkoala/mosaic_base_image) in the repo `typingkoala/mosaic_base_image`.
 
 - `call_service.py` is a script that makes a post request to our web service, printing the response.
 
-## Environment
+## Getting Started
 
-Dependencies for the environment:
+In order to deploy Mosaic, you will need the following installed on your computer.
 
-- Python 3.6.2 (or above)
-- Tensorflow GPU
-- numpy
-- keras
-- Pillow
-- pyspark
-- azureml-defaults[services]
-- tqdm
-- Docker:
-  - start from tensorflow:1.13.2-gpu and set up a Docker image, more details in `./GPU_Docker/Dockerfile`.
+- Python 3
+- Docker
+
+### Install the Python Dependencies
+
+First, install the AzureML Python SDK. Make sure to activate your virtual environment if you are using one.
+
+```bash
+pip install --upgrade azureml-sdk
+```
+
+### Deploying Featurization Script
+In order to begin online featurization, we first edit the `deploy_featurize.py` script with the appropriate workspace and Azure Storage information. On the first run, you will be prompted to log in to Microsoft using interactive authentication. Once completed, your authentication information will be cached locally for future runs.
+
+```bash
+python azureml/deploy_featurize.py
+```
+
+Running `deploy_featurize.py` will attach to a cluster (or create one if it doesn't exist) with the name specified in the script. It will then submit the `featurize.py` script as a job to complete. Logs will stream from the cluster to the local terminal. Once the script runs, the `outputs/` folder will be registered as a model so that it can be mounted to the inference cluster for serving web traffic.
 
 
 ## Training
