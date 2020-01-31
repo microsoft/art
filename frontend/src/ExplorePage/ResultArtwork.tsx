@@ -29,6 +29,7 @@ type ArtworkProps = {
 
 const shimType :any = {type: ShimmerElementType.line, height: 400, width: "20vw"};
 
+// Component for the currently selected result image (right image)
 class ResultArtwork extends React.Component<ArtworkProps, IState> {
 
   constructor(props: any) {
@@ -86,7 +87,6 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
     let idURL = '?id=' + this.props.artwork.id;
     let museumURL = '&museum=' + this.props.artwork.Museum;
     let url = encodeURIComponent(idURL + museumURL);
-    //console.log(url);
     return urlBase + url;
   }
 

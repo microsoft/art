@@ -8,8 +8,6 @@ import ArtObject from '../ArtObject';
 import rijksImg from '../images/Rijks.jpg';
 import metImg from '../images/the_met_logo_crop.png';
 
-
-
 interface IState {
   objIDs: any,
   redirect: any,
@@ -24,6 +22,7 @@ type ArtworkProps = {
   changeConditional: any
 }
 
+// Component for the original image that is used for the query (left image)
 class OriginalArtwork extends React.Component<ArtworkProps, IState> {
 
   constructor(props: any) {
@@ -66,7 +65,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
       }
     };
   }
-
+  
   searchArtUrlSuffix() {
     let urlBase = '/search/';
 
@@ -80,8 +79,6 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
     let musImg = (this.props.artwork.Museum === 'rijks') ? <img style={{height:'5vh'}} id='musButton1' src={rijksImg} /> : <img style={{height:'5vh'}} id='musButton1' src={metImg} />;
     //let imgURL = this.state.overlayOn ? this.props.overlay : this.props.artwork.Thumbnail_Url;
     let imgURL = this.props.artwork.Thumbnail_Url;
-    console.log("overlayOn: "+this.props.overlayOn);
-    console.log("Overlay: "+this.props.overlay);
     if (this.props.overlayOn && this.props.overlay) {
       imgURL = this.props.overlay
     }
