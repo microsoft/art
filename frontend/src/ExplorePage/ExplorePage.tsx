@@ -1,6 +1,6 @@
 // import '../main.scss';
 import Jimp from 'jimp';
-import { mergeStyles, Stack } from 'office-ui-fabric-react';
+import { mergeStyles, Stack, Separator } from 'office-ui-fabric-react';
 import React from 'react';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
@@ -360,11 +360,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
                             </div>
                         </Stack>
                     </Stack>
-                    <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div>
+                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
+                    <Separator/>
                     <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
                         <Options category="culture" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
                     </Stack>
+                    {/* <div style={{ "width": "100%", "height": "1px", "backgroundColor": "gainsboro", "margin": "10px 0px" }}></div> */}
+                    <Separator/>
                     <Stack horizontal horizontalAlign="space-around" verticalAlign="center" wrap>
                         <Options category="medium" changeConditional={this.changeConditional} />
                         <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />

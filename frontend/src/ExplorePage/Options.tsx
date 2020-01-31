@@ -79,7 +79,7 @@ const useSelectStyles = makeStyles({
   root: {
     width: "212px",
     margin: "auto",
-    height: "39px",
+    height: "25px",
     border: "2px solid black",
     textTransform: "capitalize",
     fontSize: "1rem",

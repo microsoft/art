@@ -90,6 +90,10 @@
 
   &__grid-list-container {
     width: 80%;
+
+    @media (max-width:1128px) {
+      width: 100%;
+    }
   }
 
   &__grid_old {
