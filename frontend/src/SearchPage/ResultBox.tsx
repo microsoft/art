@@ -1,12 +1,9 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Card } from '@uifabric/react-cards';
 import { Image, ImageFit, Stack } from 'office-ui-fabric-react';
-import { DirectionalHint, TooltipDelay, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
 import { CSSTransition } from 'react-transition-group';
-import rijksImg from '../images/Rijks.jpg';
-import metImg from '../images/the_met_logo_crop.png';
 
 
 
@@ -43,7 +40,7 @@ export default class ResultBox extends Component<IProps, IState> {
 
   render() {
     let museumName = this.props.data.Museum === "met" ? "The Met" : "The Rijks";
-    let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:30}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
+    //let musImg = (this.props.data.Museum === 'rijks') ? <img style={{height:30}} id={this.props.data.id} src={rijksImg} /> : <img style={{height:'5vh'}} id={this.props.data.id} src={metImg} />;
 
     return (
 
@@ -56,9 +53,7 @@ export default class ResultBox extends Component<IProps, IState> {
               offset={1000}
               placeholder={<CircularProgress style={{ color: '#6A6A6A' }} />}
             >
-              <TooltipHost delay={TooltipDelay.medium} closeDelay={0} directionalHint={DirectionalHint.bottomCenter} content="Find Matches" calloutProps={{ gapSpace: 0, target: `#${this.props.data.id}` }}>
-                <Image className="grid-card__img" alt="thumbnail" id={this.props.data.id} src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
-              </TooltipHost>
+                <Image className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
             </LazyLoad>
           </a>
         </Card.Item>
