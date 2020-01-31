@@ -1,4 +1,5 @@
 import requests
+import json
 
 resp = requests.post(
     "https://extern2020apim.azure-api.net/cknn/",
@@ -8,3 +9,7 @@ resp = requests.post(
     "query":"prints"})
 
 print(resp.text)
+
+response_data = json.loads(resp.content, encoding="utf-8")
+if "results" not in response_data.keys():
+    raise Exception("FAILED: No results field.")

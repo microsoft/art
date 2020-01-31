@@ -6,14 +6,6 @@ trigger:
     exclude:
       - '*.md'
 
-pr:
-  branches:
-    include:
-      - master
-  paths:
-    exclude:
-      - '*.md'
-
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -22,7 +14,7 @@ steps:
   inputs:
     versionSpec: '3.6'
   displayName: Setting Python Version...
-- script: pip install -r azureml/requirements.txt
+- script: cd azureml && pip install -r requirements.txt 
   displayName: 'Installing dependencies...'
 - task: DockerInstaller@0
   inputs:
@@ -34,5 +26,16 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      python3 azureml/updateaci.py
-  displayName: Deploying/Updating service...
+      python3 deploy_score_aks.py
+  displayName: Deploying Inference Service...
+- script: python call_service.py
+  displayName: Checking if inference service is online...
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd ../backend
+      az webapp up --name mosaicart
+  displayName: Deploying Facebook Sharing Service...
