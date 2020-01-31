@@ -310,7 +310,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     render() {
         let rationaleButtonText = this.state.rationaleOn ? "Hide Rationale" : "Show Rationale";
         return (
-            <div style={{ position: "relative", top: "-74px" }}>
+            <div style={{ position: "relative", top: "-74px", width: "100%", overflow: "hidden" }}>
                 <HideAt breakpoint="mediumAndBelow">
                     <div className="explore__background-banner">
                         <img className="explore__parallax" src={bannerImage} />
