@@ -1,8 +1,8 @@
-import { FormControl, makeStyles } from '@material-ui/core';
-import Select from '@material-ui/core/Select';
-import { mergeStyles } from '@uifabric/merge-styles';
-import { IDropdownOption } from 'office-ui-fabric-react';
 import React from 'react';
+import { Text, Stack, Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react';
+import { mergeStyles } from '@uifabric/merge-styles';
+import Select from '@material-ui/core/Select';
+import { Input, FormControl, InputLabel, makeStyles } from '@material-ui/core';
 
 const dropdown = mergeStyles({
   marginBottom: 10
@@ -95,8 +95,7 @@ const useSelectStyles = makeStyles({
 
 interface IProps {
   changeConditional: any,
-  category: "medium" | "culture",  // The factor to apply the search for ("medium" OR "culture ")
-  randomDefault: any
+  category: "medium" | "culture"  // The factor to apply the search for ("medium" OR "culture ")
 }
 
 // class Options extends React.Component<IProps, IState> {
@@ -104,24 +103,22 @@ interface IProps {
 export default function Options(props: IProps) {
   const selectClasses = useSelectStyles();
 
-    return (
-      <div className="explore__options-box">
-        <FormControl>
-          <Select
-            native
-            defaultValue={props.randomDefault}
-            onChange={(event) => { props.changeConditional(props.category, event.target.value) }}
-            classes={{
-              root: selectClasses.root
-            }}>
-            {/* <option value="" disabled>{props.category === "culture" ? "Select Culture" : "Select Medium"}</option> */}
-            {/* <option value="" disabled>{props.randomDefault}</option> */}
-            {props.category === "culture" ?
-              cultureOptions.map((culture, index) => (<option key={index} value={culture.text}>{culture.text}</option>)) :
-              mediumOptions.map((medium, index) => (<option key={index} value={medium.text}>{medium.text}</option>))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-
+  return (
+    <div className="explore__options-box">
+      <FormControl>
+        <Select
+          native
+          defaultValue=""
+          onChange={(event) => { props.changeConditional(props.category, event.target.value) }}
+          classes={{
+            root: selectClasses.root
+          }}>
+          <option value="" disabled>{props.category === "culture" ? "Select Culture" : "Select Medium"}</option>
+          {props.category === "culture" ?
+            cultureOptions.map((culture, index) => (<option key={index} value={culture.text}>{culture.text}</option>)) :
+            mediumOptions.map((medium, index) => (<option key={index} value={medium.text}>{medium.text}</option>))}
+        </Select>
+      </FormControl>
+    </div>
+  );
 }
