@@ -1,10 +1,10 @@
 // import './main.scss';
-import { initializeIcons, mergeStyles, Stack } from 'office-ui-fabric-react';
+import { initializeIcons, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import withAppInsights from './AppInsights';
 import ExplorePage from './ExplorePage/ExplorePage';
-import NavBarNew from './NavBar/NavBarNew';
+import NavBar from "./NavBar/NavBar";
 import SearchPage from "./SearchPage/SearchPage";
 
 initializeIcons();
@@ -18,7 +18,7 @@ class App extends React.Component {
         return (
             <Router basename={process.env.PUBLIC_URL}>
                 <Stack className="main" role="main">
-                    <NavBarNew />
+                    <NavBar />
                     <Switch>
                         <Route path="/search/:id" component={SearchPage} />
                         <Route exact path="/search" component={SearchPage} />

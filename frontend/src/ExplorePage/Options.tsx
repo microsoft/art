@@ -1,19 +1,9 @@
-import React from 'react';
-import { Text, Stack, Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react';
-import { mergeStyles } from '@uifabric/merge-styles';
+import { FormControl, makeStyles } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
-import { Input, FormControl, InputLabel, makeStyles } from '@material-ui/core';
-
-const dropdown = mergeStyles({
-  marginBottom: 10
-});
-
-// const dropdownStyles: Partial<IDropdownStyles> = {
-//   dropdown: { width:300 }
-// }
+import React from 'react';
 
 // Options for filtering the art culture
-const cultureOptions: IDropdownOption[] = [
+const cultureOptions: any[] = [
   { key: 'culture1', text: 'african (general)' },
   { key: 'culture2', text: 'american' },
   { key: 'culture3', text: 'ancient american' },
@@ -47,7 +37,7 @@ const cultureOptions: IDropdownOption[] = [
 ];
 
 // Options for filtering the art medium
-const mediumOptions: IDropdownOption[] = [
+const mediumOptions: any[] = [
   { key: 'medium1', text: 'prints' },
   { key: 'medium2', text: 'drawings' },
   { key: 'medium3', text: 'ceramics' },
@@ -66,13 +56,6 @@ const mediumOptions: IDropdownOption[] = [
   { key: 'medium16', text: 'leatherwork' },
   { key: 'medium17', text: 'musical instruments' },
   { key: 'medium18', text: 'uncategorized' }
-];
-
-// Options for filtering the museum
-const museumOptions: IDropdownOption[] = [
-  { key: 'museumAll', text: 'All Museums' },
-  { key: 'museumMet', text: 'Metropolitan Museum of Art' },
-  { key: 'museumRijks', text: 'Rijksmuseum' }
 ];
 
 const useSelectStyles = makeStyles({
@@ -97,8 +80,6 @@ interface IProps {
   changeConditional: any,
   category: "medium" | "culture"  // The factor to apply the search for ("medium" OR "culture ")
 }
-
-// class Options extends React.Component<IProps, IState> {
 
 export default function Options(props: IProps) {
   const selectClasses = useSelectStyles();

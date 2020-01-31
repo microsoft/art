@@ -13,9 +13,6 @@ interface IState {
 }
 
 class ListCarousel extends React.Component<IProps, IState> {
-    // constructor(props: IProps) {
-    //     super(props);
-    // }
 
     createGrid(): JSX.Element[] {
         let grid: JSX.Element[] = [];

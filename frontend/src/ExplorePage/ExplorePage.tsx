@@ -6,7 +6,7 @@ import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, T
 import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { appInsights } from '../AppInsights';
 import ArtObject from "../ArtObject";
-import bannerImage from "./banner.jpg";
+import bannerImage from "../images/banner.jpg";
 import { defaultArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
@@ -45,6 +45,9 @@ const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 
 const defaultArtObject: ArtObject = new ArtObject("", "", "", "", "", "", "", "", "");
 
+/**
+ * The Page thats shown when the user first lands onto the website
+ */
 export class ExplorePage extends React.Component<IProps, IState> {
 
     constructor(props: any) {
@@ -83,14 +86,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
     }
 
     /**
-     * Updates the current original artwork
-     * @param newOriginalArtwork the new artwork to requery on
-     */
-    setOriginalArtwork(newOriginalArtwork: ArtObject): void {
-        this.setState({ originalArtwork: newOriginalArtwork });
-    }
-
-    /**
      * Updates the conditional qualities to apply to the exploration
      * @param category the category/axis to filter on (Culture, Medium, etc); currently does not matter for the API (only option is used)
      * @param option the new filter option to use (French, Sculptures, etc)
@@ -118,7 +113,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
     setResultArtwork(newResultArtwork: ArtObject, originalArtwork?: ArtObject): void {
         this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
         originalArtwork = originalArtwork ? originalArtwork : this.state.originalArtwork;
-
+        //If either image has rational, set canRationale to true, otherwise false
         if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]) {
             this.setState({ canRationale: true });
         } else {
@@ -214,12 +209,10 @@ export class ExplorePage extends React.Component<IProps, IState> {
      * @param category the category/axis to filter on (Culture, Medium, etc)
      * @param option the new filter option to use (French, Sculptures, etc)
      */
-    //makeAPIquery(originalArtURL: string, conditionals: any) {
     makeAPIquery(originalArtwork: ArtObject, category: "all" | "culture" | "medium", option: string) {
         let originalArtURL = originalArtwork.Thumbnail_Url;
         const apiURL = "https://extern2020apim.azure-api.net/cknn/";
 
-        let params = '?url=' + originalArtURL + '&n=' + '10';
         const Http = new XMLHttpRequest();
         Http.open('POST', apiURL);
         let queryJson = option === '' ?
@@ -295,7 +288,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
             }
 
             let query = "&search=" + realID + "&filter=" + realMuseum;
-            console.log(query);
             let self = this;
             //Make query
             fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
@@ -309,6 +301,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     self.makeAPIquery(currImgObj, "all", self.state.conditionals["culture"]);
                 });
         } else {
+            //If the url has no parameters, randomly pick one from the default list.
+            //Every art in the default list has Rationale available.
             let numDefaults = defaultArtwork.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
             let newOriginalArtwork = defaultArtwork[randIndex];
@@ -324,7 +318,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
             <div style={{ position: "relative", top: "-74px", width: "100%", overflow: "hidden" }}>
                 <HideAt breakpoint="mediumAndBelow">
                     <div className="explore__background-banner">
-                        <img className="explore__parallax" src={bannerImage} />
+                        <img className="explore__parallax" alt={"Banner comparing two artworks"} src={bannerImage} />
                         <div className="explore__banner-text">Find the building blocks of art that have transcended culture, medium, and time.</div>
                         <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
                     </div>

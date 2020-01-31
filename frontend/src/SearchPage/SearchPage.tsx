@@ -147,7 +147,6 @@ export class SearchPage extends React.Component<IProps, IState> {
    * @param properties Custom properties to include in the event data
    */
   async handleTrackEvent(eventName: string, properties: Object) {
-    console.log("Tracked " + eventName);
     appInsights.trackEvent({ name: eventName, properties: properties });
   }
 
