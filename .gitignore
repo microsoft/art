@@ -134,3 +134,4 @@ dmypy.json
 .vs/
 outputs/
 images/
+*.ball

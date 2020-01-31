@@ -11,7 +11,9 @@ def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 install("azure-storage-blob")
+install("flask-cors")
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, ContentSettings
+from flask_cors import CORS
 
 connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 blob_service_client = BlobServiceClient(
@@ -27,6 +29,7 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET'])
 def home():
