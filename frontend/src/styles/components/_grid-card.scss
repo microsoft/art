@@ -1,0 +1,125 @@
+.grid-card {
+  position: relative;
+  margin-bottom: $space-l;
+  width: 15% !important;
+  height: auto !important;
+  margin: 12px !important;
+  padding-bottom: 20px;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: 0px 0px 20px dimgrey;
+  }
+
+  @media (min-width: $mq-l) {
+  }
+
+  @media (max-width: $mq-l) {
+    width: 15%;
+  }
+
+  @media (max-width: $mq-m) {
+    width: 15%;
+  }
+
+  &__img {
+    background-color: $color-shade-light;
+    height: 15rem;
+    max-height: 31.25rem;
+    max-width: 31.25rem;
+    margin-bottom: $space-s;
+    // object-fit: contain;
+    width: 100%;
+
+    @media (max-width: $mq-m){
+      height: 11rem;
+    }
+  }
+
+  &__link {
+    text-align: center;
+  }
+
+  &__title,
+  &__text {
+    margin-top: 0;
+    padding: 0px 20px;
+  }
+
+  &__title {
+    color: $color-primary;
+    font-size: $font-l;
+    font-weight: $font-weight-semibold;
+    font-family: $font-family-heading;
+    margin-bottom: $space-xs;
+    @media (max-width: $mq-m) {
+      font-size: $font-s;
+    }
+    @media (max-width: $mq-l) {
+      font-size: $font-m;
+    }
+  }
+
+  &__text {
+    color: $color-primary;
+    margin-bottom: 0;
+    font-family: $font-family-base;
+    @media (max-width: $mq-m) {
+      font-size: $font-s;
+    }
+    @media (max-width: $mq-l) {
+      font-size: $font-m;
+    }
+  }
+
+  &__buttons {
+    position: absolute;
+    bottom: -30px;
+    width: 100% !important;
+    height: 30px;
+    margin-top: auto !important;
+    // box-shadow: 0px 5px 10px 5px gray;
+  }
+
+  &__slide-enter {
+    bottom: -30px;
+  }
+
+  &__slide-enter-done {
+    bottom: 0px;
+    transition: bottom 0.15s linear;
+  }
+
+  &__slide-exit {
+    bottom: 0px;
+  }
+  
+  &__slide-exit-done {
+    bottom: -30px;
+    transition: bottom 0.25s linear;
+  }
+
+  &__button_link {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    color: black;
+    // background-color: gainsboro;
+    background-color: rgb(240,240,240);
+    font-family: $font-family-base;
+    font-weight: 500;
+    font-size: $font-m;
+    line-height: 30px;
+  }
+
+  &__button_link:hover {
+    background-color: gainsboro;
+  }
+
+  &__button_sep {
+    width: 1px;
+    height: 30px;
+    background-color: gainsboro;
+  }
+}

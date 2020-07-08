@@ -1,0 +1,137 @@
+.search {
+  box-shadow: $box-shadow;
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include main-content_responsive();
+
+  &__button {
+    width: 100%;
+  }
+
+  &__section {
+    padding: 10px;
+    width: 200px;
+
+    @media (max-width: $mq-l) {
+      width: 135px;
+    }
+
+    @media (max-width: $mq-xs) {
+      width: 100px;
+    }
+  }
+
+  &__topstack {
+    margin-left: 50px;
+    margin-right: 50px;
+
+    @media (max-width: $mq-m) {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    padding-bottom: 6rem;
+    padding-left: $space-l;
+    padding-right: $space-l;
+    padding-top: $space-l;
+    
+    @media (max-width: $mq-m){
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-top: 1.5rem;
+    }
+  }
+
+  &__input {
+    background-color: $color-shade-light;
+    background-image: url('../../images/icon-search.svg');
+    background-position: 1.5625rem;
+    background-repeat: no-repeat;
+    background-size: 2.5rem;
+    border: 0;
+    height: 5rem;
+    padding-left: 5rem;
+    width: 100%;
+    font-family: $font-family-base;
+
+    @media (max-width: $mq-s) {
+      height: 4rem;
+    }
+
+    &::-webkit-input-placeholder {
+      color: $color-primary;
+      font-size: $font-l;
+      opacity: 0.8;
+    }
+    &::-moz-placeholder {
+      color: $color-primary;
+      font-size: $font-l;
+      opacity: 0.8;
+    }
+    &:-ms-input-placeholder {
+      color: $color-primary;
+      font-size: $font-l;
+      opacity: 0.8;
+    }
+
+    &:-moz-placeholder {
+      color: $color-primary;
+      font-size: $font-l;
+      opacity: 0.8;
+    }
+  }
+
+  &__row {
+    display: flex;
+    margin-left: $space-s;
+    margin-bottom: $space-s;
+    font-family: $font-family-base;
+  }
+
+  &__row_category {
+    display: flex;
+    margin-bottom: $space-s;
+    margin-top: $space-m;
+    font-family: $font-family-base;
+    
+    @media (max-width: $mq-m){
+      margin-bottom: $space-s;
+      margin-top: $space-s;
+    }
+  }
+
+  &__checkbox {
+    margin-top: $space-s;
+    margin-right: $space-s;
+  }
+
+  &__label {
+    display: block;
+    max-width: $tags-size;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    @media (max-width: $mq-m) {
+      font-size: 14px
+    }
+  }
+
+  &__tags {
+    margin-right: $space-l;
+    max-width: 15rem;
+
+    @media (max-width: $mq-s){
+      margin-right: $space-l;
+      max-width: 25vw;
+    }
+  }
+
+  &__grid {
+    height: 0;
+  }
+}

@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - '*.md'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+  displayName: Setting Python Version...
+- script: cd azureml && pip install -r requirements.txt 
+  displayName: 'Installing dependencies...'
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
+  displayName: Installing Docker...
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      python3 deploy_score_aks.py
+  displayName: Deploying Inference Service...
+- script: python call_service.py
+  displayName: Checking if inference service is online...
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd ../backend
+      az webapp up --name mosaicart
+  displayName: Deploying Facebook Sharing Service...

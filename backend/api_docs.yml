@@ -1,0 +1,182 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "Deep Culture Explorer"
+  description: The Deep Culture Explorer API allows users to explore similarities between artworks of different mediums and cultures.
+host: art-backend.azurewebsites.net
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /select:
+    x-summary: Select API
+    get:
+      summary: Get the Artwork Object
+      description: Given an object ID and source museum, get the image object associated with that
+      parameters:
+        - name: id
+          in: query
+          description: the id of the artwork to search for
+          type: string
+          x-example: 'aa08df9c'
+          required: true
+        - name: museum
+          in: query
+          description: the museum name to search in
+          type: string
+          x-example: 'rijksmuseum'
+          required: true
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            $ref: '#/definitions/Artwork'
+          examples:
+            application/json:
+              img_url: "https://example.com/aa08df9c.jpg"
+              title: 'De Nachtwacht'
+              museum: 'rijksmuseum'
+        404:
+          description: Artwork Not Found
+  /explore:
+    x-summary: Explore API
+    get:
+      summary: Get Similar Artworks
+      description: Get a list of similar artwork given a set of filters
+      parameters:
+        - name: url
+          in: query
+          description: the url of the image to find similar artwork to
+          type: string
+          x-example: 'https://example.com/oafd98fa.jpg'
+          required: true
+        - name: numResults
+          in: query
+          description: the number of results to return
+          type: number
+          x-example: 10
+          required: true
+        - name: culture
+          in: query
+          description: the culture filter to apply to the similarity search
+          type: array
+          items:
+            type: string
+          x-example: ["american", "russian"]
+        - name: medium
+          in: query
+          description: the medium filter to apply to the similarity search
+          type: array
+          items:
+            type: string
+          x-example: ["pottery", "canvas"]
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Artwork'
+          examples:
+            application/json:
+              - img_url: "https://example.com/df0vh929c.jpg"
+                title: 'schilderijen'
+                museum: 'rijksmuseum'
+              - img_url: "https://example.com/aa08df9c.jpg"
+                title: 'De Nachtwacht'
+                museum: 'rijksmuseum'
+        404:
+          description: Artwork Not Found
+  /search:
+    x-summary: Search API
+    get:
+      summary: Get Artwork with Text Search
+      description: Given a text search and filters, return a list of artworks
+      parameters:
+      - name: query
+        in: query
+        description: the text query to search for
+        type: string
+        x-example: 'Mona Lisa'
+        required: true
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Artwork'
+          examples:
+            application/json:
+              - img_url: "https://example.com/df0vh929c.jpg"
+                title: 'schilderijen'
+                museum: 'rijksmuseum'
+              - img_url: "https://example.com/aa08df9c.jpg"
+                title: 'De Nachtwacht'
+                museum: 'rijksmuseum'
+  /curated:
+    x-summary: Curated API
+    get:
+      summary: Get a Curated List of Artworks
+      description: Return a Curated List of Artworks
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: object
+            additionalProperties: 
+              type: array
+              items:
+                $ref: '#/definitions/Artwork'
+          examples:
+            application/json:
+            # type: object
+            # properties:
+              Italian:
+                - img_url: "https://lh3.googleusercontent.com/mAyAjvYjIeAIlByhJx1Huctgeb58y7519XYP38oL1FXarhVlcXW7kxuwayOCFdnwtOp6B6F0HJmmws-Ceo5b_pNSSQs=s0"
+                  title: "Isaac and Rebecca, Known as ‘The Jewish Bride’"
+                  museum: "rijksmuseum"
+              French:
+                - img_url: "https://lh3.googleusercontent.com/AyiKhdEWJ7XmtPXQbRg_kWqKn6mCV07bsuUB01hJHjVVP-ZQFmzjTWt7JIWiQFZbb9l5tKFhVOspmco4lMwqwWImfgg=s0"
+                  title: "Portrait of a Woman, Possibly Maria Trip, Rembrandt van Rijn, 1639"
+                  museum: "rijksmuseum"
+definitions:
+  ArtworkList:
+    title: ArtworkList
+    type: array
+    items:
+      type: object
+      items:
+        $ref: '#/definitions/Artwork'
+  Artwork:
+    title: Artwork
+    type: object
+    properties:
+      img_url:
+        type: string
+      title:
+        type: string
+      museum:
+        type: string
+    required:
+      - img_url
+      - title
+      - museum
+    additionalProperties:
+      type: string
+  Filters:
+    title: Filters
+    type: object
+    properties:
+      museum:
+        type: array
+        items:
+          type: string
+      culture:
+        type: array
+        items:
+          type: string
