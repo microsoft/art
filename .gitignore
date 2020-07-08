@@ -128,6 +128,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+.idea/
+.vscode/
+.azure/
+.vs/
+outputs/
+images/
+*.ball
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 .env
 

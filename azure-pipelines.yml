@@ -1,23 +1,41 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- master
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - '*.md'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+  displayName: Setting Python Version...
+- script: cd azureml && pip install -r requirements.txt 
+  displayName: 'Installing dependencies...'
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
+  displayName: Installing Docker...
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'MMLSpark Connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'echo Autheddd'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    inlineScript: |
+      python3 deploy_score_aks.py
+  displayName: Deploying Inference Service...
+- script: python call_service.py
+  displayName: Checking if inference service is online...
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MMLSpark Connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd ../backend
+      az webapp up --name mosaicart
+  displayName: Deploying Facebook Sharing Service...
