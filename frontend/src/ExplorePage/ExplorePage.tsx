@@ -1,0 +1,387 @@
+// import '../main.scss';
+import Jimp from 'jimp';
+import { mergeStyles, Separator, Stack } from 'office-ui-fabric-react';
+import React from 'react';
+import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
+import { HideAt, ShowAt } from 'react-with-breakpoints';
+import { appInsights } from '../AppInsights';
+import ArtObject from "../ArtObject";
+import bannerImage from "../images/banner.jpg";
+import { defaultArtwork } from './DefaultArtwork';
+import ListCarousel from './ListCarousel';
+import Options from './Options';
+import OriginalArtwork from './OriginalArtwork';
+import OverlayMap from './OverlayMap';
+import ResultArtwork from './ResultArtwork';
+import SubmitControl from './SubmitControl';
+
+
+interface IProps {
+    match: any
+};
+
+interface IState {
+    originalArtwork: ArtObject,
+    resultArtwork: ArtObject,
+    bestResultArtwork: ArtObject,
+    imageDataURI: string,
+    galleryItems: ArtObject[],
+    cultureItems: ArtObject[],
+    mediumItems: ArtObject[],
+    conditionals: any,
+    shareLink: string,
+    canRationale: boolean,
+    rationaleOn: boolean
+}
+
+const halfStack = mergeStyles({
+    width: "50%",
+    height: "100%"
+})
+
+const azureSearchUrl =
+    'https://extern-search.search.windows.net/indexes/merged-art-search-3/docs?api-version=2019-05-06';
+const apiKey = '0E8FACE23652EB8A6634F02B43D42E55';
+
+const defaultArtObject: ArtObject = new ArtObject("", "", "", "", "", "", "", "", "");
+
+/**
+ * The Page thats shown when the user first lands onto the website
+ */
+export class ExplorePage extends React.Component<IProps, IState> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            originalArtwork: defaultArtObject,
+            resultArtwork: defaultArtObject,
+            bestResultArtwork: defaultArtObject,
+            imageDataURI: "",
+            galleryItems: [defaultArtObject],
+            cultureItems: [defaultArtObject],
+            mediumItems: [defaultArtObject],
+            conditionals: { 'culture': '', 'medium': '' },
+            shareLink: "",
+            canRationale: false,
+            rationaleOn: false,
+        }
+
+        // Bind everything for children
+        this.setResultArtwork = this.setResultArtwork.bind(this);
+        this.changeConditional = this.changeConditional.bind(this);
+        this.handleTrackEvent = this.handleTrackEvent.bind(this);
+        this.scrollToReference = this.scrollToReference.bind(this);
+        this.toggleRationale = this.toggleRationale.bind(this);
+    }
+
+    // Reference for scrolling to the start of the compare block
+    startRef = React.createRef<HTMLDivElement>();
+
+    /**
+     * Executes a smooth scroll effect to a specified reference
+     * @param reference the reference object to scroll to
+     */
+    scrollToReference(reference: any): void {
+        window.scrollTo({ top: reference.current.offsetTop, left: 0, behavior: "smooth" });
+    }
+
+    /**
+     * Updates the conditional qualities to apply to the exploration
+     * @param category the category/axis to filter on (Culture, Medium, etc); currently does not matter for the API (only option is used)
+     * @param option the new filter option to use (French, Sculptures, etc)
+     */
+    changeConditional(category: any, option: any): void {
+        let clonedConditionals = { ...this.state.conditionals };
+        clonedConditionals[category] = option;
+        this.setState({ "conditionals": clonedConditionals });
+        this.makeAPIquery(this.state.originalArtwork, category, option);
+    }
+
+    /**
+     * Toggles state for the visibility of rationale overlay
+     */
+    toggleRationale() {
+        let newState = !this.state.rationaleOn;
+        this.setState({ rationaleOn: newState });
+    }
+
+    /**
+     * Updates the result artwork; enables the rationale button if either artwork have rationale overlays
+     * @param newResultArtwork the artwork to set as the new result
+     * @param originalArtwork the original artwork
+     */
+    setResultArtwork(newResultArtwork: ArtObject, originalArtwork?: ArtObject): void {
+        this.setState({ resultArtwork: newResultArtwork }, this.updateImageDataURI);
+        originalArtwork = originalArtwork ? originalArtwork : this.state.originalArtwork;
+        //If either image has rational, set canRationale to true, otherwise false
+        if (OverlayMap[newResultArtwork.id] || OverlayMap[originalArtwork.id]) {
+            this.setState({ canRationale: true });
+        } else {
+            this.setState({ canRationale: false });
+        }
+    }
+
+    /**
+     * Updates the artworks in the gallery carousel
+     * @param newItems the new artworks to display in the gallery carousel
+     */
+    setGalleryItems(newItems: ArtObject[]): void {
+        this.setState({ "galleryItems": newItems });
+    }
+
+    /**
+     * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
+     */
+    updateImageDataURI(originalArtwork?: ArtObject, resultArtwork?: ArtObject) {
+        // Height of the composite image in pixels
+        let imageHeight = 400;
+
+        // Use the image url in component state if no ArtObject is given
+        let originalURL = originalArtwork ? originalArtwork.Thumbnail_Url : this.state.originalArtwork.Thumbnail_Url;
+        let resultURL = resultArtwork ? resultArtwork.Thumbnail_Url : this.state.resultArtwork.Thumbnail_Url;
+
+        Jimp.read(originalURL)  // Read original image (left)
+            .then(originalImage => {
+                Jimp.read(resultURL)    // Read the result image (right)
+                    .then(resultImage => {
+                        
+                        // Define the target width of the two images
+                        let originalImageWidth = originalImage.getWidth() * imageHeight / originalImage.getHeight();
+                        let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
+
+                        // Combine the two images
+                        originalImage.resize(originalImageWidth, imageHeight)
+                            .crop(0, 0, originalImageWidth + resultImageWidth, imageHeight)
+                            .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
+                            .getBase64Async(Jimp.MIME_PNG)
+                            .then(uri => {
+
+                                let myHeaders = new Headers();
+                                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+                                let urlencoded = new URLSearchParams();
+                                urlencoded.append("image", encodeURI(uri));
+
+                                let requestOptions: any = {
+                                    method: 'POST',
+                                    headers: myHeaders,
+                                    body: urlencoded,
+                                    redirect: 'follow'
+                                };
+
+                                let filename = this.state.originalArtwork.id + "_" + this.state.resultArtwork.id + ".jpg";
+                                // Upload the composite image to hosting service
+                                fetch("https://mosaicart.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
+                                    requestOptions)
+                                    .then(response => response.json())
+                                    .then(result => {
+                                        let shareURL = "https://mosaicart.azurewebsites.net/share";
+                                        let params = "?" + "image_url=" + result.img_url +
+                                            "&redirect_url=" + window.location.href +
+                                            "&title=" + "Mosaic" +
+                                            "&description=" + encodeURIComponent(this.state.originalArtwork.Title + " and " + this.state.resultArtwork.Title) +
+                                            "&width=" + Math.round(originalImageWidth + resultImageWidth) +
+                                            "&height=" + imageHeight;
+
+                                        // Save the resulting sharing link to component state for use with social media sharing
+                                        this.setState({ shareLink: shareURL + params });
+                                    })
+                                    .catch(error => console.log('error', error));
+                            })
+                    })
+            })
+    }
+
+
+    /**
+     * Handles event tracking for interactions
+     * @param eventName Name of the event to send to appInsights
+     * @param properties Custom properties to include in the event data
+     */
+    async handleTrackEvent(eventName: string, properties: Object) {
+        appInsights.trackEvent({ name: eventName, properties: properties });
+    }
+
+
+    /**
+     * Queries API with the original artwork with conditional qualities
+     * @param originalArtURL the image url of the original artwork
+     * @param category the category/axis to filter on (Culture, Medium, etc)
+     * @param option the new filter option to use (French, Sculptures, etc)
+     */
+    makeAPIquery(originalArtwork: ArtObject, category: "all" | "culture" | "medium", option: string) {
+        let originalArtURL = originalArtwork.Thumbnail_Url;
+        const apiURL = "https://extern2020apim.azure-api.net/cknn/";
+
+        const Http = new XMLHttpRequest();
+        Http.open('POST', apiURL);
+        let queryJson = option === '' ?
+            { url: originalArtURL, n: 10 }
+            : { url: originalArtURL, n: 10, query: option };
+
+        Http.send(JSON.stringify(queryJson));
+        Http.onreadystatechange = e => {
+            if (Http.readyState === 4) {
+                try {
+                    let response = JSON.parse(Http.responseText);
+                    response = response.results;
+                    const mappedData = response.map((pair: any) => pair[0]);
+
+                    // Filter the results to exclude the original queried iamge
+                    const filteredResponse = mappedData.filter((artwork: any) => artwork.Thumbnail_Url !== originalArtURL);
+
+                    let pieces = filteredResponse;
+                    if (pieces.length > 0) {
+                        if (category === "culture") {
+                            this.setState({
+                                cultureItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
+                        else if (category === "medium") {
+                            this.setState({
+                                mediumItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
+                        else {
+                            this.setState({
+                                cultureItems: pieces,
+                                mediumItems: pieces,
+                                resultArtwork: pieces[0],
+                                bestResultArtwork: pieces[0]
+                            });
+                        }
+
+                        // Create and upload a composite image for sharing on social media
+                        this.updateImageDataURI(originalArtwork, pieces[0]);
+                        // Display the top result on the right
+                        this.setResultArtwork(pieces[0], originalArtwork);
+                    }
+
+
+                } catch (e) {
+                    console.log('malformed request:' + Http.responseText + category);
+                }
+            }
+        }
+    }
+
+    /**
+     * Intialization code for the explore webpage
+     */
+    componentDidMount() {
+        //Decode the url data
+        if (this.props.match.params.data) {
+            const url = decodeURIComponent(this.props.match.params.data);
+
+            let realID = null;
+            let realMuseum = null;
+            if (url != null) {
+                realID = url.split("&")[0].slice(4);
+                realMuseum = url.split("&")[1];
+                if (realMuseum) {
+                    realMuseum = realMuseum.slice(7);
+                }
+            }
+
+            let query = "&search=" + realID + "&filter=" + realMuseum;
+            let self = this;
+            //Make query
+            fetch(azureSearchUrl + query, { headers: { "Content-Type": "application/json", 'api-key': apiKey, } })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (responseJson) {
+                    let currImgObj = responseJson.value[0];
+                    self.setState({ originalArtwork: responseJson.value[0] });
+
+                    self.makeAPIquery(currImgObj, "all", self.state.conditionals["culture"]);
+                });
+        } else {
+            //If the url has no parameters, randomly pick one from the default list.
+            //Every art in the default list has Rationale available.
+            let numDefaults = defaultArtwork.length;
+            let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
+            let newOriginalArtwork = defaultArtwork[randIndex];
+            this.makeAPIquery(newOriginalArtwork, "all", this.state.conditionals["culture"]);
+            this.setState({ originalArtwork: newOriginalArtwork });
+        }
+
+    }
+
+    render() {
+        let rationaleButtonText = this.state.rationaleOn ? "Hide Rationale" : "Show Rationale";
+        return (
+            <div style={{ position: "relative", top: "-74px", width: "100%", overflow: "hidden" }}>
+                <HideAt breakpoint="mediumAndBelow">
+                    <div className="explore__background-banner">
+                        <img className="explore__parallax" alt={"Banner comparing two artworks"} src={bannerImage} />
+                        <div className="explore__banner-text">Find the building blocks of art that have transcended culture, medium, and time.</div>
+                        <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
+                    </div>
+                    <div ref={this.startRef} className="explore__compare-block explore__solid">
+                        <SubmitControl/>
+                        <Stack horizontal>
+                            <Stack.Item className={halfStack} grow={1}>
+                                <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                            <Stack.Item className={halfStack} grow={1}>
+                                <ResultArtwork artwork={this.state.resultArtwork} overlayOn={this.state.rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                        </Stack>
+                    </div>
+                </HideAt>
+                <ShowAt breakpoint="mediumAndBelow">
+                    <div className="explore__compare-block explore__solid">
+                        <SubmitControl/>
+                        <Stack horizontal horizontalAlign="center" wrap>
+                            <Stack.Item grow={1}>
+                                <OriginalArtwork changeConditional={this.changeConditional} overlayOn={this.state.rationaleOn} artwork={this.state.originalArtwork} overlay={OverlayMap[this.state.originalArtwork.id]} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                            <Stack.Item grow={1}>
+                                <ResultArtwork artwork={this.state.resultArtwork} overlayOn={this.state.rationaleOn} overlay={OverlayMap[this.state.resultArtwork.id]} bestArtwork={this.state.bestResultArtwork} handleTrackEvent={this.handleTrackEvent} />
+                            </Stack.Item>
+                        </Stack>
+                    </div>
+                </ShowAt>
+                <div className="explore__solid">
+                    <Stack horizontalAlign="center">
+                        <button className="explore__buttons button" disabled={!this.state.canRationale} onClick={this.toggleRationale}>{rationaleButtonText}</button>
+                        <Stack horizontal horizontalAlign="center">
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
+                                <FacebookShareButton className="explore__share-button" url={this.state.shareLink}>
+                                    <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </FacebookShareButton>
+                            </div>
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
+                                <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink}>
+                                    <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </TwitterShareButton>
+                            </div>
+                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
+                                <LinkedinShareButton className="explore__share-button" url={this.state.shareLink}>
+                                    <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
+                                </LinkedinShareButton>
+                            </div>
+                        </Stack>
+                    </Stack>
+                    <Separator/>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
+                        <Options category="culture" changeConditional={this.changeConditional} />
+                        <ListCarousel items={this.state.cultureItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
+                    </Stack>
+                    <Separator/>
+                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
+                        <Options category="medium" changeConditional={this.changeConditional} />
+                        <ListCarousel items={this.state.mediumItems} setResultArtwork={this.setResultArtwork} resultArtwork={this.state.resultArtwork} />
+                    </Stack>
+                </div>
+            </div>
+        )
+    }
+}
+
+export default ExplorePage;
