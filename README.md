@@ -1,59 +1,48 @@
-## For Evaluation
-Evaluation notebook on databricks - input 2 pickle files:
+# Mosaic
 
-**metadata.pkl**: list of (content, style) tuples
+## About
 
-**features-{model}.pkl**: 2D numpy array (data points x length of feature vector) of feature vectors
+## Architecture
 
-features.py writes out the 2 pkl files for resnets currently.
+## Paper
 
-Work done on day one of the hackathon, deploys model onto AzureML to be run from a webservice
+## Building from Scratch
 
-## Contents
+### Backend
 
-File/Folder: Description
-+ 'azureml': All code is here
-	+ '.vs'
-	+ '.vscode'
-	+ 'call.py': Regression model, run to simulate a call to the model
-	+ 'call2.py': Resnet50 model, run to simulate a call to the model **(CURRENTLY NOT WORKING)**
-	+ 'deploy.py': Resgression model, deploys the model to AzureML
-	+ 'deploy2.py': Resnet50 model, deploys the model to AzureML **(CURRENTLY NOT WORKING)**
-	+ 'deploymentConfig.yml': configuration details for deploying the model to AzureML
-	+ 'my_model.h5': Model of Resnet50, may need modification
-	+ 'myenv.yml': details about the python environment
-	+ 'panda.jpg': image of a panda used for testing
-	+ 'score.py': Regression model, handles the actual calculations when called from call.py
-	+ 'score2.py': Resnet model, handles the actual classification when called from call2.py
-	+ 'sklearn_regression_model.pkl': Regression model
-+ 'gitignore': What to ignore at commit time
-+ 'CODE_OF_CONDUCT': Code of conduct 
-+ 'LICENSE': The license for the files
-+ 'README': This README file
-+ 'SECURITY': Security information
+1. Download Image Metadata:
+    ```bash
+    wget https://mmlsparkdemo.blob.core.windows.net/cknn/metadata.json?sv=2019-02-02&st=2020-07-23T02%3A22%3A30Z&se=2023-07-24T02%3A22%3A00Z&sr=b&sp=r&sig=hDnGw9y%2BO5XlggL6br%2FPzSKmpAdUZ%2F1LJKVkcmbVmCE%3D
+    ```
+1. Download Images:
+    ```bash
+   cd data_prep
+   python download_images.py 
+   ```  
+1. Featurize and perform Conditional Image Retrieval on every image
+   ```bash
+   cd data_prep
+   python featurize_and_match.py 
+   ```
+1. Write enriched information to an Azure Search Index. 
 
+    More detailed code coming soon, Follow [the closely related guide](
+https://docs.microsoft.com/en-us/azure/cognitive-services/big-data/recipes/art-explorer) for a similiar example.
 
-## Prerequisites
+### Frontend
 
-Visual Studio/Visual Studio Code (if you use Visual Studio Code to set up your python environment use ctrl+shift+p, "Python: Select Interpreter") \
-Anaconda 3.7 \
-Azure Machine Learning workspace \
-Azure Machine Learning SDK (https://docs.microsoft.com/en-us/python/api/overview/azure/ml/install?view=azure-ml-py) \
-Docker \
-Tensorflow \
-Keras
+1. Install `npm` if you dont already have it. You can find instructions at [https://nodejs.org/](https://nodejs.org/).
+1. Install dependencies:
+	```bash
+	cd frontend
+	npm install
+	```
+1. Start the development server:
+	```bash
+	npm start
+	```
+1. Navigate to [http://localhost:3000/art](http://localhost:3000/art) to explore the local website.
 
-## Setup
-
-One time run of either deploy.py or deploy2.py depending on which model is being used to deploy the model to the target
-
-## Running the sample
-
-Run call.py or call2.py depending on which model is being used to simulate a call to the AzureML model
-
-## Key concepts
-
-The general idea is that we are deploying a machine learning model to the cloud as a webservice. The regression model was mostly proof of concept and the Resnet50 model is going to be closer to what we will end up using since we will be handling images. 
 
 ## Contributing
 
