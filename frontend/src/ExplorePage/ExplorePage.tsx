@@ -10,11 +10,12 @@ import bannerImage from "../images/banner.jpg";
 import { defaultIds } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
-import OriginalArtwork from './OriginalArtwork';
+import QueryArtwork from './OriginalArtwork';
 import ResultArtwork from './ResultArtwork';
 import SubmitControl from './SubmitControl';
 import { nMatches } from '../Shared/SearchTools';
 import { lookupWithMatches, lookup, cultures, media } from '../Shared/SearchTools'
+import NavBar from '../Shared/NavBar';
 
 interface IProps {
     match: any
@@ -36,6 +37,8 @@ const halfStack = mergeStyles({
     height: "100%"
 })
 
+const startingCultures = ["american", "asian", "ancient_asian", "greek", "italian", "african", "chinese", "roman", "egyptian"]
+const startingMedia = ["paintings", "ceramics", "stone", "sculptures", "prints", "glass", "textiles", "photographs", "drawings"]
 
 /**
  * The Page thats shown when the user first lands onto the website
@@ -50,8 +53,8 @@ export class ExplorePage extends React.Component<IProps, IState> {
             imageDataURI: null,
             cultureItems: Array(nMatches).fill(loadingMatch),
             mediumItems: Array(nMatches).fill(loadingMatch),
-            cultureFilter: 'american',
-            mediumFilter: 'ceramics',
+            cultureFilter: startingCultures[Math.floor(Math.random() * Math.floor(startingCultures.length))],
+            mediumFilter: startingMedia[Math.floor(Math.random() * Math.floor(startingMedia.length))],
             shareLink: null
         }
 
@@ -249,12 +252,14 @@ export class ExplorePage extends React.Component<IProps, IState> {
             artworkID = defaultIds[randIndex];
         }
 
-        this.executeQuery(artworkID!, true);
+        this.executeQuery(artworkID!, false);
 
     }
 
     render() {
         return (
+            <Stack className="main" role="main">     
+            <NavBar />
             <div style={{ position: "relative", top: "-74px", width: "100%", overflow: "hidden" }}>
                 <HideAt breakpoint="mediumAndBelow">
                     <div className="explore__background-banner">
@@ -266,7 +271,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         <SubmitControl />
                         <Stack horizontal>
                             <Stack.Item className={halfStack} grow={1}>
-                                <OriginalArtwork
+                                <QueryArtwork
                                     artwork={this.state.queryArtwork}
                                     handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
@@ -284,7 +289,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                         <SubmitControl />
                         <Stack horizontal horizontalAlign="center" wrap>
                             <Stack.Item grow={1}>
-                                <OriginalArtwork
+                                <QueryArtwork
                                     artwork={this.state.queryArtwork}
                                     handleTrackEvent={this.handleTrackEvent} />
                             </Stack.Item>
@@ -340,6 +345,7 @@ export class ExplorePage extends React.Component<IProps, IState> {
                     </Stack>
                 </div>
             </div>
+            </Stack>
         )
     }
 }

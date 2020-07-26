@@ -71,7 +71,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   </div>
                 </div>
               </Shimmer>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">{"Close Match"}</Text>
             </Stack>
             <Stack style={{ "marginLeft": 20 }}>
               <Text block style={{ "fontWeight": "bold", "width": "15vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
@@ -102,7 +102,7 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
                   </div>
                 </Shimmer>
               </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{this.props.artwork.id === this.props.bestArtwork.id ? "Best Match" : "Close Match"}</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">{"Close Match"}</Text>
             </Stack>
           </Stack>
         </ShowAt>

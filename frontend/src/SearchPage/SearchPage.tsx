@@ -5,6 +5,7 @@ import SearchControl from './SearchControl';
 import SearchGrid from './SearchGrid';
 import TagList from './TagList';
 import { search} from '../Shared/SearchTools';
+import NavBar from '../Shared/NavBar';
 
 
 interface IProps {
@@ -124,6 +125,8 @@ export class SearchPage extends React.Component<IProps, IState> {
 
   render() {
     return (
+      <Stack className="main" role="main">     
+      <NavBar />
       <Stack className="search__topstack">
         <SearchControl updateTerms={this.updateTerms} />
         <Separator />
@@ -139,7 +142,7 @@ export class SearchPage extends React.Component<IProps, IState> {
           <Separator vertical />
           <SearchGrid results={this.state.results} handleTrackEvent={this.handleTrackEvent} />
         </Stack>
-
+      </Stack>
       </Stack>
     )
   }

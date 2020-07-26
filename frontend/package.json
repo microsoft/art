@@ -25,6 +25,7 @@
     "pure-react-carousel": "^1.24.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-iframe": "^1.8.0",
     "react-helmet": "^5.2.1",
     "react-i18next": "^11.2.7",
     "react-lazyload": "^2.6.5",

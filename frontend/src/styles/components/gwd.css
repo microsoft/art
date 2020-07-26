@@ -1,0 +1,76 @@
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+body {
+    background-color: transparent;
+    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    -moz-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    perspective: 1400px;
+    -webkit-perspective: 1400px;
+    -moz-perspective: 1400px;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+}
+.gwd-img-1pen {
+    position: absolute;
+    width: 629px;
+    height: 221px;
+    left: 666px;
+    top: 305px;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform: translate3d(0px, 0px, 0px);
+    -webkit-transform: translate3d(0px, 0px, 0px);
+    -moz-transform: translate3d(0px, 0px, 0px);
+}
+@keyframes gwd-gen-1fd1gwdanimation_gwd-keyframes {
+    0% {
+        transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -moz-transform: translate3d(0px, 0px, 0px);
+        animation-timing-function: linear;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-timing-function: linear;
+    }
+    100% {
+        transform: translate3d(666px, 0px, 0px);
+        -webkit-transform: translate3d(666px, 0px, 0px);
+        -moz-transform: translate3d(666px, 0px, 0px);
+        animation-timing-function: linear;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-timing-function: linear;
+    }
+}
+@-webkit-keyframes gwd-gen-1fd1gwdanimation_gwd-keyframes {
+    0% {
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -webkit-animation-timing-function: linear;
+    }
+    100% {
+        -webkit-transform: translate3d(666px, 0px, 0px);
+        -webkit-animation-timing-function: linear;
+    }
+}
+@-moz-keyframes gwd-gen-1fd1gwdanimation_gwd-keyframes {
+    0% {
+        -moz-transform: translate3d(0px, 0px, 0px);
+        -moz-animation-timing-function: linear;
+    }
+    100% {
+        -moz-transform: translate3d(666px, 0px, 0px);
+        -moz-animation-timing-function: linear;
+    }
+}
+
+.htmlNoPages .gwd-gen-1fd1gwdanimation {
+    animation: 0.5s linear 0s 1 normal forwards gwd-gen-1fd1gwdanimation_gwd-keyframes;
+    -webkit-animation: 0.5s linear 0s 1 normal forwards gwd-gen-1fd1gwdanimation_gwd-keyframes;
+    -moz-animation: 0.5s linear 0s 1 normal forwards gwd-gen-1fd1gwdanimation_gwd-keyframes;
+}

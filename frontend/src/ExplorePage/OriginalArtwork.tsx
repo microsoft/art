@@ -17,7 +17,7 @@ type ArtworkProps = {
 }
 
 // Component for the original image that is used for the query (left image)
-class OriginalArtwork extends React.Component<ArtworkProps, IState> {
+class QueryArtwork extends React.Component<ArtworkProps, IState> {
 
   constructor(props: any) {
     super(props);
@@ -54,7 +54,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   </TooltipHost>
                 </div>
               </div>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">Original</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingTop": "10px" }} variant="large">Query Image</Text>
             </Stack>
           </Stack>
         </HideAt>
@@ -71,7 +71,7 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
                   </TooltipHost>
                 </div>
               </Stack>
-              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Original</Text>
+              <Text style={{ "textAlign": "center", "fontWeight": "bold" }} variant="large">Query Image</Text>
             </Stack>
           </Stack>
         </ShowAt>
@@ -81,4 +81,4 @@ class OriginalArtwork extends React.Component<ArtworkProps, IState> {
   }
 };
 
-export default OriginalArtwork;
+export default QueryArtwork;

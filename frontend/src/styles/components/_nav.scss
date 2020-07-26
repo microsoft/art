@@ -7,8 +7,10 @@
   display: flex;
   height: $nav-unit;
   justify-content: space-between;
-  padding: 5px 15px;
+  padding: 0px 0px;
   z-index: 1;
+  width: 100vw;
+
 
   @media (max-width: 1128px) {
     border-bottom: 1px solid gainsboro;
@@ -19,17 +21,26 @@
     height: $nav-unit-s;
   }
 
+  &__text_link {
+    color: black;
+    text-align: center;
+    font-family: $font-family-base;
+    font-size: 36px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 40px;
+  }
+
   &__link {
     align-items: center;
     display: flex;
     height: inherit;
     left: 0;
+    margin-left: 20px;
+
     
     text-decoration: none;
     text-transform: uppercase;
-    width: $nav-unit;
-
-    color: black;
 
     &:visited {
       color: black;
@@ -37,7 +48,7 @@
 
     img{
       height: 3rem;
-      position: absolute;
+      //position: absolute;
       max-height: $nav-unit;
       @media (max-width: $mq-s) {
         max-height: $nav-unit-s;
@@ -51,7 +62,7 @@
       font-weight: $font-weight-black;
       line-height: 0.9; // Magic string, do not change
       max-width: 60px; // Magic string, do not change
-      width: 100%;
+      //width: 100%;
     }
   }
 

@@ -6,6 +6,7 @@ import withAppInsights from './Shared/AppInsights';
 import ExplorePage from './ExplorePage/ExplorePage';
 import NavBar from "./Shared/NavBar";
 import SearchPage from "./SearchPage/SearchPage";
+import IntroPage from "./IntroPage/IntroPage";
 
 initializeIcons();
 
@@ -17,15 +18,13 @@ class App extends React.Component {
     render() {
         return (
             <Router basename={process.env.PUBLIC_URL}>
-                <Stack className="main" role="main">
-                    <NavBar />
-                    <Switch>
-                        <Route path="/search/:id" component={SearchPage} />
-                        <Route exact path="/search" component={SearchPage} />
-                        <Route path="/:data" component={ExplorePage} /> 
-                        <Route exact path="/" component={ ExplorePage } />
-                    </Switch>
-                </Stack>
+                <Switch>
+                    <Route exact path="/intro" component={ IntroPage } />
+                    <Route path="/search/:id" component={SearchPage} />
+                    <Route exact path="/search" component={SearchPage} />
+                    <Route path="/:data" component={ExplorePage} /> 
+                    <Route exact path="/" component={ ExplorePage } />
+                </Switch>
             </Router>
         );
     }

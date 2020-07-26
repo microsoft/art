@@ -1,0 +1,33 @@
+.intro {
+    box-shadow: $box-shadow;
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+
+  
+    @include main-content_responsive();
+  
+    &__bg {
+        background: #000;
+        width: 100vw;
+        height: 100vh;
+    }
+    
+    &__topstack {
+ 
+      @media (max-width: $mq-m) {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+
+    &__center_image {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
+  
+   
+  }
+  
