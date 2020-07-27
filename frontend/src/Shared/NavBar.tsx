@@ -16,7 +16,7 @@ export default class NavBar extends Component {
     return (
       <nav className="nav">
         <div>
-          <a className="nav__link" href="/art/">
+          <a className="nav__link" href="/art/app">
             <img src={logo} alt="" />
           </a>
         </div>

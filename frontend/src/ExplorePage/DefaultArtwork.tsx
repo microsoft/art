@@ -83,11 +83,6 @@ export const defaultArtworks = [
         "Title": "Portrait of Don Ramón Satué"
     },
     {
-        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-T-1914-17-69.jpg",
-        "id": "UlAtVC0xOTE0LTE3LTY5",
-        "Title": "A Xhosa (possibly Gonaqua) chieftan’s wife with an infant on her back"
-    },
-    {
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/SK-A-4221.jpg",
         "id": "U0stQS00MjIx",
         "Title": "Portrait of a Woman"
@@ -128,16 +123,6 @@ export const defaultArtworks = [
         "Title": "Portrait Bust of Johann Neudörfer the Younger"
     },
     {
-        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/SK-A-5049.jpg",
-        "id": "U0stQS01MDQ5",
-        "Title": "Crucifixion of Christ, with the Virgin and St John"
-    },
-    {
-        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/NG-2016-50-2.jpg",
-        "id": "TkctMjAxNi01MC0y",
-        "Title": "Prentbriefkaart uit album 'Als aandenken aan Suriname'"
-    },
-    {
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/AK-MAK-9.jpg",
         "id": "QUstTUFLLTk=",
         "Title": "Ritual bell"
@@ -146,7 +131,69 @@ export const defaultArtworks = [
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/SK-A-233.jpg",
         "id": "U0stQS0yMzM=",
         "Title": " Portrait of Catherine Bégon"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/545088.jpg",
+        "Title": "Scarab",
+        "id": "NTQ1MDg4",
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/363552.jpg",
+        "Title": "Illuminated Letter D within a Decorated Border",
+        "id": "MzYzNTUy",
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/BK-1978-878.jpg",
+        "Title": "Double Face Banyan",
+        "id": "QkstMTk3OC04Nzg=",
+        "defaultCulture":"chinese",
+        "defaultMedium":"musical_instruments"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/10158.jpg",
+        "Title": "Sunrise on the Matterhorn",
+        "id": "MTAxNTg=",
+        "defaultCulture":"greek",
+        "defaultMedium":"musical_instruments"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/437685.jpg",
+        "Title": "The Road from Versailles to Louveciennes",
+        "id": "NDM3Njg1",
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/BK-16394-R-2.jpg",
+        "Title": "Saucer with a putto on clouds",
+        "id": "QkstMTYzOTQtUi0y"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/205288.jpg",
+        "Title": "Tureen with cover in the form of a turkey",
+        "id": "MjA1Mjg4"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/249477.jpg",
+        "Title": "Tile mosaic with rabbit, lizard and mushroom",
+        "id": "MjQ5NDc3"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/BK-1973-268.jpg",
+        "Title": "Kokarde van veren in de kleuren oranje en blauw in de vorm van een rozet",
+        "id": "QkstMTk3My0yNjg=",
+        "defaultCulture":"egyptian",
+        "defaultMedium":"drawings"
+    },
+    {
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-T-1941-89.jpg",
+        "Title": "Portrait of Edwin vom Rath’s Pug",
+        "id": "UlAtVC0xOTQxLTg5",
+        "defaultCulture":"african",
+        "defaultMedium":"metalwork"
     }
 ]
 
-export const defaultIds: string[] = defaultArtworks.map(info => info.id)
+interface StringMap {
+    [key: string]: any;
+  }
+
+export const idToArtwork: StringMap = defaultArtworks.reduce((o, artwork) => Object.assign(o, {[artwork.id]: artwork}), {});

@@ -57,5 +57,5 @@ export class ArtMatch {
 export const loadingMatch = new ArtMatch("./images/loading.jpg", null, null)
 
 export function urlEncodeArt(artworkId: string) {
-    return '/art/' + encodeURIComponent('?id=' + artworkId);
+    return '/art/app/' + encodeURIComponent('?id=' + artworkId);
 }

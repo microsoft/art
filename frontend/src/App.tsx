@@ -14,11 +14,11 @@ class App extends React.Component {
         return (
             <Router basename={process.env.PUBLIC_URL}>
                 <Switch>
-                    <Route exact path="/intro" component={ IntroPage } />
+                    <Route exact path="/" component={ IntroPage } />
                     <Route path="/search/:id" component={SearchPage} />
                     <Route exact path="/search" component={SearchPage} />
-                    <Route path="/:data" component={ExplorePage} /> 
-                    <Route exact path="/" component={ ExplorePage } />
+                    <Route path="/app/:data" component={ExplorePage} /> 
+                    <Route exact path="/app" component={ ExplorePage } />
                 </Switch>
             </Router>
         );

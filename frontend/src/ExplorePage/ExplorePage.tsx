@@ -5,7 +5,7 @@ import { HideAt, ShowAt } from 'react-with-breakpoints';
 import { logEvent } from '../Shared/AppInsights';
 import { ArtObject, ArtMatch, loadingMatch, loadingArtwork, urlEncodeArt } from "../Shared/ArtSchemas";
 import bannerImage from "../images/banner5.jpg";
-import { defaultIds, defaultArtworks } from './DefaultArtwork';
+import {defaultArtworks, idToArtwork } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
 import QueryArtwork from './QueryArtwork';
@@ -168,12 +168,19 @@ export default class ExplorePage extends React.Component<IProps, IState> {
         //If the url has no parameters, randomly pick one from the default list.
         //Every art in the default list has Rationale available.
         if (artworkID == null) {
-            let numDefaults = defaultIds.length;
+            let numDefaults = defaultArtworks.length;
             let randIndex = Math.floor(Math.random() * Math.floor(numDefaults));
-            artworkID = defaultIds[randIndex];
+            artworkID = defaultArtworks[randIndex].id;
         }
 
-        this.executeQuery(artworkID!, false);
+        if (artworkID in idToArtwork){
+            this.setState({
+                cultureFilter: idToArtwork[artworkID].defaultCulture || this.state.cultureFilter,
+                mediumFilter: idToArtwork[artworkID].defaultMedium || this.state.mediumFilter
+            }, () => this.executeQuery(artworkID!, false));
+        }else {
+            this.executeQuery(artworkID!, false);
+        };
 
     }
 
@@ -229,7 +236,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                         <Separator />
                         <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                             <Options
-                                default={this.state.cultureFilter}
+                                value={this.state.cultureFilter}
                                 choices={cultures}
                                 changeConditional={this.changeCulture} />
                             <ListCarousel
@@ -240,7 +247,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                         <Separator />
                         <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
                             <Options
-                                default={this.state.mediumFilter}
+                                value={this.state.mediumFilter}
                                 choices={media}
                                 changeConditional={this.changeMedium} />
                             <ListCarousel

@@ -22,7 +22,7 @@ const useSelectStyles = makeStyles({
 });
 
 interface IProps {
-  default: string,
+  value: string,
   changeConditional: any,
   choices: string[]
 }
@@ -36,7 +36,7 @@ export default function Options(props: IProps) {
       <FormControl>
         <Select
           native
-          defaultValue={props.default}
+          value={props.value}
           onChange={(event) => { props.changeConditional(event.target.value) }}
           classes={{
             root: selectClasses.root
