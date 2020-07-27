@@ -3,13 +3,16 @@
 // -------------------------------------------------------------
 .nav {
   align-items: center;
-  background-color: white;
+  background-color: $color-shade-dark;
   display: flex;
   height: $nav-unit;
   justify-content: space-between;
   padding: 0px 0px;
   z-index: 1;
   width: 100vw;
+  position:fixed;
+  top:0;
+  width:100%;
 
 
   @media (max-width: 1128px) {
@@ -31,12 +34,24 @@
     margin-right: 40px;
   }
 
+  &__menu_link {
+    color: white;
+    text-align: left;
+    font-family: $font-family-base;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+
   &__link {
     align-items: center;
     display: flex;
     height: inherit;
     left: 0;
     margin-left: 20px;
+    //padding-bottom: 10px;
+    //margin-top: 5px;
 
     
     text-decoration: none;
@@ -51,7 +66,7 @@
       //position: absolute;
       max-height: $nav-unit;
       @media (max-width: $mq-s) {
-        max-height: $nav-unit-s;
+        max-height: 40px;
       }
     }
 

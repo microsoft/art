@@ -1,18 +1,13 @@
 // import './main.scss';
-import { initializeIcons, Stack } from 'office-ui-fabric-react';
+import { initializeIcons} from 'office-ui-fabric-react';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import withAppInsights from './Shared/AppInsights';
 import ExplorePage from './ExplorePage/ExplorePage';
-import NavBar from "./Shared/NavBar";
 import SearchPage from "./SearchPage/SearchPage";
 import IntroPage from "./IntroPage/IntroPage";
 
 initializeIcons();
-
-interface IProps {};
-
-interface IState {};
 
 class App extends React.Component {
     render() {

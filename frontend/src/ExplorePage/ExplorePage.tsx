@@ -1,16 +1,14 @@
 // import '../main.scss';
-import Jimp from 'jimp';
-import { mergeStyles, Separator, Stack } from 'office-ui-fabric-react';
+import { mergeStyles, Separator, Stack, Text } from 'office-ui-fabric-react';
 import React from 'react';
-import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { HideAt, ShowAt } from 'react-with-breakpoints';
-import { appInsights } from '../Shared/AppInsights';
-import { ArtObject, ArtMatch, loadingMatch, loadingArtwork } from "../Shared/ArtSchemas";
-import bannerImage from "../images/banner.jpg";
-import { defaultIds } from './DefaultArtwork';
+import { logEvent } from '../Shared/AppInsights';
+import { ArtObject, ArtMatch, loadingMatch, loadingArtwork, urlEncodeArt } from "../Shared/ArtSchemas";
+import bannerImage from "../images/banner5.jpg";
+import { defaultIds, defaultArtworks } from './DefaultArtwork';
 import ListCarousel from './ListCarousel';
 import Options from './Options';
-import QueryArtwork from './OriginalArtwork';
+import QueryArtwork from './QueryArtwork';
 import ResultArtwork from './ResultArtwork';
 import SubmitControl from './SubmitControl';
 import { nMatches } from '../Shared/SearchTools';
@@ -23,7 +21,7 @@ interface IProps {
 
 interface IState {
     queryArtwork: ArtObject,
-    chosenResultArtwork: ArtObject,
+    chosenArtwork: ArtObject,
     imageDataURI: string | null,
     cultureItems: ArtMatch[],
     mediumItems: ArtMatch[],
@@ -43,13 +41,13 @@ const startingMedia = ["paintings", "ceramics", "stone", "sculptures", "prints",
 /**
  * The Page thats shown when the user first lands onto the website
  */
-export class ExplorePage extends React.Component<IProps, IState> {
+export default class ExplorePage extends React.Component<IProps, IState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
             queryArtwork: loadingArtwork,
-            chosenResultArtwork: loadingArtwork,
+            chosenArtwork: loadingArtwork,
             imageDataURI: null,
             cultureItems: Array(nMatches).fill(loadingMatch),
             mediumItems: Array(nMatches).fill(loadingMatch),
@@ -60,7 +58,6 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
         // Bind everything for children
         this.setResultArtwork = this.setResultArtwork.bind(this);
-        this.handleTrackEvent = this.handleTrackEvent.bind(this);
         this.scrollToReference = this.scrollToReference.bind(this);
         this.changeCulture = this.changeCulture.bind(this);
         this.changeMedium = this.changeMedium.bind(this);
@@ -96,87 +93,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
         this.updateBestMatch(self, newResultArtwork)
     }
 
-    /**
-     * Updates the data uri that encodes a side-by-side composite image of the orignal and result artworks for sharing
-     */
-    updateImageDataURI(originalArtwork?: ArtObject, resultArtwork?: ArtObject) {
-        // Height of the composite image in pixels
-        let imageHeight = 400;
-
-        // Use the image url in component state if no ArtObject is given
-        let originalURL = originalArtwork ? originalArtwork.Thumbnail_Url : this.state.queryArtwork!.Thumbnail_Url;
-        let resultURL = resultArtwork ? resultArtwork.Thumbnail_Url : this.state.chosenResultArtwork!.Thumbnail_Url;
-
-        Jimp.read(originalURL)  // Read original image (left)
-            .then((originalImage: any) => {
-                Jimp.read(resultURL)    // Read the result image (right)
-                    .then((resultImage: any) => {
-
-                        // Define the target width of the two images
-                        let originalImageWidth = originalImage.getWidth() * imageHeight / originalImage.getHeight();
-                        let resultImageWidth = resultImage.getWidth() * imageHeight / resultImage.getHeight();
-
-                        // Combine the two images
-                        originalImage.resize(originalImageWidth, imageHeight)
-                            .crop(0, 0, originalImageWidth + resultImageWidth, imageHeight)
-                            .composite(resultImage.resize(resultImageWidth, imageHeight), originalImageWidth, 0)
-                            .getBase64Async(Jimp.MIME_PNG)
-                            .then((uri: any) => {
-
-                                let myHeaders = new Headers();
-                                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-                                let urlencoded = new URLSearchParams();
-                                urlencoded.append("image", encodeURI(uri));
-
-                                let requestOptions: any = {
-                                    method: 'POST',
-                                    headers: myHeaders,
-                                    body: urlencoded,
-                                    redirect: 'follow'
-                                };
-
-                                let filename = this.state.queryArtwork!.id + "_" + this.state.chosenResultArtwork!.id + ".jpg";
-                                // Upload the composite image to hosting service
-                                fetch("https://mosaicart.azurewebsites.net/upload?filename=" + encodeURIComponent(filename),
-                                    requestOptions)
-                                    .then(response => response.json())
-                                    .then(result => {
-                                        let shareURL = "https://mosaicart.azurewebsites.net/share";
-                                        let params = `?image_url=${result.img_url}
-                                        &redirect_url=${window.location.href}
-                                        &title=Mosaic
-                                        &description=${encodeURIComponent(
-                                            this.state.queryArtwork!.Title + " and " + this.state.chosenResultArtwork.Title
-                                        )}
-                                        &width=${Math.round(originalImageWidth + resultImageWidth)}
-                                        &height=${imageHeight}`;
-
-                                        // Save the resulting sharing link to component state for use with social media sharing
-                                        this.setState({ shareLink: shareURL + params });
-                                    })
-                                    .catch(error => console.log('error', error));
-                            })
-                    })
-            })
-    }
-
-
-    /**
-     * Handles event tracking for interactions
-     * @param eventName Name of the event to send to appInsights
-     * @param properties Custom properties to include in the event data
-     */
-    async handleTrackEvent(eventName: string, properties: Object) {
-        appInsights.trackEvent({ name: eventName, properties: properties });
-    }
-
-
     updateBestMatch(component: any, match: ArtMatch) {
         lookup(match.id!)
             .then(function (responseJson) {
                 component.setState({
-                    chosenResultArtwork: new ArtObject(
+                    chosenArtwork: new ArtObject(
                         responseJson.Artist,
                         responseJson.Classification,
                         responseJson.Culture,
@@ -202,11 +123,11 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
                 function infoToMatches(info: any): ArtMatch[] {
                     return info.ids.map(function (id: string, i: any) {
-                        return new ArtMatch(info.urls[i], btoa(id));
+                        return new ArtMatch(info.urls[i], btoa(id), null);
                     })
                 }
-                const cultureMatches = infoToMatches(cultureInfo)
-                const mediumMatches = infoToMatches(mediumInfo)
+                const cultureMatches = infoToMatches(cultureInfo).filter(match => match.id != artworkID)
+                const mediumMatches = infoToMatches(mediumInfo).filter(match => match.id != artworkID)
                 self.setState({
                     queryArtwork: new ArtObject(
                         responseJson.Artist,
@@ -258,96 +179,87 @@ export class ExplorePage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <Stack className="main" role="main">     
-            <NavBar />
-            <div style={{ position: "relative", top: "-74px", width: "100%", overflow: "hidden" }}>
-                <HideAt breakpoint="mediumAndBelow">
-                    <div className="explore__background-banner">
-                        <img className="explore__parallax" alt={"Banner comparing two artworks"} src={bannerImage} />
-                        <div className="explore__banner-text">Find the building blocks of art that have transcended culture, medium, and time.</div>
-                        <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
-                    </div>
-                    <div ref={this.startRef} className="explore__compare-block explore__solid">
-                        <SubmitControl />
-                        <Stack horizontal>
-                            <Stack.Item className={halfStack} grow={1}>
-                                <QueryArtwork
-                                    artwork={this.state.queryArtwork}
-                                    handleTrackEvent={this.handleTrackEvent} />
-                            </Stack.Item>
-                            <Stack.Item className={halfStack} grow={1}>
-                                <ResultArtwork
-                                    artwork={this.state.chosenResultArtwork}
-                                    bestArtwork={this.state.chosenResultArtwork}
-                                    handleTrackEvent={this.handleTrackEvent} />
-                            </Stack.Item>
+            <Stack className="main" role="main">
+                <NavBar />
+                <div className="page-wrap" style={{ position: "relative", top: "-20px", width: "100%", overflow: "hidden" }}>
+                    <HideAt breakpoint="mediumAndBelow">
+                        <div className="explore__background-banner">
+                            <img className="explore__parallax" alt={"Banner comparing two artworks"} src={bannerImage} />
+                            <div className="explore__banner-text">Explore the hidden connections between art of different cultures and media.</div>
+                            <button onClick={() => this.scrollToReference(this.startRef)} className="explore__get-started button" >GET STARTED</button>
+                        </div>
+                        <div ref={this.startRef} className="explore__compare-block explore__solid">
+                            <Stack horizontal horizontalAlign="center" style={{ width: "60%" }}>
+                                <SubmitControl />
+                            </Stack>
+                            <Stack horizontal>
+                                <Stack.Item className={halfStack} grow={1}>
+                                    <QueryArtwork artwork={this.state.queryArtwork} />
+                                </Stack.Item>
+                                <Stack.Item className={halfStack} grow={1}>
+                                    <ResultArtwork artwork={this.state.chosenArtwork} />
+                                </Stack.Item>
+                            </Stack>
+                        </div>
+                    </HideAt>
+                    <ShowAt breakpoint="mediumAndBelow">
+                        <div className="explore__compare-block explore__solid">
+                            <SubmitControl />
+                            <Stack horizontal horizontalAlign="center" wrap>
+                                <Stack.Item grow={1}>
+                                    <QueryArtwork artwork={this.state.queryArtwork} />
+                                </Stack.Item>
+                                <Stack.Item grow={1}>
+                                    <ResultArtwork artwork={this.state.chosenArtwork} />
+                                </Stack.Item>
+                            </Stack>
+                        </div>
+                    </ShowAt>
+                    <div className="explore__solid">
+                        <Stack horizontalAlign="center">
+                            <Stack horizontal horizontalAlign="center">
+                                <a
+                                    href={urlEncodeArt(this.state.chosenArtwork.id!)}
+                                    onClick={() => logEvent("Matches", { "Location": "ResultImage" })} >
+                                    <button className="explore__buttons button">Use Match as Query</button>
+                                </a>
+                            </Stack>
                         </Stack>
-                    </div>
-                </HideAt>
-                <ShowAt breakpoint="mediumAndBelow">
-                    <div className="explore__compare-block explore__solid">
-                        <SubmitControl />
-                        <Stack horizontal horizontalAlign="center" wrap>
-                            <Stack.Item grow={1}>
-                                <QueryArtwork
-                                    artwork={this.state.queryArtwork}
-                                    handleTrackEvent={this.handleTrackEvent} />
-                            </Stack.Item>
-                            <Stack.Item grow={1}>
-                                <ResultArtwork
-                                    artwork={this.state.chosenResultArtwork}
-                                    bestArtwork={this.state.chosenResultArtwork} handleTrackEvent={this.handleTrackEvent} />
-                            </Stack.Item>
+
+                        <Separator />
+                        <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
+                            <Options
+                                default={this.state.cultureFilter}
+                                choices={cultures}
+                                changeConditional={this.changeCulture} />
+                            <ListCarousel
+                                items={this.state.cultureItems!}
+                                selectorCallback={this.setResultArtwork}
+                                selectedArtwork={this.state.chosenArtwork!} />
                         </Stack>
-                    </div>
-                </ShowAt>
-                <div className="explore__solid">
-                    <Stack horizontalAlign="center">
-                        <Stack horizontal horizontalAlign="center">
-                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Facebook" })}>
-                                <FacebookShareButton className="explore__share-button" url={this.state.shareLink!}>
-                                    <FacebookIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                                </FacebookShareButton>
-                            </div>
-                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Twitter" })}>
-                                <TwitterShareButton className="explore__share-button" title="Check out my Mosaic!" url={this.state.shareLink!}>
-                                    <TwitterIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                                </TwitterShareButton>
-                            </div>
-                            <div onClick={() => this.handleTrackEvent("Share", { "Network": "Linkedin" })}>
-                                <LinkedinShareButton className="explore__share-button" url={this.state.shareLink!}>
-                                    <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
-                                </LinkedinShareButton>
-                            </div>
+                        <Separator />
+                        <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
+                            <Options
+                                default={this.state.mediumFilter}
+                                choices={media}
+                                changeConditional={this.changeMedium} />
+                            <ListCarousel
+                                items={this.state.mediumItems!}
+                                selectorCallback={this.setResultArtwork}
+                                selectedArtwork={this.state.chosenArtwork!} />
                         </Stack>
-                    </Stack>
-                    <Separator />
-                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
-                        <Options
-                            default={this.state.cultureFilter}
-                            choices={cultures}
-                            changeConditional={this.changeCulture} />
-                        <ListCarousel
-                            items={this.state.cultureItems!}
-                            setResultArtwork={this.setResultArtwork}
-                            resultArtwork={this.state.chosenResultArtwork!} />
-                    </Stack>
-                    <Separator />
-                    <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
-                        <Options
-                            default={this.state.mediumFilter}
-                            choices={media}
-                            changeConditional={this.changeMedium} />
-                        <ListCarousel
-                            items={this.state.mediumItems!}
-                            setResultArtwork={this.setResultArtwork}
-                            resultArtwork={this.state.chosenResultArtwork!} />
-                    </Stack>
+                        <Separator />
+                        <Stack horizontal horizontalAlign="start" verticalAlign="center" wrap>
+                            <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingLeft": "40px" }} variant="large">Choose Another Query:</Text>
+                            <ListCarousel
+                                items={defaultArtworks}
+                                selectorCallback={(am) => {window.location.href = urlEncodeArt(am.id!)}}
+                                selectedArtwork={this.state.chosenArtwork!} />
+                        </Stack>
+
+                    </div>
                 </div>
-            </div>
             </Stack>
         )
     }
 }
-
-export default ExplorePage;

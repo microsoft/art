@@ -13,11 +13,10 @@ interface IState {
 
 type ArtworkProps = {
   artwork: ArtObject,
-  handleTrackEvent: (eventName: string, properties: Object) => void, 
 }
 
 // Component for the original image that is used for the query (left image)
-class QueryArtwork extends React.Component<ArtworkProps, IState> {
+export default class QueryArtwork extends React.Component<ArtworkProps, IState> {
 
   constructor(props: any) {
     super(props);
@@ -80,5 +79,3 @@ class QueryArtwork extends React.Component<ArtworkProps, IState> {
     
   }
 };
-
-export default QueryArtwork;

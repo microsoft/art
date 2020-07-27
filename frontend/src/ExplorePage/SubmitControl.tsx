@@ -56,16 +56,14 @@ export default class SubmitControl extends Component<IProps, IState> {
 
     } else {
       return (
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} style={{flexGrow:1}}>
           <input className="search__input" style={{
             backgroundColor: "#f0f0f0",
-            marginBottom: "10px",
-            width: "min(95%, 1100px)",
+            width: "95%",
             height: "60px",
-            position: "relative",
-            left: "50%",
-            transform: "translate(-50%, 0%)"
-          }} type="search" value={value} placeholder="Find other artworks" onChange={this.onChange} />
+            marginLeft: "20px",
+            marginRight: "20px",
+          }} type="search" value={value} placeholder="Search the Collection" onChange={this.onChange} />
           <input type="submit" style={{ display: "none" }} />
         </form>
 

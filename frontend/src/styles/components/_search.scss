@@ -57,13 +57,13 @@
     border: 0;
     height: 5rem;
     padding-left: 5rem;
-    width: 100%;
     font-family: $font-family-base;
     font-weight: bold;
     font-size: larger;
 
     @media (max-width: $mq-s) {
       height: 4rem;
+      width: 85% !important;
     }
 
     &::-webkit-input-placeholder {

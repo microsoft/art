@@ -36,19 +36,26 @@ export class ArtObject {
     }
 }
 
-export const loadingArtwork = new ArtObject("", "", "", "images/loading.jpg", "", "", "images/loading.jpg", "Loading", null)
+export const loadingArtwork = new ArtObject("", "", "", "", "", "", "", "", null)
 
 export class ArtMatch {
     Thumbnail_Url: string;
     id: string | null;
+    Title: string | null;
 
     constructor(
         Thumbnail_Url: string,
-        id: string | null
+        id: string | null,
+        Title: string | null
     ) {
         this.Thumbnail_Url = Thumbnail_Url;
         this.id = id;
+        this.Title = Title
     }
 }
 
-export const loadingMatch = new ArtMatch("images/loading.jpg", null)
+export const loadingMatch = new ArtMatch("./images/loading.jpg", null, null)
+
+export function urlEncodeArt(artworkId: string) {
+    return '/art/' + encodeURIComponent('?id=' + artworkId);
+}
