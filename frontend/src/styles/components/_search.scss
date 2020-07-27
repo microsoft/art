@@ -27,6 +27,7 @@
   &__topstack {
     margin-left: 50px;
     margin-right: 50px;
+    margin-top: 70px !important;
 
     @media (max-width: $mq-m) {
       margin-left: 10px;
@@ -55,7 +56,7 @@
     background-repeat: no-repeat;
     background-size: 2.5rem;
     border: 0;
-    height: 5rem;
+    height: 60px !important;
     padding-left: 5rem;
     font-family: $font-family-base;
     font-weight: bold;
