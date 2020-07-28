@@ -36,7 +36,7 @@ export default class NavBar extends Component {
                 <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
               </LinkedinShareButton>
             </div>
-            <a className="nav__text_link" href="/art/intro">
+            <a className="nav__text_link" href="/art">
               intro
             </a>
           </div>
@@ -44,7 +44,7 @@ export default class NavBar extends Component {
 
         <ShowAt breakpoint="small">
           <Menu right>
-            <a className="nav__menu_link" href="/art/intro">
+            <a className="nav__menu_link" href="/art">
               Intro
             </a>
             <div className="nav__menu_link" >Share:</div>
