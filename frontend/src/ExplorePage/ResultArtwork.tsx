@@ -65,8 +65,8 @@ class ResultArtwork extends React.Component<ArtworkProps, IState> {
             </Stack>
             <Stack style={{ "marginLeft": 20 }}>
               <Text block style={{ "fontWeight": "bold", "width": "15vw" }} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
-              <Text style={{ "textTransform": "capitalize" }} variant="large">{this.props.artwork.Culture}</Text>
-              <Text variant="large" style={{ "marginBottom": 15, "textTransform": "capitalize" }}>{this.props.artwork.Classification}</Text>
+              <Text style={{ "textTransform": "capitalize" }} variant="large">{this.props.artwork.Culture.replace(/_/g, " ")}</Text>
+              <Text variant="large" style={{ "marginBottom": 15, "textTransform": "capitalize" }}>{this.props.artwork.Classification.replace(/_/g, " ")}</Text>
             </Stack>
           </Stack>
         </HideAt>

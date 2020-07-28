@@ -39,8 +39,8 @@ export default class QueryArtwork extends React.Component<ArtworkProps, IState> 
           <Stack horizontal horizontalAlign="end" verticalAlign="center" className="explore__main-images">
             <Stack verticalAlign="end" style={{ "marginRight": 20 }}>
               <Text block style={{ "textAlign": "right", "fontWeight": "bold" , "width":"15vw"}} variant="xLarge">{this.props.artwork.Title ? this.props.artwork.Title : "Untitled Piece"}</Text>
-              <Text style={{ "textAlign": "right", "textTransform": "capitalize"}} variant="large">{this.props.artwork.Culture}</Text>
-              <Text style={{ "textAlign": "right", "marginBottom": 15 , "textTransform": "capitalize"}} variant="large">{this.props.artwork.Classification}</Text>
+              <Text style={{ "textAlign": "right", "textTransform": "capitalize"}} variant="large">{this.props.artwork.Culture.replace(/_/g, " ")}</Text>
+              <Text style={{ "textAlign": "right", "marginBottom": 15 , "textTransform": "capitalize"}} variant="large">{this.props.artwork.Classification.replace(/_/g, " ")}</Text>
             </Stack>
             <Stack>
               <div className="explore__artwork-frame" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>

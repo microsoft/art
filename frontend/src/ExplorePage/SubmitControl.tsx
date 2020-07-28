@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 interface IProps {
+  placeholder: string
 };
 
 interface IState {
@@ -61,9 +62,8 @@ export default class SubmitControl extends Component<IProps, IState> {
             backgroundColor: "#f0f0f0",
             width: "95%",
             height: "60px",
-            marginLeft: "20px",
-            marginRight: "20px",
-          }} type="search" value={value} placeholder="Search the Collection" onChange={this.onChange} />
+            margin: "20px",
+          }} type="search" value={value} placeholder={this.props.placeholder} onChange={this.onChange} />
           <input type="submit" style={{ display: "none" }} />
         </form>
 

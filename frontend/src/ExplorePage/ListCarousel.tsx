@@ -18,8 +18,7 @@ interface IState {
 class ListCarousel extends React.Component<IProps, IState> {
 
   createGrid(): JSX.Element[] {
-    let grid: JSX.Element[] = [];
-
+    let grid: JSX.Element[] = [];    
     this.props.items.forEach((item: any, i: number) => {
 
       let isSelected = false

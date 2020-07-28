@@ -17,8 +17,8 @@ class App extends React.Component {
                     <Route exact path="/" component={ IntroPage } />
                     <Route path="/search/:id" component={SearchPage} />
                     <Route exact path="/search" component={SearchPage} />
-                    <Route path="/app/:data" component={ExplorePage} /> 
-                    <Route exact path="/app" component={ ExplorePage } />
+                    <Route path="/app/:data" render={(props) => <ExplorePage {...props} />} /> 
+                    <Route exact path="/app" render={(props) => <ExplorePage {...props} />}  />
                 </Switch>
             </Router>
         );

@@ -41,7 +41,7 @@ export default function Options(props: IProps) {
           classes={{
             root: selectClasses.root
           }}>
-          {props.choices.map((choice, index) => (<option key={index} value={choice}>{choice.replace("_", " ")}</option>))}
+          {props.choices.map((choice, index) => (<option key={index} value={choice}>{choice.replace(/_/g, " ")}</option>))}
         </Select>
       </FormControl>
       <Text style={{ "textAlign": "center", "fontWeight": "bold", "paddingLeft": "10px"}} variant="large">Artworks:</Text>

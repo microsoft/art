@@ -4,7 +4,6 @@ import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, T
 import { logEvent } from '../Shared/AppInsights';
 import { slide as Menu } from 'react-burger-menu'
 import { HideAt, ShowAt } from 'react-with-breakpoints';
-import { Text } from 'office-ui-fabric-react';
 
 const shareUrl = "https://microsoft.github.io/art/";
 

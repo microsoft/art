@@ -1,4 +1,4 @@
-export const azureSearchUrl = 'https://extern-search.search.windows.net/indexes/art-search-2/docs';
+export const azureSearchUrl = 'https://extern-search.search.windows.net/indexes/art-search-3/docs';
 export const apiVersion = '2019-05-06'
 export const azureSearchApiKey = '0E8FACE23652EB8A6634F02B43D42E55';
 export const nMatches = 10;
@@ -105,3 +105,4 @@ export function search(
 
     return queryBase(query)
 }
+

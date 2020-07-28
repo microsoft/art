@@ -7,7 +7,6 @@ import TagList from './TagList';
 import { search} from '../Shared/SearchTools';
 import NavBar from '../Shared/NavBar';
 
-
 interface IProps {
   match: any
 };

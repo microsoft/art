@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
 import { CSSTransition } from 'react-transition-group';
 import { urlEncodeArt } from '../Shared/ArtSchemas';
+import Popup from 'reactjs-popup'
+import { isBeta, betaMessageDiv } from '../Shared/BetaTools';
 
 
 interface IProps {
@@ -15,6 +17,7 @@ interface IProps {
 
 interface IState {
   hover: boolean
+  open: boolean
 }
 
 /**
@@ -24,8 +27,19 @@ export default class ResultBox extends Component<IProps, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      hover: false
+      hover: false,
+      open: false
     };
+
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  };
+
+  openModal() {
+    this.setState({ open: true });
+  }
+  closeModal() {
+    this.setState({ open: false });
   }
 
   render() {
@@ -35,7 +49,13 @@ export default class ResultBox extends Component<IProps, IState> {
 
       <Card className="grid-card" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
         <Card.Item className="grid-card__link">
-          <a href={urlEncodeArt(this.props.data.id)}>
+          <a onClick={() => {
+            if (isBeta) {
+              window.location.href = urlEncodeArt(this.props.data.id);
+            } else {
+              this.openModal()
+            };
+          }}> 
             <LazyLoad
               throttle={250}
               height={200}
@@ -45,6 +65,19 @@ export default class ResultBox extends Component<IProps, IState> {
               <Image className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
             </LazyLoad>
           </a>
+          <Popup
+            open={this.state.open}
+            closeOnDocumentClick
+            onClose={this.closeModal}
+          >
+            <div className="modal">
+              <a className="close" onClick={this.closeModal}>
+                &times;
+              </a>
+              {betaMessageDiv}
+            </div>
+          </Popup>
+
         </Card.Item>
         <Card.Item>
           <div className="grid-card__title" style={{ marginTop: -10, textAlign: "center" }}>{!this.props.data.Title ?
