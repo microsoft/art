@@ -220,7 +220,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                                 <ListCarousel
                                     items={defaultArtworks}
                                     selectorCallback={(am) => {
-                                        this.props.history.push(encodeURIComponent('?id=' + am.id!));
+                                        this.props.history.push("/app/" + encodeURIComponent('?id=' + am.id!));
                                         this.executeQueryWithDefaults(am.id!)
                                     }}
                                     selectedArtwork={this.state.queryArtwork} />
@@ -245,7 +245,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                                 <ListCarousel
                                     items={defaultArtworks}
                                     selectorCallback={(am) => {
-                                        this.props.history.push(encodeURIComponent('?id=' + am.id!));
+                                        this.props.history.push("/app/" + encodeURIComponent('?id=' + am.id!));
                                         this.executeQueryWithDefaults(am.id!)
                                     }}
                                     selectedArtwork={this.state.chosenArtwork!} />
@@ -269,7 +269,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                                 <a
                                     onClick={() => {
                                         if (isBeta) {
-                                            this.props.history.push(encodeURIComponent('?id=' + this.state.chosenArtwork.id!));
+                                            this.props.history.push("/app/" + encodeURIComponent('?id=' + this.state.chosenArtwork.id!));
                                             this.executeQueryWithDefaults(this.state.chosenArtwork.id!);
                                             logEvent("Matches", { "Location": "ResultImage" });
                                         } else {
