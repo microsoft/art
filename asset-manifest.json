@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/art/static/css/main.4f55ef54.chunk.css",
-    "main.js": "/art/static/js/main.5ea9dae1.chunk.js",
-    "main.js.map": "/art/static/js/main.5ea9dae1.chunk.js.map",
-    "runtime-main.js": "/art/static/js/runtime-main.178fb66b.js",
-    "runtime-main.js.map": "/art/static/js/runtime-main.178fb66b.js.map",
-    "static/js/2.41afdcdf.chunk.js": "/art/static/js/2.41afdcdf.chunk.js",
-    "static/js/2.41afdcdf.chunk.js.map": "/art/static/js/2.41afdcdf.chunk.js.map",
+    "main.css": "/art/static/css/main.2546f854.chunk.css",
+    "main.js": "/art/static/js/main.fb0511fd.chunk.js",
+    "main.js.map": "/art/static/js/main.fb0511fd.chunk.js.map",
+    "runtime-main.js": "/art/static/js/runtime-main.e272d18e.js",
+    "runtime-main.js.map": "/art/static/js/runtime-main.e272d18e.js.map",
+    "static/js/2.36c54e78.chunk.js": "/art/static/js/2.36c54e78.chunk.js",
+    "static/js/2.36c54e78.chunk.js.map": "/art/static/js/2.36c54e78.chunk.js.map",
     "index.html": "/art/index.html",
-    "precache-manifest.71b640a894110cc44a4bbcfa2d9517a0.js": "/art/precache-manifest.71b640a894110cc44a4bbcfa2d9517a0.js",
+    "precache-manifest.0fa17a0f7591cfc87eb3b5e88914a14d.js": "/art/precache-manifest.0fa17a0f7591cfc87eb3b5e88914a14d.js",
     "service-worker.js": "/art/service-worker.js",
-    "static/css/main.4f55ef54.chunk.css.map": "/art/static/css/main.4f55ef54.chunk.css.map",
-    "static/js/2.41afdcdf.chunk.js.LICENSE": "/art/static/js/2.41afdcdf.chunk.js.LICENSE",
-    "static/media/banner.jpg": "/art/static/media/banner.6e52252b.jpg",
+    "static/css/main.2546f854.chunk.css.map": "/art/static/css/main.2546f854.chunk.css.map",
+    "static/js/2.36c54e78.chunk.js.LICENSE.txt": "/art/static/js/2.36c54e78.chunk.js.LICENSE.txt",
+    "static/media/banner5.jpg": "/art/static/media/banner5.b687fe02.jpg",
     "static/media/main.scss": "/art/static/media/icon-search.49c4642a.svg",
     "static/media/mosaicLogo.png": "/art/static/media/mosaicLogo.7ad32eba.png",
     "static/media/the_met_logo_crop.png": "/art/static/media/the_met_logo_crop.bcf589a2.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.178fb66b.js",
-    "static/js/2.41afdcdf.chunk.js",
-    "static/css/main.4f55ef54.chunk.css",
-    "static/js/main.5ea9dae1.chunk.js"
+    "static/js/runtime-main.e272d18e.js",
+    "static/js/2.36c54e78.chunk.js",
+    "static/css/main.2546f854.chunk.css",
+    "static/js/main.fb0511fd.chunk.js"
   ]
 }
