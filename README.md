@@ -1,69 +1,109 @@
-# Mosaic
+<p align="center">
+  <img src="./media/mosaic.svg" />
+</p>
+
+## [Live Demo at aka.ms/mosaic](www.aka.ms/mosaic)
+
+## About
+
+Art is one of the few languages which transcends barriers of country, culture, and time. We aim to create an algorithim that can help discover the common semantic elements of art even between **any** culture, media, artist, or collection within the comined artworks of [The Metropolitan Museum of Art](https://www.metmuseum.org/) and [The Rijksmusem](https://www.rijksmuseum.nl/en). 
+
+
+### Conditional Image Retrieval
 
 <p align="center">
   <img src="./media/teaser_img.gif" />
 </p>
 
-## [Live Demo!](www.aka.ms/mosaic)
+Image retrieval systems allow individuals to find images that are semantically similar to a query image. This serves as the backbone of reverse image search engines and many product recommendation engines. 
+We presents a novel method for specializing image retrieval systems called conditional image retrieval. When applied over large art datasets in particular, conditional image retrieval provides visual analogies that bring to light hidden connections among different artists, cultures, and media. Conditional image retrieval systems can efficiently find shared semantics between works of vastly different media and cultural origin. [Our paper](https://arxiv.org/abs/2007.07177) introduces new variants of K-Nearest Neighbor algorithims that support specializing to particular subsets of image collections on the fly. 
 
-## About
+### Deep Semantic Similarity
 
+To find artworks with similiar semantic structure we leverage "features" from deep vision networks trained on ImageNet. These networks map images into a high-dimensional space where distance is semantically meaningful. Here, nearest neighbor queries tend to act as "reverse image search engines" and similiar objects often share common structure.
 
-Image retrieval systems allow individuals to find images that are semantically similar to a query image. This serves as the backbone of reverse image search engines and many product recommendation engines. Restricting an image retrieval system to particular subsets of images can yield new insights into relationships in the visual world.
+<p align="center">
+  <img src="./media/e2e.gif" />
+</p>
 
-We presents a novel method for specializing image retrieval systems called conditional image retrieval. When applied over large art datasets in particular, conditional image retrieval provides visual analogies that bring to light hidden connections among different artists, cultures, and media. Conditional image retrieval systems can efficiently find shared semantics between works of vastly different media and cultural origin. And can also diagnose issues with generative adversarial networks (GANs), algorithms that create novel images from scratch, by identifying where GANs fail to model the true data distribution.
+### Architecture
 
-This work was inspired by a special exhibit “Rembrant and Velazquez” in Amsterdam’s Rijksmuseum. This exhibit juxtaposed works from the studios of two great artists of the Netherlands and Spain, Rembrant and Velazquez. These artists did not have a correspondence or meet each other during their lives, but their works shared rich and meaningful themes both symbolically and visually.
+<p align="center">
+  <img src="./media/architecture.png" width=70%/>
+</p>
 
- 
-The exhibit spoke to the commonality of these two artist’s experiences and representations by finding pairs of paintings that speak to the same themes. To me, it hints at a rich, latent structure that underlies visual art across time, origin, and artist. The immediate question was: “How can we find this structure not just between Rembrant and Velazquez, but between any two artists, cultures, or subsets of the collection?” From this idea, we were pushed to develop new algorithms to answer these questions and found that they could apply to other areas and datasets as well.
+## Webinar
+To learn more about this project please join our [live webinar](https://note.microsoft.com/MSR-Webinar-Visual-Analogies-Registration-Live.html) on 10AM PST 7/30/2020.
+
+<p align="center">
+<a href="https://note.microsoft.com/MSR-Webinar-Visual-Analogies-Registration-Live.html" target="_blank">
+  <img src="./media/webinar.jpg" width="50%"/>
+</a>
+</p>
+
 
 ## Paper
 
-## Building from Scratch
+- Hamilton, M., Fu, S., Freeman, W. T., & Lu, M. (2020). Conditional Image Retrieval. arXiv preprint [arXiv:2007.07177](https://arxiv.org/abs/2007.07177).
 
-### Backend
+To cite this work please use the following:
+```
+@article{hamilton2020conditional,
+  title={Conditional Image Retrieval},
+  author={Hamilton, Mark and Fu, Stephanie and Freeman, William T and Lu, Mindren},
+  journal={arXiv preprint arXiv:2007.07177},
+  year={2020}
+}
+```
 
-1. Download Image Metadata:
-    ```bash
-    wget https://mmlsparkdemo.blob.core.windows.net/cknn/metadata.json?sv=2019-02-02&st=2020-07-23T02%3A22%3A30Z&se=2023-07-24T02%3A22%3A00Z&sr=b&sp=r&sig=hDnGw9y%2BO5XlggL6br%2FPzSKmpAdUZ%2F1LJKVkcmbVmCE%3D
-    ```
-1. Download Images:
-    ```bash
-   cd data_prep
-   python download_images.py 
-   ```  
-1. Featurize and perform Conditional Image Retrieval on every image
-   ```bash
-   cd data_prep
-   python featurize_and_match.py 
-   ```
-1. Write enriched information to an Azure Search Index. 
+## Developer Guide
 
-    More detailed code coming soon, Follow [the closely related guide](
-https://docs.microsoft.com/en-us/azure/cognitive-services/big-data/recipes/art-explorer) for a similiar example.
+Please see our [developer guide](./developer_guide.mg) to build the project for yourself/
 
-### Frontend
 
-#### Development 
-1. Install `npm` if you dont already have it. You can find instructions at [https://nodejs.org/](https://nodejs.org/).
-1. Install dependencies:
-	```bash
-	cd frontend
-	npm install
-	```
-1. Start the development server:
-	```bash
-	npm start
-	```
-1. Navigate to [http://localhost:3000/art](http://localhost:3000/art) to explore the local website.
+## Contributors
 
-#### Deployment
+Special thanks to all of the contributors who helped make this project a reality!
 
-1. run `npm run build` to create a optimized build
-1. Copy `frontend/utils/404.html` file to the `frontend/build`
-1. In `frontend/build/index.html`, between the noscript and script tags (right after the root div), copy in the script from `frontend/utils/singe_page_app.txt`
-1. run `npm run deploy` to push the build to github pages
+#### Project Leads
+- [Mark Hamilton](www.mhamilton.net)
+- Chris Hoder
+
+#### Collaborators
+- [Professor William T Freeman](https://billf.mit.edu/)
+- [Lei Zhang](https://www.microsoft.com/en-us/research/people/leizhang/)
+- Anand Raman
+- Al Bracuti
+- Ryan Gaspar
+- Christina Lee
+
+#### MIT x MSFT Garage 2020 Externship Team:
+
+<p align="center">
+<img src="./media/mit_externs.jpg" width="40%"/>
+</p>
+
+
+ The MIT x MSFT externs were pivotal in turning this research project into a functioning website. In only one month, the team built and designed the mosaic website. Stephanie Fu and Mindren Lu also contributed to the "Conditional Image Retrieval" publication through their evaluation of the affect of different pre-trained networks on nonparametric style transfer.
+
+Students
+- Stephanie Fu
+- Mindren Lu 
+- Zhenbang (Ben) Chen
+- Felix Tran 
+- Darius Bopp 
+- Margaret (Maggie) Wang
+- Marina Rogers 
+- Johnny Bui 
+
+#### MSFT Garage Staff and Mentors
+This project owes a heavy thanks to the MSFT Garage team. They are passionate creators who seek to incubate new projects and inspire new generations of engineers. Their support and mentorship on this project are sincerely appreciated.
+- Chris Templeman
+- Linda Thackery 
+- Jean-Yves Ntamwemezi
+- Dalitso Banda
+- Anunaya Pandey
+
 
 ## Contributing
 
