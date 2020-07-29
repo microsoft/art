@@ -4,6 +4,8 @@
 
 ## [Live Demo at aka.ms/mosaic](www.aka.ms/mosaic)
 
+To access the search functionality, [apply to access the mosaic beta](https://forms.microsoft.com/Pages/DesignPage.aspx#FormId=v4j5cvGGr0GRqy180BHbR3nswihwe8JLvwovyYerymVUQlUzOE9VVDUyQjlJUzRFQ1pQUEJDN001Wi4u)
+
 ## About
 
 Art is one of the few languages which transcends barriers of country, culture, and time. We aim to create an algorithim that can help discover the common semantic elements of art even between **any** culture, media, artist, or collection within the comined artworks of [The Metropolitan Museum of Art](https://www.metmuseum.org/) and [The Rijksmusem](https://www.rijksmuseum.nl/en). 
@@ -59,7 +61,6 @@ To cite this work please use the following:
 ## Developer Guide
 
 Please see our [developer guide](./developer_guide.mg) to build the project for yourself/
-
 
 ## Contributors
 
