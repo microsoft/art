@@ -69,6 +69,7 @@ export function queryBase(query: string): Promise<any> {
 }
 
 export function lookupBase(artworkID: string, selectors: string[]): Promise<any> {
+    console.log(artworkID)
     return queryBase(`/${artworkID}?api-version=${apiVersion}&$select=${selectors.join(",")}`)
 }
 

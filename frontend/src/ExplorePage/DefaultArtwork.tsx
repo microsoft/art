@@ -104,7 +104,79 @@ export const defaultArtworks = [
         "Title": "Menat necklace from Malqata",
         "defaultCulture": "southeast_asian",
         "defaultMedium": "prints"
-    }
+    },
+
+
+    //non-default selection
+    {
+        "id": "MjM2NzUw",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/236750.jpg",
+        "Title": "Wine cooler with A Marine Triumph of Bacchus",
+        "defaultCulture": "greek",
+        "defaultMedium": "woodwork"
+    },
+    {
+        "id": "MjAyNTU0",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/202554.jpg",
+        "Title": "Miniature tea and coffee set",
+        "defaultCulture": "dutch",
+        "defaultMedium": "drawings"
+    },
+    {
+        "id": "MjU0MDI=",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/25402.jpg",
+        "Title": "Saddle",
+        "defaultCulture": "american",
+        "defaultMedium": "stone"
+    },
+
+    // GTG
+
+    {
+        "id": "UlAtVC0xOTE0LTE3LTMxNg==",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/RP-T-1914-17-316.jpg",
+        "Title": "Balearica regulorum (Grey crowned crane)",
+        "defaultCulture": "southeast_asian",
+        "defaultMedium": "ceramics"
+    },
+    {
+        "id": "MjY1Mjk0",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/265294.jpg",
+        "Title": "[The Dolly Sisters]",
+        "defaultCulture": "latin_american",
+        "defaultMedium": "precious"
+    },
+    {
+        "id": "MjM4OTI0",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/238924.jpg",
+        "Title": "Tile with dragon",
+        "defaultCulture": "german",
+        "defaultMedium": "sculptures"
+    },
+    {
+        "id": "MjAzMjEw",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/203210.jpg",
+        "Title": "Standing woman",
+        "defaultMedium": "musical_instruments",
+        "defaultCulture": "ancient_american",
+    },
+    {
+        "id": "MjcxNzM=",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/27173.jpg",
+        "Title": "Helmet (Khula Khud) with Horns",
+        "defaultCulture": "german",
+        "defaultMedium": "photographs"
+
+    },
+    {
+        "id": "MTU3MTU5",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/157159.jpg",
+        "Title": "Umbrella",
+        "defaultCulture": "african",
+        "defaultMedium": "metalwork"
+
+    },
+
 
 ]
 

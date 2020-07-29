@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./media/mosaic.svg" />
+  <img src="./media/header-image.jpg" width="80%"/>
 </p>
 
 ## [Live Demo at aka.ms/mosaic](www.aka.ms/mosaic)
@@ -61,6 +61,8 @@ To cite this work please use the following:
 ## Developer Guide
 
 Please see our [developer guide](./developer_guide.mg) to build the project for yourself/
+
+# Our Favorite Matches
 
 ## Contributors
 

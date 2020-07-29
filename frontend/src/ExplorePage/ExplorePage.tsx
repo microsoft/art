@@ -17,7 +17,6 @@ import NavBar from '../Shared/NavBar';
 import Popup from 'reactjs-popup';
 import { isBeta, betaMessageDiv } from '../Shared/BetaTools';
 
-
 interface IProps {
     match: any
     history: any
