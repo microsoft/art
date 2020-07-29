@@ -91,6 +91,7 @@ Special thanks to all of the contributors who helped make this project a reality
 - Al Bracuti
 - Ryan Gaspar
 - Christina Lee
+- Lily Li
 
 #### MIT x MSFT Garage 2020 Externship Team:
 
