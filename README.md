@@ -62,7 +62,20 @@ To cite this work please use the following:
 
 Please see our [developer guide](./developer_guide.mg) to build the project for yourself/
 
-# Our Favorite Matches
+## Some Favorite Matches
+
+Shared portreyals of reverance over 3000 years:
+
+<p align="center">
+  <img src="./media/match1.jpg" width=70%/>
+</p>
+
+How to match your watch to your ourfit and your dinnerware:
+
+<p align="center">
+  <img src="./media/match2.jpg" width=70%/>
+</p>
+
 
 ## Contributors
 

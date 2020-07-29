@@ -105,11 +105,11 @@ export default class ExplorePage extends React.Component<IProps, IState> {
      */
     setResultArtwork(newResultArtwork: ArtMatch): void {
         let self = this;
-        this.updateBestMatch(self, newResultArtwork)
+        this.updateBestMatch(self, newResultArtwork.id!)
     }
 
-    updateBestMatch(component: any, match: ArtMatch) {
-        lookup(match.id!)
+    updateBestMatch(component: any, id: string) {
+        lookup(id)
             .then(function (responseJson) {
                 component.setState({
                     chosenArtwork: new ArtObject(
@@ -131,7 +131,9 @@ export default class ExplorePage extends React.Component<IProps, IState> {
             this.setState({
                 cultureFilter: idToArtwork[artworkID].defaultCulture || this.state.cultureFilter,
                 mediumFilter: idToArtwork[artworkID].defaultMedium || this.state.mediumFilter
-            }, () => this.executeQuery(artworkID!, false));
+            }, () => {
+                this.executeQuery(artworkID!, false)
+            });
         } else {
             this.executeQuery(artworkID!, false);
         };
@@ -170,12 +172,20 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                     mediumItems: mediumMatches
                 });
                 if (promoteCultureMatch) {
-                    return cultureMatches[0]
+                    return cultureMatches
                 } else {
-                    return mediumMatches[0]
+                    return mediumMatches
                 }
             })
-            .then(function (match) { self.updateBestMatch(self, match) })
+            .then(function (matches) {
+                if (artworkID in idToArtwork
+                    && "defaultResultId" in idToArtwork[artworkID]
+                    && matches.map(m => m.id!).indexOf(idToArtwork[artworkID].defaultResultId) >= 0) {
+                    self.updateBestMatch(self, idToArtwork[artworkID].defaultResultId)
+                } else {
+                    self.updateBestMatch(self, matches[0].id!)
+                }
+            })
     }
 
     /**

@@ -1,4 +1,12 @@
 export const defaultArtworks = [
+
+    {
+        "id": "NjQ0Mg==",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/6442.jpg",
+        "Title": "Plate",
+        "defaultCulture": "russian",
+        "defaultMedium": "photographs",
+    },
     {
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/rijks/resized_images/SK-A-3064.jpg",
         "id": "U0stQS0zMDY0",
@@ -106,14 +114,13 @@ export const defaultArtworks = [
         "defaultMedium": "prints"
     },
 
-
-    //non-default selection
     {
         "id": "MjM2NzUw",
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/236750.jpg",
         "Title": "Wine cooler with A Marine Triumph of Bacchus",
         "defaultCulture": "greek",
-        "defaultMedium": "woodwork"
+        "defaultMedium": "woodwork",
+        "defaultResultId": "MjA3Njgx"
     },
     {
         "id": "MjAyNTU0",
@@ -127,10 +134,9 @@ export const defaultArtworks = [
         "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/25402.jpg",
         "Title": "Saddle",
         "defaultCulture": "american",
-        "defaultMedium": "stone"
+        "defaultMedium": "stone",
+        "defaultResultId": "NDQ5ODEx"
     },
-
-    // GTG
 
     {
         "id": "UlAtVC0xOTE0LTE3LTMxNg==",
@@ -176,6 +182,15 @@ export const defaultArtworks = [
         "defaultMedium": "metalwork"
 
     },
+    {
+        "id": "MTk0MTEz",
+        "Thumbnail_Url": "https://mmlsparkdemo.blob.core.windows.net/met/thumbnails/194113.jpg",
+        "Title": "The Great Ruby Watch",
+        "defaultCulture": "chinese",
+        "defaultMedium": "textiles",
+        "defaultResultId": "QkstQlItNjA5",
+    },
+
 
 
 ]
