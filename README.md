@@ -19,11 +19,11 @@ Art is one of the few languages which transcends barriers of country, culture, a
 </p>
 
 Image retrieval systems allow individuals to find images that are semantically similar to a query image. This serves as the backbone of reverse image search engines and many product recommendation engines. 
-We presents a novel method for specializing image retrieval systems called conditional image retrieval. When applied over large art datasets in particular, conditional image retrieval provides visual analogies that bring to light hidden connections among different artists, cultures, and media. Conditional image retrieval systems can efficiently find shared semantics between works of vastly different media and cultural origin. [Our paper](https://arxiv.org/abs/2007.07177) introduces new variants of K-Nearest Neighbor algorithims that support specializing to particular subsets of image collections on the fly. 
+We present a novel method for specializing image retrieval systems called conditional image retrieval. When applied over large art datasets, conditional image retrieval provides visual analogies that bring to light hidden connections among different artists, cultures, and media. Conditional image retrieval systems can efficiently find shared semantics between works of vastly different media and cultural origin. [Our paper](https://arxiv.org/abs/2007.07177) introduces new variants of K-Nearest Neighbor algorithms that support specializing to particular subsets of image collections on the fly. 
 
 ### Deep Semantic Similarity
 
-To find artworks with similiar semantic structure we leverage "features" from deep vision networks trained on ImageNet. These networks map images into a high-dimensional space where distance is semantically meaningful. Here, nearest neighbor queries tend to act as "reverse image search engines" and similiar objects often share common structure.
+To find artworks with similar semantic structure we leverage "features" from deep vision networks trained on ImageNet. These networks map images into a high-dimensional space where distance is semantically meaningful. Here, nearest neighbor queries tend to act as "reverse image search engines" and similar objects often share common structure.
 
 <p align="center">
   <img src="./media/e2e.gif" />
