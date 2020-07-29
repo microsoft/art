@@ -10,8 +10,7 @@ To access the search functionality, [apply to access the mosaic beta](https://fo
 
 ## About
 
-Art is one of the few languages which transcends barriers of country, culture, and time. We aim to create an algorithim that can help discover the common semantic elements of art even between **any** culture, media, artist, or collection within the comined artworks of [The Metropolitan Museum of Art](https://www.metmuseum.org/) and [The Rijksmusem](https://www.rijksmuseum.nl/en). 
-
+Art is one of the few languages which transcends barriers of country, culture, and time. We aim to create an algorithm that can help discover the common semantic elements of art even between **any** culture, media, artist, or collection within the combined artworks of [The Metropolitan Museum of Art](https://www.metmuseum.org/) and [The Rijksmusem](https://www.rijksmuseum.nl/en). 
 
 ### Conditional Image Retrieval
 
@@ -45,7 +44,6 @@ To learn more about this project please join our [live webinar](https://note.mic
 </a>
 </p>
 
-
 ## Paper
 
 - Hamilton, M., Fu, S., Freeman, W. T., & Lu, M. (2020). Conditional Image Retrieval. arXiv preprint [arXiv:2007.07177](https://arxiv.org/abs/2007.07177).
@@ -66,18 +64,17 @@ Please see our [developer guide](./developer_guide.mg) to build the project for 
 
 ## Some Favorite Matches
 
-Shared portreyals of reverance over 3000 years:
+Shared portrayals of reverence over 3000 years:
 
 <p align="center">
   <img src="./media/match1.jpg" width=70%/>
 </p>
 
-How to match your watch to your ourfit and your dinnerware:
+How to match your watch to your outfit and your dinnerware:
 
 <p align="center">
   <img src="./media/match2.jpg" width=70%/>
 </p>
-
 
 ## Contributors
 
@@ -101,7 +98,6 @@ Special thanks to all of the contributors who helped make this project a reality
 <img src="./media/mit_externs.jpg" width="40%"/>
 </p>
 
-
  The MIT x MSFT externs were pivotal in turning this research project into a functioning website. In only one month, the team built and designed the mosaic website. Stephanie Fu and Mindren Lu also contributed to the "Conditional Image Retrieval" publication through their evaluation of the affect of different pre-trained networks on nonparametric style transfer.
 
 Students
@@ -122,7 +118,6 @@ This project owes a heavy thanks to the MSFT Garage team. They are passionate cr
 - Dalitso Banda
 - Anunaya Pandey
 
-
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
@@ -136,4 +131,3 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
