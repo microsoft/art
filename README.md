@@ -1,8 +1,10 @@
 <p align="center">
+<a href="https://aka.ms/mosaic" target="_blank">
   <img src="./media/header-image.jpg" width="80%"/>
+  </a>
 </p>
 
-## [Live Demo at aka.ms/mosaic](www.aka.ms/mosaic)
+## [Live Demo at aka.ms/mosaic](https://aka.ms/mosaic)
 
 To access the search functionality, [apply to access the mosaic beta](https://forms.microsoft.com/Pages/DesignPage.aspx#FormId=v4j5cvGGr0GRqy180BHbR3nswihwe8JLvwovyYerymVUQlUzOE9VVDUyQjlJUzRFQ1pQUEJDN001Wi4u)
 
@@ -60,7 +62,7 @@ To cite this work please use the following:
 
 ## Developer Guide
 
-Please see our [developer guide](./developer_guide.mg) to build the project for yourself/
+Please see our [developer guide](./developer_guide.mg) to build the project for yourself.
 
 # Our Favorite Matches
 
@@ -69,7 +71,7 @@ Please see our [developer guide](./developer_guide.mg) to build the project for 
 Special thanks to all of the contributors who helped make this project a reality!
 
 #### Project Leads
-- [Mark Hamilton](www.mhamilton.net)
+- [Mark Hamilton](https://mhamilton.net)
 - Chris Hoder
 
 #### Collaborators
