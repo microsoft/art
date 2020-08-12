@@ -60,7 +60,7 @@ To cite this work please use the following:
 
 ## Developer Guide
 
-Please see our [developer guide](./developer_guide.mg) to build the project for yourself.
+Please see our [developer guide](./developer_guide.md) to build the project for yourself.
 
 ## Some Favorite Matches
 
