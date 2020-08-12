@@ -100,8 +100,6 @@ Special thanks to all of the contributors who helped make this project a reality
 </p>
 
  The MIT x MSFT externs were pivotal in turning this research project into a functioning website. In only one month, the team built and designed the mosaic website. Stephanie Fu and Mindren Lu also contributed to the "Conditional Image Retrieval" publication through their evaluation of the affect of different pre-trained networks on nonparametric style transfer.
-
-Students
 - Stephanie Fu
 - Mindren Lu 
 - Zhenbang (Ben) Chen
