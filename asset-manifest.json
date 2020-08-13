@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/art/static/css/main.f92cbf46.chunk.css",
+    "main.js": "/art/static/js/main.910275f7.chunk.js",
+    "main.js.map": "/art/static/js/main.910275f7.chunk.js.map",
+    "runtime-main.js": "/art/static/js/runtime-main.e272d18e.js",
+    "runtime-main.js.map": "/art/static/js/runtime-main.e272d18e.js.map",
+    "static/js/2.dd31ed5d.chunk.js": "/art/static/js/2.dd31ed5d.chunk.js",
+    "static/js/2.dd31ed5d.chunk.js.map": "/art/static/js/2.dd31ed5d.chunk.js.map",
+    "index.html": "/art/index.html",
+    "precache-manifest.f9ca383397965766ef402e779eafd40e.js": "/art/precache-manifest.f9ca383397965766ef402e779eafd40e.js",
+    "service-worker.js": "/art/service-worker.js",
+    "static/css/main.f92cbf46.chunk.css.map": "/art/static/css/main.f92cbf46.chunk.css.map",
+    "static/js/2.dd31ed5d.chunk.js.LICENSE.txt": "/art/static/js/2.dd31ed5d.chunk.js.LICENSE.txt",
+    "static/media/banner5.jpg": "/art/static/media/banner5.b687fe02.jpg",
+    "static/media/main.scss": "/art/static/media/icon-search.49c4642a.svg",
+    "static/media/mosaicLogo.png": "/art/static/media/mosaicLogo.7ad32eba.png",
+    "static/media/the_met_logo_crop.png": "/art/static/media/the_met_logo_crop.bcf589a2.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e272d18e.js",
+    "static/js/2.dd31ed5d.chunk.js",
+    "static/css/main.f92cbf46.chunk.css",
+    "static/js/main.910275f7.chunk.js"
+  ]
+}
