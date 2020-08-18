@@ -275,7 +275,7 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                     <div className="explore__solid">
                         <Stack horizontalAlign="center">
                             <Stack horizontal horizontalAlign="center">
-                                <a
+                                <button
                                     onClick={() => {
                                         if (isBeta) {
                                             this.props.history.push("/app/" + encodeURIComponent('?id=' + this.state.chosenArtwork.id!));
@@ -284,18 +284,17 @@ export default class ExplorePage extends React.Component<IProps, IState> {
                                         } else {
                                             this.openModal()
                                         };
-                                    }} >
-                                    <button className="explore__buttons button">Use Match as Query</button>
-                                </a>
+                                    }}
+                                    className="explore__buttons button">Use Match as Query</button>
                                 <Popup
                                     open={this.state.open}
                                     closeOnDocumentClick
                                     onClose={this.closeModal}
                                 >
                                     <div className="modal">
-                                        <a className="close" onClick={this.closeModal}>
+                                        <button className="close" onClick={this.closeModal}>
                                             &times;
-                                        </a>
+                                        </button>
                                         {betaMessageDiv}
                                     </div>
                                 </Popup>

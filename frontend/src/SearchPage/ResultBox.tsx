@@ -49,7 +49,7 @@ export default class ResultBox extends Component<IProps, IState> {
 
       <Card className="grid-card" onMouseEnter={() => this.setState({ hover: true })} onMouseLeave={() => this.setState({ hover: false })}>
         <Card.Item className="grid-card__link">
-          <a onClick={() => {
+          <div onClick={() => {
             if (isBeta) {
               window.location.href = urlEncodeArt(this.props.data.id);
             } else {
@@ -64,16 +64,16 @@ export default class ResultBox extends Component<IProps, IState> {
             >
               <Image className="grid-card__img" alt="thumbnail" src={this.props.data.Thumbnail_Url} imageFit={ImageFit.contain} />
             </LazyLoad>
-          </a>
+          </div>
           <Popup
             open={this.state.open}
             closeOnDocumentClick
             onClose={this.closeModal}
           >
             <div className="modal">
-              <a className="close" onClick={this.closeModal}>
+              <button className="close" onClick={this.closeModal}>
                 &times;
-              </a>
+              </button>
               {betaMessageDiv}
             </div>
           </Popup>
