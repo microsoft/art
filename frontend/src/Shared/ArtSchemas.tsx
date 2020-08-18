@@ -1,3 +1,5 @@
+import { root } from './Constants'
+
 /**
  * Internal representation of an artwork
  */
@@ -57,5 +59,5 @@ export class ArtMatch {
 export const loadingMatch = new ArtMatch("./images/loading.jpg", null, null)
 
 export function urlEncodeArt(artworkId: string) {
-    return '/art/app/' + encodeURIComponent('?id=' + artworkId);
+    return root + '/app/' + encodeURIComponent('?id=' + artworkId);
 }

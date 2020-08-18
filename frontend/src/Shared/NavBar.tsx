@@ -4,6 +4,7 @@ import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, T
 import { logEvent } from '../Shared/AppInsights';
 import { slide as Menu } from 'react-burger-menu'
 import { HideAt, ShowAt } from 'react-with-breakpoints';
+import { root } from './Constants'
 
 const shareUrl = "https://microsoft.github.io/art/";
 
@@ -15,7 +16,7 @@ export default class NavBar extends Component {
     return (
       <nav className="nav">
         <div>
-          <a className="nav__link" href="/art/app">
+          <a className="nav__link" href={root + "/app"}>
             <img src={logo} alt="" />
           </a>
         </div>
@@ -36,7 +37,7 @@ export default class NavBar extends Component {
                 <LinkedinIcon size={35} round={true} iconBgStyle={{ "fill": "black" }} />
               </LinkedinShareButton>
             </div>
-            <a className="nav__text_link" href="/art">
+            <a className="nav__text_link" href={root}>
               intro
             </a>
           </div>
@@ -44,7 +45,7 @@ export default class NavBar extends Component {
 
         <ShowAt breakpoint="small">
           <Menu right>
-            <a className="nav__menu_link" href="/art">
+            <a className="nav__menu_link" href={root}>
               Intro
             </a>
             <div className="nav__menu_link" >Share:</div>
