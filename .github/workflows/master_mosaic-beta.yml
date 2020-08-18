@@ -25,6 +25,7 @@ jobs:
         cd frontend
         npm install
         npm run build --if-present
+        mv utils/404.html build/
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
@@ -32,4 +33,4 @@ jobs:
         app-name: 'mosaic-beta'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_49db28a9807849198359c51c5330fea1 }}
-        package: .
+        package: frontend/build
