@@ -32,4 +32,4 @@ jobs:
         app-name: 'mosaic-beta'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_49db28a9807849198359c51c5330fea1 }}
-        package: .
+        package: frontend/build
