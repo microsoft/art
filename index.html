@@ -2,6 +2,11 @@
 <html lang="en">
 
 <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="/mosaicTabLogo.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
     <title>Mosaic: Find Hidden Artistic Connections with Deep Learning</title>
     <meta property="og:title" content="Mosaic: Find Hidden Artistic Connections with Deep Learning">
     <meta property="og:image" content="https://mmlsparkdemo.blob.core.windows.net/mosaic-shares/header-image.jpg">
@@ -9,13 +14,7 @@
     <meta property="og:description"
         content="Use deep learning to find hidden connections in art that span time, culture, and media."
         data-react-helmet="true">
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="/art/mosaicTabLogo.png" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="manifest" href="/art/manifest.json" />
-    <title>mosAIc</title>
-    <link href="/art/static/css/main.f92cbf46.chunk.css" rel="stylesheet">
+    <link href="/static/css/main.915d0b1a.chunk.css" rel="stylesheet">
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
@@ -32,28 +31,27 @@
         // the correct url will be waiting in the browser's history for
         // the single page app to route accordingly.
         (function (l) {
-            if (l.search) {
-                var q = {};
-                l.search.slice(1).split('&').forEach(function (v) {
-                    var a = v.split('=');
-                    q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-                });
-                if (q.p !== undefined) {
-                    window.history.replaceState(null, null,
-                        l.pathname.slice(0, -1) + (q.p || '') +
-                        (q.q ? ('?' + q.q) : '') +
-                        l.hash
-                    );
-                }
+          if (l.search) {
+            var q = {};
+            l.search.slice(1).split('&').forEach(function (v) {
+              var a = v.split('=');
+              q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+            });
+            if (q.p !== undefined) {
+              window.history.replaceState(null, null,
+                l.pathname.slice(0, -1) + (q.p || '') +
+                (q.q ? ('?' + q.q) : '') +
+                l.hash
+              );
             }
+          }
         }(window.location))
-    </script>
-
+      </script>
+      
     <div id="root"></div>
-
-    <script>!function (e) { function r(r) { for (var n, a, l = r[0], f = r[1], i = r[2], c = 0, s = []; c < l.length; c++)a = l[c], Object.prototype.hasOwnProperty.call(o, a) && o[a] && s.push(o[a][0]), o[a] = 0; for (n in f) Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]); for (p && p(r); s.length;)s.shift()(); return u.push.apply(u, i || []), t() } function t() { for (var e, r = 0; r < u.length; r++) { for (var t = u[r], n = !0, l = 1; l < t.length; l++) { var f = t[l]; 0 !== o[f] && (n = !1) } n && (u.splice(r--, 1), e = a(a.s = t[0])) } return e } var n = {}, o = { 1: 0 }, u = []; function a(r) { if (n[r]) return n[r].exports; var t = n[r] = { i: r, l: !1, exports: {} }; return e[r].call(t.exports, t, t.exports, a), t.l = !0, t.exports } a.m = e, a.c = n, a.d = function (e, r, t) { a.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t }) }, a.r = function (e) { "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 }) }, a.t = function (e, r) { if (1 & r && (e = a(e)), 8 & r) return e; if (4 & r && "object" == typeof e && e && e.__esModule) return e; var t = Object.create(null); if (a.r(t), Object.defineProperty(t, "default", { enumerable: !0, value: e }), 2 & r && "string" != typeof e) for (var n in e) a.d(t, n, function (r) { return e[r] }.bind(null, n)); return t }, a.n = function (e) { var r = e && e.__esModule ? function () { return e.default } : function () { return e }; return a.d(r, "a", r), r }, a.o = function (e, r) { return Object.prototype.hasOwnProperty.call(e, r) }, a.p = "/art/"; var l = this.webpackJsonpart = this.webpackJsonpart || [], f = l.push.bind(l); l.push = r, l = l.slice(); for (var i = 0; i < l.length; i++)r(l[i]); var p = f; t() }([])</script>
-    <script src="/art/static/js/2.dd31ed5d.chunk.js"></script>
-    <script src="/art/static/js/main.910275f7.chunk.js"></script>
+    <script>!function (e) { function r(r) { for (var n, l, a = r[0], f = r[1], i = r[2], c = 0, s = []; c < a.length; c++)l = a[c], Object.prototype.hasOwnProperty.call(o, l) && o[l] && s.push(o[l][0]), o[l] = 0; for (n in f) Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]); for (p && p(r); s.length;)s.shift()(); return u.push.apply(u, i || []), t() } function t() { for (var e, r = 0; r < u.length; r++) { for (var t = u[r], n = !0, a = 1; a < t.length; a++) { var f = t[a]; 0 !== o[f] && (n = !1) } n && (u.splice(r--, 1), e = l(l.s = t[0])) } return e } var n = {}, o = { 1: 0 }, u = []; function l(r) { if (n[r]) return n[r].exports; var t = n[r] = { i: r, l: !1, exports: {} }; return e[r].call(t.exports, t, t.exports, l), t.l = !0, t.exports } l.m = e, l.c = n, l.d = function (e, r, t) { l.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t }) }, l.r = function (e) { "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 }) }, l.t = function (e, r) { if (1 & r && (e = l(e)), 8 & r) return e; if (4 & r && "object" == typeof e && e && e.__esModule) return e; var t = Object.create(null); if (l.r(t), Object.defineProperty(t, "default", { enumerable: !0, value: e }), 2 & r && "string" != typeof e) for (var n in e) l.d(t, n, function (r) { return e[r] }.bind(null, n)); return t }, l.n = function (e) { var r = e && e.__esModule ? function () { return e.default } : function () { return e }; return l.d(r, "a", r), r }, l.o = function (e, r) { return Object.prototype.hasOwnProperty.call(e, r) }, l.p = "/"; var a = this.webpackJsonpart = this.webpackJsonpart || [], f = a.push.bind(a); a.push = r, a = a.slice(); for (var i = 0; i < a.length; i++)r(a[i]); var p = f; t() }([])</script>
+    <script src="/static/js/2.174dfff8.chunk.js"></script>
+    <script src="/static/js/main.60821aaa.chunk.js"></script>
 </body>
 
 </html>
