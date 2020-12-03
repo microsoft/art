@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/static/css/main.915d0b1a.chunk.css",
-    "main.js": "/static/js/main.60821aaa.chunk.js",
-    "main.js.map": "/static/js/main.60821aaa.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8ce1419b.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8ce1419b.js.map",
-    "static/js/2.174dfff8.chunk.js": "/static/js/2.174dfff8.chunk.js",
-    "static/js/2.174dfff8.chunk.js.map": "/static/js/2.174dfff8.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.be05bb2be05fac370b2f48854f0782c5.js": "/precache-manifest.be05bb2be05fac370b2f48854f0782c5.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.915d0b1a.chunk.css.map": "/static/css/main.915d0b1a.chunk.css.map",
-    "static/js/2.174dfff8.chunk.js.LICENSE.txt": "/static/js/2.174dfff8.chunk.js.LICENSE.txt",
-    "static/media/banner5.jpg": "/static/media/banner5.b687fe02.jpg",
-    "static/media/main.scss": "/static/media/icon-search.49c4642a.svg",
-    "static/media/mosaicLogo.png": "/static/media/mosaicLogo.7ad32eba.png",
-    "static/media/the_met_logo_crop.png": "/static/media/the_met_logo_crop.bcf589a2.png"
+    "main.css": "/art/static/css/main.bb9337f2.chunk.css",
+    "main.js": "/art/static/js/main.8ec0cfc7.chunk.js",
+    "main.js.map": "/art/static/js/main.8ec0cfc7.chunk.js.map",
+    "runtime-main.js": "/art/static/js/runtime-main.e272d18e.js",
+    "runtime-main.js.map": "/art/static/js/runtime-main.e272d18e.js.map",
+    "static/js/2.8701187c.chunk.js": "/art/static/js/2.8701187c.chunk.js",
+    "static/js/2.8701187c.chunk.js.map": "/art/static/js/2.8701187c.chunk.js.map",
+    "index.html": "/art/index.html",
+    "precache-manifest.8771b7b8b41a000c6ef1dcafa4db957f.js": "/art/precache-manifest.8771b7b8b41a000c6ef1dcafa4db957f.js",
+    "service-worker.js": "/art/service-worker.js",
+    "static/css/main.bb9337f2.chunk.css.map": "/art/static/css/main.bb9337f2.chunk.css.map",
+    "static/js/2.8701187c.chunk.js.LICENSE.txt": "/art/static/js/2.8701187c.chunk.js.LICENSE.txt",
+    "static/media/banner5.jpg": "/art/static/media/banner5.b687fe02.jpg",
+    "static/media/main.scss": "/art/static/media/icon-search.49c4642a.svg",
+    "static/media/mosaicLogo.png": "/art/static/media/mosaicLogo.7ad32eba.png",
+    "static/media/the_met_logo_crop.png": "/art/static/media/the_met_logo_crop.bcf589a2.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.8ce1419b.js",
-    "static/js/2.174dfff8.chunk.js",
-    "static/css/main.915d0b1a.chunk.css",
-    "static/js/main.60821aaa.chunk.js"
+    "static/js/runtime-main.e272d18e.js",
+    "static/js/2.8701187c.chunk.js",
+    "static/css/main.bb9337f2.chunk.css",
+    "static/js/main.8ec0cfc7.chunk.js"
   ]
 }
