@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const isBeta = false
+export const isBeta = true
 
 export const betaMessageDiv = <div className="explore__medium-text">
     Thank you for exploring mosaic! To explore the full application please apply to access the beta <a
