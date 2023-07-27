@@ -26,6 +26,8 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
+      az account show
+      az get-access-token
       python3 deploy_score_aks.py
   displayName: Deploying Inference Service...
 - script: python call_service.py
@@ -37,5 +39,7 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd ../backend
+      az account show
+      az get-access-token
       az webapp up --name mosaicart
   displayName: Deploying Facebook Sharing Service...
